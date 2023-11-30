@@ -95,16 +95,18 @@ const editHandler = id => {
  const renderDebtor = debtor.map((value, id) => {
   const { total, date, description, category, qty, rate } = value;
   return (
-     <tr key={id} className='relative left-60 top-28 mt-2 flex space-x-4'>
-      <td className='table-data'>{date}</td>
-      <td className='bg-gray-200 w-72 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
-      <td className='table-data'>{category}</td>
-      <td className='table-data'>{qty}</td>
-      <td className='table-data'>{rate}</td>
-      <td className='table-data'>{total}</td>
-      <button className='btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
-      <button className='btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
-     </tr>
+    <>
+     <tr key={id} className='relative left-2 space-x-2 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4'>
+      <td className='table-header'>{date}</td>
+      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-72'>{description}</td>
+      <td className='table-header'>{category}</td>
+      <td className='table-header'>{qty}</td>
+      <td className='table-header'>{rate}</td>
+      <td className='table-header'>{total}</td>
+      </tr>
+      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
+      <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
+    </>
   )
  })
 
@@ -130,9 +132,9 @@ console.log(debtorTotal)
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-60 top-28 flex space-x-4'>
+      <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-72 h-10 rounded pt-2'>Goods Description</th>
+        <th className='bg-gray-200 w-40 text-xs md:w-72 h-10 rounded pt-2'>Goods Description</th>
         <th className='table-header'>Category</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>

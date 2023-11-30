@@ -27,7 +27,7 @@
     @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-44 md:h-12
 }
 .btn7{
-    @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative  top-1 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white
+    @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative top-10 md:top-20 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white 
 }
 .submit{
     @apply -left-48 top-9 text-xs h-8 text-black font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
@@ -39,7 +39,13 @@
     @apply bg-gray-200 w-36 h-10 rounded pt-2 text-xs md:text-lg
 }
 .table-data{
-    @apply bg-gray-100 text-xs w-52 ml-2 h-10 rounded pt-2 flex justify-center md:text-xl
+    @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
+}
+/* w-40 ml-2 h-10 */
+.table{
+    width:60px;
+    gap: 20px;
+    margin-left: 10px;
 }
 .container{
     width: 250rem;
@@ -64,6 +70,7 @@
     top: 450px;
     left: 73rem
 }
+/**************For small screen***********************/
 @media (max-width: 768px) {
     .header-profile{
         left: 10.7rem;
@@ -90,6 +97,19 @@
         position: absolute;
         top: 690px;
         left: 35rem
+    }
+    .btn7a{
+        left: 300px;
+    }
+}
+
+/****************For big screen********************/
+@media (min-width: 768px) {
+    body{
+        overflow-x: hidden;
+    }
+    .btn7a{
+        left: 40rem;
     }
 }
 

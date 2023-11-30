@@ -93,16 +93,17 @@ const editHandler = id => {
  const renderCreditor = creditor.map((value, id) => {
   const { date, total, description, category, qty, rate } = value;
   return (
-     <tr key={id} className='relative left-60 top-28 mt-2 flex space-x-4'>
+    <>   <tr key={id} className='relative space-x-2 left-2 top-20 md:left-60 md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-data'>{date}</td>
-      <td className='bg-gray-200 w-72 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
-      <td className='table-data'>{category}</td>
-      <td className='table-data'>{qty}</td>
-      <td className='table-data'>{rate}</td>
-      <td className='table-data'>{total}</td>
-      <button className='btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
-      <button className='btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
-     </tr>
+      <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-72'>{description}</td>
+      <td className='table-header'>{category}</td>
+      <td className='table-header'>{qty}</td>
+      <td className='table-header'>{rate}</td>
+      <td className='table-header'>{total}</td>
+      </tr>
+      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
+      <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
+    </>
   )
  })
 
@@ -130,9 +131,9 @@ console.log(creditorTotal)
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-60 top-28 flex space-x-4'>
+      <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-72 h-10 rounded pt-2'>Goods Description</th>
+        <th className='bg-gray-200 w-26 text-xs md:w-72 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
         <th className='table-header'>Category</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
@@ -145,7 +146,7 @@ console.log(creditorTotal)
         <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-center text-xl'>{creditorTotal}</div></div>
           <div className='flex space-x-8'>
             <div className='btn5'>Paid: </div>
-                <input className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center text-xl text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here'/>
+                <input className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center md:text-xl text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here'/>
                 <button className='w-20 h-8 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-lg shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
           </div>
         <div className='btn5'>Bal:</div><div className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center text-xl relative left-32 -top-16'>{totalCash}</div>
