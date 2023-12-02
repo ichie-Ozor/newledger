@@ -5,6 +5,7 @@ import { AuthContext } from '../Context/auth'
 
 function LandingPage() {
   const navigate = useNavigate()
+  const [errorText, setErrorText ] = useState("")
   // const { user, setUser, logOut} = useContext(AuthContext)
   const { user } = useContext(AuthContext)
   const [ clicked, setClicked ] = useState(true)
@@ -53,7 +54,7 @@ function LandingPage() {
         password:""
        })
     } else {
-     alert("Please register Now, Or 😡😡😠😡😡")
+     setErrorText("Please register Now, Or 😡😡😠😡😡")
      setIsRegister({
       fullName: "",
       bizName: "",
@@ -68,7 +69,7 @@ function LandingPage() {
           navigate('dashboard')
     } else {
       // navigate('/')
-      alert("respect yourself oh, Nkakwu 😂😂😂")
+      setErrorText("respect yourself oh, Nkakwu 😂😂😂")
       setClicked(false)
       setIsRegister({
         fullName: "",
@@ -88,10 +89,11 @@ function LandingPage() {
   return (
     <div>
       <div className='float-left w-1/2 h-screen grid items-center justify-items-center'>
-          <div className='absolute top-32 w-64 left-10 md:top-56 md:left-72'>
+          <div className='absolute top-32 w-64 left-10 md:top-52 md:left-72'>
             <span className='text-4xl font-bold'>Welcome Back</span>
             <p className='relative left-8'>Enter Your Details Below</p>
           </div>
+          <div className='absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-72 md:left-80'>{errorText}</div>
           { clicked?
           <>
           <form className='relative p-2 w-96 top-20 md:top-36 md:left-16 ' onSubmit={isSignInHandler}>

@@ -77,16 +77,16 @@ const editHandler = id => {
       const { sPrice, date, availGoods, category, qty, cPrice } = value;
       return (
         <>
-           <tr key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
-            <td className='table-header'>{date}</td>
-            <td className='bg-gray-200 w-72 h-10 rounded pt-2 text-xs md:text-lg'>{availGoods}</td>
-            <td className='table-header'>{category}</td>
-            <td className='table-header'>{qty}</td>
-            <td className='table-header'>{cPrice}</td>
-            <td className='table-header'>{sPrice}</td>
-            </tr>
-            <button className='btn7a btn7  top-28' onClick={() => deleteHandler(value.id)}>Delete</button>
-            <button className='btn7a btn7  top-28 w-40' onClick={() => editHandler(value.id)}>Edit</button>
+           <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
+            <div className='table-header'>{date}</div>
+            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg'>{availGoods}</div>
+            <div className='table-header'>{category}</div>
+            <div className='table-header'>{qty}</div>
+            <div className='table-header'>{cPrice}</div>
+            <div className='table-header'>{sPrice}</div>
+            </div>
+            <button className='btn7a btn7 top-28' onClick={() => deleteHandler(value.id)}>Delete</button>
+            <button className='btn7a btn7 top-28 w-40' onClick={() => editHandler(value.id)}>Edit</button>
           </>
         )
      })
@@ -105,14 +105,14 @@ const editHandler = id => {
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
-        <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-72 h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</th>
-        <th className='table-header'>Category</th>
-        <th className='table-header'>Quantity</th>
-        <th className='table-header'>Cost Price</th>
-        <th className='table-header'>Selling Price</th>
-      </table>
+      <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
+        <div className='table-header'>Date</div>
+        <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>
+        <div className='table-header'>Category</div>
+        <div className='table-header'>Quantity</div>
+        <div className='table-header'>Cost Price</div>
+        <div className='table-header'>Selling Price</div>
+      </div>
       <div>{renderStock}</div>
     </div>
   )

@@ -36,7 +36,7 @@
     @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600
 }
 .table-header{
-    @apply bg-gray-200 w-36 h-10 rounded pt-2 text-xs md:text-lg
+    @apply flex text-center justify-center bg-gray-200 w-36 h-10 rounded pt-2 text-xs md:text-lg
 }
 .table-data{
     @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
@@ -99,7 +99,9 @@
         left: 35rem
     }
     .btn7a{
-        left: 300px;
+        position: relative;
+        top: 45px;
+        left: 390px;
     }
 }
 
@@ -109,7 +111,8 @@
         overflow-x: hidden;
     }
     .btn7a{
-        left: 40rem;
+        position: relative;
+        left: 84rem;
     }
 }
 
