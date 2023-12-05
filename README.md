@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+<!-----------Login----------------->
+--When a user registers, it creates an account and uses it for authentication
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-----------Profile----------------->
+--Only the admin can register as an admin as it will be used to allow for the edit and delete
+--the admin can be able to upload picture
 
-## Available Scripts
+<!-----------Creditor-------------->
+This accepts creditor input, goods collected from people on credit
+--once you click a submit button, it sends the collected data to the backend
+--It should have a search input which filters the item and bring out the name and display it
+--It collects all the sum of goods and deduct the amount paid to give the balance
+--It will only be the admin that can use the delete and edit button  
 
-In the project directory, you can run:
+<!---------Debtor---------------->
+This accepts debtors input, goods given to people on credit 
+--once you click a submit button, it sends the collected data to the backend
+--It should have a search input which filters the item and bring out the name and display it
+--It collects all the sum of goods and deduct the amount paid to give the balance
+--It will only be the admin that can use the delete and edit button
 
-### `npm start`
+<!-----------Stock------------------>
+--Once the page opens, it loads the data stored at the database
+--Add all the value of the goods and total it
+--This accept input for stocks and sends it to the backend
+--Once at the backend, it will send an email to the registered mail
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<!------------Sales------------------>
+This accepts sales input, goods sold 
+--once you click a submit button, it sends the collected data to the backend
+--It should have a search input which filters the item and bring out the name and display it
+--It collects all the sum of goods 
