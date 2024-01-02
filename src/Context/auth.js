@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import clients from '../data'
 
 export const AuthContext = createContext(null)
 
@@ -23,7 +24,7 @@ export const AuthProvider = ({children}) => {
     const logOut = () => {
         setUser(null)
     }
-    return <AuthContext.Provider value={{ user, setUser, logOut}}>
+    return <AuthContext.Provider value={{ user, setUser, logOut, clients}}>
                {children}
            </AuthContext.Provider>
 }

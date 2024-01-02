@@ -1,5 +1,6 @@
-<!-----------Login----------------->
+<!-----------Login/Sign in----------------->
 --When a user registers, it creates an account and uses it for authentication
+--old user can easily sign in if they already have an account
 
 <!-----------Profile----------------->
 --Only the admin can register as an admin as it will be used to allow for the edit and delete

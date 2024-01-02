@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import axios from 'axios'
 
-// this is work i have not done
+
 function Creditor() {
   let initialValue 
+  // let initialValue2 = 0
+  // const timer = Date.now()
+  const baseUrl = "https://fakestoreapi.com/products";
   const [ creditor, setCreditor ] = useState([])
+  // const [time, setTime] = useState(initialValue)
   const [cash, setCash] = useState(initialValue)
   const [ totalCash, setTotalCash ] = useState(0)
+  const [error, setError] = useState(null)
   const [ creditorInput, setCreditorInput ] = useState({
     date: "",
     description: "",
@@ -15,7 +21,7 @@ function Creditor() {
     qty: "",
     rate: ""
   })
-// and this
+
 const onChange = (e) => {
   e.preventDefault()
   const { name, value } = e.target
@@ -26,9 +32,8 @@ const onChange = (e) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    // console.log("see am here", creditorInput)
    if(creditorInput.date === "" && creditorInput.category === "") return 
-   setCreditor((prev) => [
+   setCreditor((prev) => [    //this is sent to the backend
     ...prev,
     {
       id: new Date().getMilliseconds(),
@@ -51,6 +56,36 @@ const onChange = (e) => {
     // it should also send data to the backend from here and display it on the page at the same time
   }
   console.log(creditor)
+
+  ////This fetches data from the backend and displays it here 
+  useEffect(()=> {
+    // if(timer ){                              //this is also supposed to get a timer from the context that will allow 
+    //   console.log("time up")                 //if the subscription is still valid before it can be allowed to fetch from the DB
+    // } else {
+      axios.get(baseUrl).then((response) => {
+        // setClient(() => response.data)
+        setCreditor((prev) => [
+          ...prev, response.data
+          
+    // {
+    //   id: new Date().getMilliseconds(),
+    //   date: creditorInput.date,
+    //   description: creditorInput.description,
+    //   category: creditorInput.category,
+    //   qty: creditorInput.qty,
+    //   rate: creditorInput.rate,
+    //   total: creditorInput.rate * creditorInput.qty
+    // },
+        ])
+      }).catch(error => {
+         setError(error)
+      })
+    // }
+  }, [])
+
+console.log(creditor)
+
+
  //////////////Delete/////////////
 const deleteHandler = id => {
   console.log(id)
@@ -86,7 +121,7 @@ const editHandler = id => {
     const total = creditorTotal - cash
     setTotalCash(total)
   }
-  console.log(cash)
+  // console.log(cash)
      
   ////////////////Total ends here///////////////////////
 
@@ -111,11 +146,11 @@ const editHandler = id => {
 ////////////Reducer/////////////
 const reducer = (accumulator, currentValue) => {
   const returns = accumulator + Number(currentValue.total)
-  console.log(typeof returns);
+  // console.log(typeof returns);
   return returns
 }
 const creditorTotal = creditor.reduce(reducer, 0)
-console.log(creditorTotal)
+// console.log(creditorTotal)
 
   return (
     <div>
@@ -139,7 +174,10 @@ console.log(creditorTotal)
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>
       </table>
-      <div>{renderCreditor}</div>
+      {/* <div>{renderCreditor}</div> */}
+      <div>
+        {error ? error.message : renderCreditor}
+      </div>
 
       <div className='relative float-right right-40 top-40 space-y-8 shadow-xl hover:shadow w-3/5 rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>

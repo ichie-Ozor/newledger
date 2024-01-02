@@ -6,6 +6,7 @@ import Sales from './Component/Main/Sales'
 import Debtor from './Component/Main/Debtor'
 import Stock from './Component/Main/Stock'
 import './App.css';
+import AdminDashboard from './Component/AdminDashboard';
 
 
 
@@ -14,6 +15,7 @@ const router = createBrowserRouter(
       <Route>
         <Route path='/' element={<LandingPage />}/>
         <Route path='dashboard' element={<Dashboard />}/>
+        <Route path='admin' element={<AdminDashboard />}/>
         <Route path='dashboard/creditor' element={<Creditor />} />
         <Route path='dashboard/sales' element={<Sales />} />
         <Route path='dashboard/debtor' element={<Debtor />} />
