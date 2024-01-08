@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import data from '../data'
 import { AuthContext } from '../Context/auth'
 
 function LandingPage() {
@@ -63,6 +62,9 @@ function LandingPage() {
      })
     }
   }
+
+  //fetch signup details from the back
+
   const isSignInHandler = (e) => {
     e.preventDefault()
       if (user.email === isSigneIn.email  && user.password === isSigneIn.password){

@@ -1,12 +1,16 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+// import { useSelector, useDispatch } from 'react-redux'
+// import { AuthContext } from '../Context/auth'
 import axios from 'axios'
 
 function AdminDashboard() {
 const initialValue = 0
 const timer = Date.now()
+// const dispatch = useDispatch()
+// const { renew, setRenew } = useContext(AuthContext)
 const [client, setClient] = useState([])
 const [time, setTime] = useState(initialValue)
+const [renew, setRenew] = useState({})
 const [error, setError] = useState(null)
 const baseUrl = "http://localhost:8080/auth/getaccount"
 
@@ -28,12 +32,11 @@ useEffect(()=> {
 //this reloads the time once it is clicked, the time is then kept in redux or context so that it will help control the fetching of data from DB
 const renewTimerHandler = (id) => {
   console.log(id)
-  const findClient = client.filter((example) => console.log(example._id === id))  //this one picks the individual client that was clicked
-  console.log(findClient)
+  setRenew(client.filter((example) => (example._id === id)))  //this one picks the individual client that was clicked
   return (setTime(Date.now() + 1000))
 }
 
-
+// console.log(renew[0]._id)   //this gives you only the id of the clicked client
 
 //this deletes the subscription time
 const deleteTimerHandler = (id) => {

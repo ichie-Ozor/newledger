@@ -30,8 +30,11 @@
     @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative top-10 md:top-20 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white 
 }
 .submit{
-    @apply -left-48 top-9 text-xs h-8 text-black font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
+    @apply -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
 }
+/* .save{
+    @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
+} */
 .header-input{
     @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600
 }
@@ -42,6 +45,24 @@
     @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
 }
 /* w-40 ml-2 h-10 */
+.save{
+   position: relative;
+   color: #fff;
+   top: 28rem;
+   margin: 10px;
+   background: rgb(193, 187, 187);
+   left: 85rem;
+   width: 150px;
+   height: 40px;
+   border-radius: 10px;
+   font-size: 20px;
+   font-weight: 700;
+}
+.save:hover{
+  color: #000;
+  background: #1606f5;
+  scale: 0.8;
+}
 .table{
     width:60px;
     gap: 20px;

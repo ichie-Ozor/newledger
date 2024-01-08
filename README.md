@@ -31,3 +31,9 @@ This accepts sales input, goods sold
 --once you click a submit button, it sends the collected data to the backend
 --It should have a search input which filters the item and bring out the name and display it
 --It collects all the sum of goods 
+
+
+
+<!----------APIs that i need--------------------->
+1. API to get the id of the biz owner
+2. 
