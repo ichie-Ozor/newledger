@@ -36,4 +36,6 @@ This accepts sales input, goods sold
 
 <!----------APIs that i need--------------------->
 1. API to get the id of the biz owner
-2. 
+2. API to send the id of the individual creditor and debtor
+3. API to get the individual creditor and debtor
+4. API to get all the creditor and debtor details 

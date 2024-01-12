@@ -8,6 +8,7 @@ import Stock from './Component/Main/Stock'
 import './App.css';
 import AdminDashboard from './Component/AdminDashboard';
 import EachCreditor from './Component/Main/EachCreditor';
+import EachDebtor from './Component/Main/EachDebtor'
 
 
 
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
         <Route path='admin' element={<AdminDashboard />}/>
         <Route path='dashboard/creditor' element={<Creditor />} />
         <Route path='dashboard/creditor/eachcreditor' element={<EachCreditor />} />
+        <Route path='dashboard/debtor/eachdebtor' element={<EachDebtor />} />
         <Route path='dashboard/sales' element={<Sales />} />
         <Route path='dashboard/debtor' element={<Debtor />} />
         <Route path='dashboard/stock' element={<Stock />} />

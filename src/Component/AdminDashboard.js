@@ -10,7 +10,7 @@ const timer = Date.now()
 // const { renew, setRenew } = useContext(AuthContext)
 const [client, setClient] = useState([])
 const [time, setTime] = useState(initialValue)
-const [renew, setRenew] = useState({})
+// const [renew, setRenew] = useState({})
 const [error, setError] = useState(null)
 const baseUrl = "http://localhost:8080/auth/getaccount"
 
@@ -32,7 +32,7 @@ useEffect(()=> {
 //this reloads the time once it is clicked, the time is then kept in redux or context so that it will help control the fetching of data from DB
 const renewTimerHandler = (id) => {
   console.log(id)
-  setRenew(client.filter((example) => (example._id === id)))  //this one picks the individual client that was clicked
+  // setRenew(client.filter((example) => (example._id === id)))  //this one picks the individual client that was clicked
   return (setTime(Date.now() + 1000))
 }
 
