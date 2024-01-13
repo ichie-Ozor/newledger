@@ -34,14 +34,19 @@ function Creditor() {
           name : name
         }
         console.log(deleteData)
-        setShowDeleteModal(false)
+       
         ////////////////////////////////////send to the backend where the logic is to be done
-        axios.post(deleteUrl, deleteData).then((response) => 
-        console.log(response))
-        .catch(error => {
+        if(!deleteData){
+          axios.post(deleteUrl, deleteData).then((response) => 
+          console.log(response))
+          .catch(error => {
           setError(error)
         })
-        
+        setShowDeleteModal(false)
+        } else {
+          setShowDeleteModal(false)
+        }
+                
       }
 
       /////////This is to delete client
@@ -81,11 +86,11 @@ function Creditor() {
           <NavBar /> 
           <Header name={" Creditor Page"}/> 
           <div>
-          {error ? error.message :render}
+          {error ? error.message : render}
           </div>
-          <DeleteModal visible={showDeleteModal}>
+          <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
           <form onSubmit={submitHandler}>  
-              <input placeholder='put in your password here' type='password' value={name} onChange={(e) => setName(e.target.value)} className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-10 pl-4'/>
+              <input placeholder='put in your password here' type='password' value={name} onChange={(e) => setName(e.target.value)} className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'/>
               <button className='deletebtn'>Enter</button>
           </form>
           </DeleteModal>

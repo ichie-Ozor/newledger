@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 import clients from '../data'
-
 export const AuthContext = createContext(null)
+
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState({
         "email" : "example@mail.com",

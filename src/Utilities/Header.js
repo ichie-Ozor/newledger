@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 
 
 function Header({name}) {
+  const adminUrl = ""  //this should be the url for the password of the owner account
   const navigate = useNavigate()
+  const [admin, setAdmin] = useState(false)
   const [ open, setOpen ] = useState(false)
   const [profile, setProfile ] = useState({
     fName: "",
@@ -12,6 +15,15 @@ function Header({name}) {
     bName: "",
     adminPword: ""
   })
+
+
+useEffect(() => {
+  axios.get(adminUrl).then((response) => {
+    setAdmin(() => response.data)
+  }).catch(error => {
+    console.log(error)
+  })
+})
 
 
   const onChange = (e) => {
@@ -55,17 +67,21 @@ function Header({name}) {
         </svg>
       </div>
       {open ?
-      <div className='relative -left-96 top-36 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-1/3 md:bg-white hover:shadow-md'>
-        <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
-        <form onSubmit={profileHandler}>
-          <input type='text' placeholder='Enter First Name' className='header-input' name='fName' value={profile.fName} onChange={onChange}/>
-          <input type='text' placeholder='Enter Last Name' className='header-input' name='lName' value={profile.lName} onChange={onChange}/>
-          <input type='text' placeholder='Enter Business Name' className='header-input' name='bName' value={profile.bName} onChange={onChange}/>
-          <input type='password' placeholder='Password' className='header-input' name='adminPword' value={profile.adminPword} onChange={onChange}/>
-          <button type='submit' className='w-24 h-10 rounded relative left-36 top-1 text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
-        </form>
-      </div>
-      : <div></div>
+        //  admin?
+        //    <div>
+        //     The Admin is already registered
+        //    </div> :
+                <div className='relative -left-96 top-36 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-1/3 md:bg-white hover:shadow-md'>
+                  <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
+                  <form onSubmit={profileHandler}>
+                    <input type='text' placeholder='Enter First Name' className='header-input' name='fName' value={profile.fName} onChange={onChange}/>
+                    <input type='text' placeholder='Enter Last Name' className='header-input' name='lName' value={profile.lName} onChange={onChange}/>
+                    <input type='text' placeholder='Enter Business Name' className='header-input' name='bName' value={profile.bName} onChange={onChange}/>
+                    <input type='password' placeholder='Password' className='header-input' name='adminPword' value={profile.adminPword} onChange={onChange}/>
+                    <button type='submit' className='w-24 h-10 rounded relative left-36 top-1 text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
+                  </form>
+                </div>
+        : <div></div>
       }
     </div>
   )
