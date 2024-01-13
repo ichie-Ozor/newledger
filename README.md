@@ -38,4 +38,6 @@ This accepts sales input, goods sold
 1. API to get the id of the biz owner
 2. API to send the id of the individual creditor and debtor
 3. API to get the individual creditor and debtor
-4. API to get all the creditor and debtor details 
+4. API to get all the creditor and debtor details
+5. API that enables the business owner to delete a creditor
+6. API that enables the business owner to delete the debtor 

@@ -24,40 +24,33 @@ function Creditor() {
           })
       }, [])    
 
-      //Not working so discard
-      // const renewTimerHandler = (id) => {
-      //     console.log(id)
-      //     setRenew(client.filter((example) => (example._id === id)))  //this one picks the individual client that was clicked
-      //      return id
-      //   }
-
+     
       const submitHandler = (e, id) => {
         e.preventDefault()
         // setDeleteId({...deleteId, name: name})  this is supposed to copy the prev content and change only a part of the object
-        console.log(deleteId.id, name)
         setName("")
         const deleteData = {
-          id : deleteId,
+          id : deleteId.id,
           name : name
         }
+        console.log(deleteData)
+        setShowDeleteModal(false)
         ////////////////////////////////////send to the backend where the logic is to be done
-        axios.post(baseUrl, deleteData).then((response) => 
+        axios.post(deleteUrl, deleteData).then((response) => 
         console.log(response))
         .catch(error => {
           setError(error)
         })
+        
       }
 
       /////////This is to delete client
-      const deleteTimerHandler = (id) => {
+      const deleteCreditorHandler = (id) => {
         console.log(id)
         setDeleteId({id: id})
         setShowDeleteModal(true)
       }
-  
-
-     
-
+    
 
     const render = client.map((item, id) => {
         return (
@@ -70,13 +63,13 @@ function Creditor() {
             <div className='ml-20 float-right'>
                 <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
-                 onClick={() => deleteTimerHandler(item._id)}>
+                 onClick={() => deleteCreditorHandler(item._id)}>
                    Delete
                  </button>
                  <Link to='eachcreditor' state={item}><button className='
                 float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
-               >Renew</button></Link>
+               >Open</button></Link>
             </div>
         </div>)
      })
@@ -85,8 +78,8 @@ function Creditor() {
 
     return (
         <div>
-          {/* <NavBar /> */}
-          {/* <Header name={" Creditor Page"}/> */}
+          <NavBar /> 
+          <Header name={" Creditor Page"}/> 
           <div>
           {error ? error.message :render}
           </div>

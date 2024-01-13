@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 
 function Debtor() {
     const [client, setClient] = useState([])
-    // const [renew, setRenew] = useState([])
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [name, setName] = useState("")
     const [error, setError] = useState(null)
+    const [deleteId, setDeleteId] = useState({
+      id: ""
+    })
     const baseUrl = "http://localhost:8080/auth/getaccount"
+    const deleteUrl = ""
 
     useEffect(()=> {
           axios.get(baseUrl).then((response) => {
@@ -18,15 +24,31 @@ function Debtor() {
           })
       }, [])    
 
-      //Not working so discard
-      // const renewTimerHandler = (id) => {
-      //     console.log(id)
-      //     setRenew(client.filter((example) => (example._id === id)))  //this one picks the individual client that was clicked
-      //      return id
-      //   }
+   
+      const submitHandler = (e, id) => {
+        e.preventDefault()
+        // setDeleteId({...deleteId, name: name})  this is supposed to copy the prev content and change only a part of the object
+        setName("")
+        const deleteData = {
+          id : deleteId.id,
+          name : name
+        }
+        console.log(deleteData)
+        ////////////////////////////////////send to the backend where the logic is to be done
+        axios.post(deleteUrl, deleteData).then((response) => 
+        console.log(response))
+        .catch(error => {
+          setError(error)
+        })
+        setShowDeleteModal(false)
+      }
 
-
-      const deleteTimerHandler = (id) => {}
+      ///////////////This is to delete the debtor by only the owner
+      const deleteDebtorHandler = (id) => {
+        console.log(id)
+        setDeleteId({id: id})
+        setShowDeleteModal(true)
+      }
 
     const render = client.map((item, id) => {
         return (<div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
@@ -38,13 +60,13 @@ function Debtor() {
        <div className='ml-20 float-right'>
            <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
             hover:text-black hover:scale-90 duration-300 hover:font-bold' 
-            onClick={() => deleteTimerHandler(item.id)}>
+            onClick={() => deleteDebtorHandler(item._id)}>
               Delete
             </button>
             <Link to='eachdebtor' state={item}><button className='
            float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
             hover:text-black hover:scale-90 duration-300 hover:font-bold' 
-            >Renew</button></Link>
+            >Open</button></Link>
        </div>
         </div>)
      })
@@ -55,6 +77,12 @@ function Debtor() {
           <div>
           {error ? error.message :render}
           </div>
+          <DeleteModal visible={showDeleteModal}>
+          <form onSubmit={submitHandler}>  
+              <input placeholder='put in your password here' type='password' value={name} onChange={(e) => setName(e.target.value)} className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-10 pl-4'/>
+              <button className='deletebtn'>Enter</button>
+          </form>
+          </DeleteModal>
         </div>
       )
 }

@@ -32,11 +32,7 @@ function EachCreditor(props) {
 ////This fetches data from the backend and displays it here 
 useEffect(()=> {
   // send the id to the backend and use it to query the creditor
-  // axios.post(baseUrl, id).then((response) => 
-  // console.log(response))
-  // .catch(error => {
-  //   setError(error)
-  // })
+  
 
   ////////this one will send the id to the backend so that we can fetch the individual data
   axios({
