@@ -145,5 +145,9 @@
         border-radius: 7px;
         color: #fff;
     }
+    .profileAdmin{
+        left: 53rem;
+        font: 15px;
+    }
 }
 
