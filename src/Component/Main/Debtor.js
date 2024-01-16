@@ -34,7 +34,7 @@ function Debtor() {
           name : name
         }
         console.log(deleteData)
-        ////////////////////////////////////send to the backend where the logic is to be done
+        /////////////////////////////////////send to the backend where the logic is to be done
         axios.post(deleteUrl, deleteData).then((response) => 
         console.log(response))
         .catch(error => {
