@@ -149,5 +149,19 @@
         left: 53rem;
         font: 15px;
     }
+    .del{
+        left: -15rem;
+        overflow-y:scroll;
+    }
+    .Del{
+        width: 40rem;
+        left: 20rem;
+    }
+    .catModel{
+        z-index: 1;
+    }
+    .catForm{
+        width: 32.3rem;
+    }
 }
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-// import { AuthContext } from '../../Context/auth'
+import React, { useEffect, useState, useContext } from 'react'
+import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ function EachCreditor(props) {
   const baseUrl = "url here";
   const baseUrl2 = "url here";
   const location = useLocation()
-  // const { renew } = useContext(AuthContext)
+  const { category, setCategory } = useContext(AuthContext)
   const [ creditor, setCreditor ] = useState([])
   const [cash, setCash] = useState(initialValue)
   const [ totalCash, setTotalCash ] = useState(0)
@@ -52,7 +52,7 @@ useEffect(()=> {
     setError(error)
   })
 }, [_id])
-
+console.log(category)
 
 const onChange = (e) => {
   e.preventDefault()
@@ -87,6 +87,7 @@ const onChange = (e) => {
   })
     // it should also send data to the backend from here and display it on the page at the same time
   }
+  setCategory("welcome")
   console.log(creditor)
 
   
@@ -165,7 +166,12 @@ const creditorTotal = creditor.reduce(reducer, 0)
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
           <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/>
-          <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/>
+          <select name='category' className='btn4'>
+            <option value={"Java"}>Java</option>
+            <option value={"JavaScript"}>JavaScript</option>
+            <option value={"C++"}>C++</option>
+          </select>
+          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>

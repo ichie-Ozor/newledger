@@ -1,6 +1,6 @@
 import React from 'react'
 
-function NavBar() {
+function NavBar({children}) {
   return (
     <div className='fixed grid md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
       <div className='absolute font-ms left-4 text-white font-black flex top-2 text-6xl md:top-5 md:text-8xl'>
@@ -13,14 +13,17 @@ function NavBar() {
         <ul className='md:text-base mt-2'>
           Statement
         </ul>
-        <ul className='md:text-base mt-2'>
-          Credit Balance
-        </ul>
+        {/* <ul className='md:text-base mt-2'>
+          {children}
+        </ul> */}
         <ul className='md:text-base mt-2'>
           Debit Balance
         </ul>
         <ul className='md:text-xl mt-2'>
           Stocks
+        </ul>
+        <ul>
+          {children}
         </ul>
         <ul className='md:text-xl mt-2'>
           Sign Out

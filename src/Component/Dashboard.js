@@ -4,6 +4,7 @@ import NavBar from '../Utilities/NavBar'
 import CreditorModal from '../Utilities/CreditorModal'
 import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
+import DashboardModal from '../Utilities/DashboardModal'
 
 
 function Dashboard() {
@@ -11,7 +12,36 @@ function Dashboard() {
   const [ openDebtor, setOpenDebtor ] = useState(false)
   const [ showCreditorModal, setShowCreditorModal ] = useState(false)
   const [ showDebtorModal, setShowDebtorModal ] = useState(false)
+  const [ showCategoryModal, setShowCategoryModal ] = useState(false)
+  const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
+  const [categoryTodo, setCategoryTodo] = useState()
+  const [ categoryList, setCategoryList ] = useState([])
 
+/////////////////////Category Delete//////////////////////
+const deleteCategory = (id) => {
+  console.log(id)
+  const itemToDelete = categoryList.splice(id, 1)  //i had to do this because the mapped items do not have an id so is used splice to remove it from the array 
+  const remnant = categoryList.filter((item) => item !== itemToDelete )
+  setCategoryList(remnant)
+  console.log(categoryList)
+}
+
+//////////Category Todo //////////////////////
+const CategoryHandler = (e) => {
+  e.preventDefault()
+  setCategoryList((prev) => [...prev, categoryTodo])
+  setCategoryTodo("")
+}
+console.log(categoryList)
+const renderCategory = categoryList.map((item, id) => {
+  console.log(item)
+  return (
+    <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
+      <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item}</p>
+      <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(id)}>Delete</button>
+    </div>
+  )
+})
 
 
 
@@ -38,7 +68,10 @@ function Dashboard() {
 
   return (
     <div>
-      <NavBar />
+      <NavBar>
+        <div onClick={() => setShowCategoryModal(true)}>Category</div>
+        <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div>
+      </NavBar>
       <Header name={" Dashboard"}/>
        {/*******************  Main body here ***********************/}
        <div className='relative -left-64 -top-64 md:left-0'>
@@ -65,6 +98,39 @@ function Dashboard() {
       <CreditorModal onClose={handleCreditorOnClose} visible={showCreditorModal}/>
       <DebtorModal onClose={handleDebtorOnClose} visible={showDebtorModal} />
       </div>
+      {/***************CategoryModal*******************/}
+      {showCategoryModal ? 
+      <DashboardModal visible={showCategoryModal} close={() => setShowCategoryModal(false)}>
+         <div className='del relative top-1  h-4/5'>
+            <form onSubmit={CategoryHandler} className='catForm fixed bg-white z-30'>
+              <input 
+              type='text' 
+              placeholder='Enter Category here' 
+              className='m-1 w-80 h-10 p-2' 
+              name='categoryTodo' 
+              value={categoryTodo} 
+              onChange={(e) => setCategoryTodo(e.target.value)}
+              />
+              <button className='w-14 h-10 bg-gray-200'>Enter</button>
+            </form>
+            <div className='catModel relative top-12'>
+            {renderCategory}
+            </div>
+        </div>
+      </DashboardModal>
+      :
+      <div></div>
+      }
+      {/*******************Credit Balance Modal*/}
+      {showCreditBalModal ? 
+      <DashboardModal visible={showCreditBalModal} close={() => setShowCreditBalModal(false)}>
+         <div>
+            Credit Balance Here
+        </div>
+      </DashboardModal>
+      :
+      <div></div>
+      }
     </div>
   )
 }

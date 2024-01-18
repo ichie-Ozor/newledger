@@ -3,6 +3,7 @@ import clients from '../data'
 export const AuthContext = createContext(null)
 
 export const AuthProvider = ({children}) => {
+    const [category, setCategory ] = useState("hello")
     const [user, setUser] = useState({
         "email" : "example@mail.com",
         "password": "123456789"
@@ -12,7 +13,7 @@ export const AuthProvider = ({children}) => {
     const logOut = () => {
         setUser(null)
     }
-    return <AuthContext.Provider value={{ user, setUser, logOut, clients}}>
+    return <AuthContext.Provider value={{ user, setUser, logOut, clients, category, setCategory}}>
                {children}
            </AuthContext.Provider>
 }
