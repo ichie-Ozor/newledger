@@ -150,12 +150,12 @@
         font: 15px;
     }
     .del{
-        left: -15rem;
+        left: -22rem;
         overflow-y:scroll;
     }
     .Del{
         width: 40rem;
-        left: 20rem;
+        left: 12rem;
     }
     .catModel{
         z-index: 1;

@@ -5,6 +5,7 @@ import CreditorModal from '../Utilities/CreditorModal'
 import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
 import DashboardModal from '../Utilities/DashboardModal'
+import axios from 'axios'
 
 
 function Dashboard() {
@@ -16,6 +17,7 @@ function Dashboard() {
   const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
   const [categoryTodo, setCategoryTodo] = useState()
   const [ categoryList, setCategoryList ] = useState([])
+  const [error, setError] = useState(null)
 
 /////////////////////Category Delete//////////////////////
 const deleteCategory = (id) => {
@@ -27,12 +29,19 @@ const deleteCategory = (id) => {
 }
 
 //////////Category Todo //////////////////////
+const CategoryUrl = ""
 const CategoryHandler = (e) => {
   e.preventDefault()
   setCategoryList((prev) => [...prev, categoryTodo])
   setCategoryTodo("")
 }
-console.log(categoryList)
+console.log(categoryList)  //send thid to the backend for storage
+axios.post(CategoryUrl, categoryList).then((response) => 
+console.log(response))
+.catch(error => {
+  setError(error)
+})
+
 const renderCategory = categoryList.map((item, id) => {
   console.log(item)
   return (
@@ -76,7 +85,7 @@ const renderCategory = categoryList.map((item, id) => {
        {/*******************  Main body here ***********************/}
        <div className='relative -left-64 -top-64 md:left-0'>
        <div className='absolute top-80 left-80'>
-        <NavLink to='stock'><button className='btn1'>Stock</button></NavLink>
+        <NavLink to='stock' state={categoryList}><button className='btn1'>Stock</button></NavLink>
         <NavLink to='sales'><button className='btn1'>Sales</button></NavLink>
         <button className='btn1' onClick={creditorHandler}>Creditor</button>
         <button className='btn1' onClick={debtorHandler}>Debtor</button>
@@ -113,9 +122,8 @@ const renderCategory = categoryList.map((item, id) => {
               />
               <button className='w-14 h-10 bg-gray-200'>Enter</button>
             </form>
-            <div className='catModel relative top-12'>
-            {renderCategory}
-            </div>
+            {renderCategory} 
+            <button className='absolute bg-green-400 w-20 h-10 border rounded-sm left-2/3 mt-2'>Submit</button>
         </div>
       </DashboardModal>
       :
