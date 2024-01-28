@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { AuthContext } from '../../Context/auth'
+// import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ function EachCreditor(props) {
   const baseUrl = "url here";
   const baseUrl2 = "url here";
   const location = useLocation()
-  const { category, setCategory } = useContext(AuthContext)
+  // const { category, setCategory } = useContext(AuthContext)
   const [ creditor, setCreditor ] = useState([])
   const [cash, setCash] = useState(initialValue)
   const [ totalCash, setTotalCash ] = useState(0)
@@ -52,7 +52,7 @@ useEffect(()=> {
     setError(error)
   })
 }, [_id])
-console.log(category)
+// console.log(category)
 
 const onChange = (e) => {
   e.preventDefault()
@@ -87,7 +87,7 @@ const onChange = (e) => {
   })
     // it should also send data to the backend from here and display it on the page at the same time
   }
-  setCategory("welcome")
+  // setCategory("welcome")
   console.log(creditor)
 
   

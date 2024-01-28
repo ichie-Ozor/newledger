@@ -71,10 +71,6 @@ const renderCategory = categoryList.map((item, id) => {
   const handleCreditorOnClose = () => setShowCreditorModal(false)
   const handleDebtorOnClose = () => setShowDebtorModal(false)
 
-
-
-
-
   return (
     <div>
       <NavBar>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { AuthContext } from '../../Context/auth';
+// import { AuthContext } from '../../Context/auth';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ function Debtor() {
   const baseUrl2 = "url here";
   const location = useLocation()
   const [ debtor, setDebtor ] = useState([])
-  const { category, setCategory } = useContext(AuthContext)
+  // const { category, setCategory } = useContext(AuthContext)
   const [cash, setCash] = useState(initialValue)
   const [ totalCash, setTotalCash ] = useState(0)
   const [error, setError] = useState(null)
@@ -118,8 +118,8 @@ const editHandler = id => {
 
 
 //////////////////Category 
-console.log(category)
-setCategory("god")
+// console.log(category)
+// setCategory("god")
 
   ////////Total calculations are here////////////////////////////////
   

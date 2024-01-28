@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../Context/auth'
+import { useAuth } from '../Context/auth'
+import axios from 'axios'
 
 function LandingPage() {
   const navigate = useNavigate()
   const [errorText, setErrorText ] = useState("")
-  // const { user, setUser, logOut} = useContext(AuthContext)
-  const { user } = useContext(AuthContext)
+   const auth = useAuth()   //this is imported from the context soas to distribute it to all the components that needs it
   const [ clicked, setClicked ] = useState(true)
   const [ isRegister, setIsRegister ] = useState({
     fullName: "",
@@ -19,7 +19,6 @@ function LandingPage() {
     password: ""
   }) 
 
-  // const me = useContext(AuthProvider)
  const onRegister = (e) => {
   e.preventDefault()
   const { name, value } = e.target
@@ -63,15 +62,24 @@ function LandingPage() {
     }
   }
 
-  //fetch signup details from the back
-
+  //Signin and fetch signup details from the backend
+  // const baseUrl = `http://localhost:8080/auth/getaccount/${isSigneIn.email}$${isSigneIn.password}`   //the detail ofthe client with that email//this url is used to get 
+  const baseUrl = "http://localhost:8080/auth/signin"
   const isSignInHandler = (e) => {
     e.preventDefault()
-      if (user.email === isSigneIn.email  && user.password === isSigneIn.password){
+    const {email, password} = isSigneIn
+    /////////////////this sends data to the back for signin 
+    axios({
+      method: 'post',
+      url: baseUrl,
+      data: {email, password}
+    }).then((response) => {
+    const status = response.request.status
+      if (status === 200){
+          auth.login(email)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
           navigate('dashboard')
     } else {
-      // navigate('/')
-      setErrorText("respect yourself oh, Nkakwu 😂😂😂")
+      setErrorText("Please register 😂😂😂")
       setClicked(false)
       setIsRegister({
         fullName: "",
@@ -79,13 +87,17 @@ function LandingPage() {
         email: "",
         password:""
       })
-    }
+    } 
+  }).catch(error => {
+    setErrorText(error,"This name does not exist, please register")
+  })
+
     setIsSigneIn({
       email: "",
       password: ""
     })
   }
-
+ 
 
 
   return (
