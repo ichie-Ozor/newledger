@@ -32,6 +32,9 @@
 .submit{
     @apply -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
 }
+.save{
+    @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:-top-10 md:ml-2
+}
 /* .save{
     @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
 } */
@@ -150,8 +153,8 @@
         font: 15px;
     }
     .del{
-        left: -22rem;
-        overflow-y:scroll;
+        /* left: -22rem; */
+        /* overflow-y:scroll; */
     }
     .Del{
         width: 40rem;

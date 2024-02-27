@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import { useAuth } from '../../Context/auth'
+import axios from 'axios'
 
 function Stock() {
   const location = useLocation()
   const [ stock, setStock ] = useState([])
+  const [error, setError] = useState("")
   const [ stockInput, setStockInput ] = useState({
     date: "",
     availGoods: "",
@@ -83,6 +86,24 @@ const editHandler = id => {
   deleteHandler(id)
 } 
 
+///////// it should also send data to the backend from here and display it on the page at the same time
+const stockUrl = "http://localhost:8080/stock"
+const saveHandler = async() => {
+  // const lastSaleEntry = sales.slice(-1)
+  // console.log(lastSaleEntry, sale)
+ try{
+  axios({
+        method: 'post',
+        url: stockUrl,
+        data: stock
+      }).then((response) => {
+        console.log("sales data posted", response)
+        setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
+      })
+ } catch(err) {console.log(err.message)}
+ setStock([])
+}
+
    
     const renderStock = stock.map((value, id) => {
       const { sPrice, date, availGoods, category, qty, cPrice } = value;
@@ -127,7 +148,9 @@ const editHandler = id => {
         <div className='table-header'>Cost Price</div>
         <div className='table-header'>Selling Price</div>
       </div>
+      {error}
       <div>{renderStock}</div>
+      <button className='save' onClick={saveHandler}>Save</button>
     </div>
   )
 }

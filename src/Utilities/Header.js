@@ -17,13 +17,13 @@ function Header({name}) {
   })
 
 
-useEffect(() => {
-  axios.get(adminUrl).then((response) => {
-    setAdmin(() => response.data)
-  }).catch(error => {
-    console.log(error.message)
-  })
-})
+// useEffect(() => {
+//   axios.get(adminUrl).then((response) => {
+//     setAdmin(() => response.data)
+//   }).catch(error => {
+//     console.log(error.message)
+//   })
+// })
 
 
   const onChange = (e) => {

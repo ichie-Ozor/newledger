@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,12 +8,14 @@ import { useNavigate } from 'react-router-dom'
 function CreditorModal({visible, onClose}) {
   const navigate = useNavigate()
   const [ newCreditor, setNewCreditor ] = useState({
-    fName: "",
-    lName: "",
-    pNumber: "",
-    bName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    businessName: "",
     address: ""
   })
+  
+
 
   // this collects all the data in the input field and store it in state
   const onChange = (e) => {
@@ -23,21 +26,40 @@ function CreditorModal({visible, onClose}) {
     })
   }
 
+  
+
   // this collects the  data when you click the sibmit button
-  const onSubmitCreditorHandler = (e) => {
+   const creditorUrl = "http://localhost:8080/creditor/"
+
+
+  const onSubmitCreditorHandler = async (e) => {
     e.preventDefault()
-    
+    console.log("see me")
+    console.log("creditor", newCreditor)
+  // this pushes the creditor to the database
+  try {
+    const response = await axios.post(creditorUrl, newCreditor)
+    console.log("creditor data posted", response)
+  } catch(err){ console.log(err.message)}
+
+  
     onClose()
     setNewCreditor({
-      fName: "",
-      lName: "",
-      pNumber: "",
-      bName: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      businessName: "",
       address: ""
     })
     navigate('creditor')
-  } 
-  console.log("creditor", newCreditor)
+  }
+
+
+
+
+
+//  console.log("creditor", newCreditor)
+
   // this closes the modal when you click outside the input form
     const handleCreditorOnClose = (e) => {
         if(e.target.id === "container") onClose()
@@ -55,13 +77,13 @@ function CreditorModal({visible, onClose}) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
         </div>
-        <form className='grid justify-center' onSubmit={onSubmitCreditorHandler}>
-            <input className='btn3' type='text' placeholder='Enter First Name' name='fName' value={newCreditor.fName} onChange={onChange}/>
-            <input className='btn3' type='text' placeholder='Enter Last Name' name='lName' value={newCreditor.lName} onChange={onChange}/>
-            <input className='btn3' type='Number' placeholder='Enter Phone Number' name='pNumber' value={newCreditor.pNumber} onChange={onChange}/>
-            <input className='btn3' type='text' placeholder='Enter Business Name' name='bName' value={newCreditor.bName} onChange={onChange}/>
+        <form className='grid justify-center'  onSubmit={onSubmitCreditorHandler}>
+            <input className='btn3' type='text' placeholder='Enter First Name' name='firstName' value={newCreditor.firstName} onChange={onChange}/>
+            <input className='btn3' type='text' placeholder='Enter Last Name' name='lastName' value={newCreditor.lastName} onChange={onChange}/>
+            <input className='btn3' type='Number' placeholder='Enter Phone Number' name='phoneNumber' value={newCreditor.phoneNumber} onChange={onChange}/>
+            <input className='btn3' type='text' placeholder='Enter Business Name' name='businessName' value={newCreditor.businessName} onChange={onChange}/>
             <input className='btn3' type='text' placeholder='Enter Address' name='address' value={newCreditor.address} onChange={onChange}/>
-            <button className='w-28 h-11 bg-white relative top-24 left-28 rounded-sm -mt-12 shadow-xl hover:shadow hover:bg-slate-400 hover:text-white hover:font-bold'>Submit</button>
+            <button type="submit" className='w-28 h-11 bg-white relative top-24 left-28 rounded-sm -mt-12 shadow-xl hover:shadow hover:bg-slate-400 hover:text-white hover:font-bold'>Submit</button>
         </form>
       </div>
     </div>

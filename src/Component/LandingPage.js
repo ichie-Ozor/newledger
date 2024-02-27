@@ -21,7 +21,7 @@ function LandingPage() {
   }) 
 
 
-  ////////////////Registration
+  ////////////////Registration begins here
  const onRegister = (e) => {
   e.preventDefault()
   const { name, value } = e.target
@@ -90,9 +90,10 @@ function LandingPage() {
       data: {email, password}
     }).then((response) => {
     const status = response.data.status
-    console.log(response, status)
+    const userDetail = {email, response}
+    // console.log(response, status)
       if (status === "Success"){
-          auth.login(email)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+          auth.login(userDetail)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
           navigate('dashboard')
     } else {
       setErrorText("Please register 😂😂😂")

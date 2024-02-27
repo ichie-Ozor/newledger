@@ -15,7 +15,10 @@ function Dashboard() {
   const [ showDebtorModal, setShowDebtorModal ] = useState(false)
   const [ showCategoryModal, setShowCategoryModal ] = useState(false)
   const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
-  const [categoryTodo, setCategoryTodo] = useState()
+  // const [categoryTodo, setCategoryTodo] = useState({})
+  const [categoryTodo, setCategoryTodo] = useState({
+    todo: ""
+  })
   const [ categoryList, setCategoryList ] = useState([])
   const [error, setError] = useState(null)
 
@@ -29,18 +32,32 @@ const deleteCategory = (id) => {
 }
 
 //////////Category Todo //////////////////////
-const CategoryUrl = ""
+const onChange = (e) => {
+  e.preventDefault()
+  const { name, value } = e.target
+  setCategoryTodo({
+    ...categoryTodo, [name] : value
+  })
+}
 const CategoryHandler = (e) => {
   e.preventDefault()
+  console.log(categoryTodo)
   setCategoryList((prev) => [...prev, categoryTodo])
   setCategoryTodo("")
 }
 console.log(categoryList)  //send thid to the backend for storage
-axios.post(CategoryUrl, categoryList).then((response) => 
-console.log(response))
-.catch(error => {
-  setError(error)
-})
+const categoryUrl = "http://localhost:8080/category/"
+const sendCategory = () => {
+  try{
+    axios({
+      method: 'post',
+      url: categoryUrl,
+      data: categoryList
+    }).then((response) => {
+      console.log("category data posted", response)
+    })
+  } catch (err) {console.log(err.message)}
+}
 
 const renderCategory = categoryList.map((item, id) => {
   console.log(item)
@@ -53,7 +70,7 @@ const renderCategory = categoryList.map((item, id) => {
 })
 
 
-
+//credit handle here
   const creditorHandler = (e) => {
     e.preventDefault()
     if(!openCreditor){
@@ -61,6 +78,7 @@ const renderCategory = categoryList.map((item, id) => {
     } else setOpenCreditor(false)
   }
 
+  //delete handle here
   const debtorHandler = (e) => {
     e.preventDefault()
     if(!openDebtor){
@@ -106,20 +124,23 @@ const renderCategory = categoryList.map((item, id) => {
       {/***************CategoryModal*******************/}
       {showCategoryModal ? 
       <DashboardModal visible={showCategoryModal} close={() => setShowCategoryModal(false)}>
-         <div className='del relative top-1  h-4/5'>
+         {/* <div className='del relative top-1  h-4/5'> */}
+         <div className='relative -top-2 -left-96 overflow-auto'>
             <form onSubmit={CategoryHandler} className='catForm fixed bg-white z-30'>
               <input 
               type='text' 
               placeholder='Enter Category here' 
-              className='m-1 w-80 h-10 p-2' 
-              name='categoryTodo' 
-              value={categoryTodo} 
-              onChange={(e) => setCategoryTodo(e.target.value)}
+              // className='m-1 w-80 h-10 p-2' 
+
+              name='todo' 
+              value={categoryTodo.todo} 
+              // onChange={(e) => setCategoryTodo(e.target.value)}
+              onChange={onChange}
               />
-              <button className='w-14 h-10 bg-gray-200'>Enter</button>
+              <button className='w-14 h-8 bg-gray-200'>Enter</button>
             </form>
-            {renderCategory} 
-            <button className='absolute bg-green-400 w-20 h-10 border rounded-sm left-2/3 mt-2'>Submit</button>
+            <div className='mt-10 h-7/7'>{renderCategory}</div> 
+            <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button>
         </div>
       </DashboardModal>
       :
