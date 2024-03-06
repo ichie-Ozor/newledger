@@ -5,11 +5,13 @@ import { useLocation } from 'react-router-dom';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
+import { toast } from 'react-toastify';
 import axios from 'axios'
 
 function Stock() {
   // const location = useLocation()
   const [ stock, setStock ] = useState([])
+  const [ stocks, setStocks ] = useState([])
   const auth = useAuth()
   const [error, setError] = useState("")
   const [category, setCategory] = useState('')
@@ -73,6 +75,20 @@ useEffect(() => {
     },
   ])
 
+  setStocks((prev) => [
+    ...prev,
+    {
+      id: new Date().getMilliseconds(),
+      account: account_id,
+      date: stockInput.date,
+      goods: stockInput.goods,
+      category: category,
+      qty: stockInput.qty,
+      cost: stockInput.cost,
+      sellingPrice: stockInput.sellingPrice 
+    },
+  ])
+
   setStockInput({
     date: "",
     goods: "",
@@ -112,13 +128,14 @@ const saveHandler = async() => {
   axios({
         method: 'post',
         url: stockUrl,
-        data: stock
+        data: stocks
       }).then((response) => {
         console.log("sales data posted", response)
-        setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
+        toast.success("Sales Posted Successfully")
+        // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
       })
  } catch(err) {console.log(err.message)}
- setStock([])
+ setStocks([])
 }
 
    
@@ -128,7 +145,7 @@ const saveHandler = async() => {
         <>
            <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
             <div className='table-header'>{moment(date).format('DD/MM/YYYY')}</div>
-            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg'>{goods}</div>
+            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
             <div className='table-header'>{category}</div>
             <div className='table-header'>{qty}</div>
             <div className='table-header'>{cost}</div>

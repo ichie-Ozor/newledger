@@ -51,7 +51,7 @@
 .save{
    position: relative;
    color: #fff;
-   top: 14rem;
+   top: 7rem;
    margin: 10px;
    background: rgb(193, 187, 187);
    left: 85rem;
@@ -64,7 +64,8 @@
 .save:hover{
   color: #000;
   background: #1606f5;
-  scale: 0.8;
+  scale: 0.9;
+  transition: 0.4s;
 }
 .table{
     width:60px;
