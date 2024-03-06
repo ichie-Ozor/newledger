@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import moment from 'moment';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 function Sales() {
   const [ sales, setSales ] = useState([])
   const [sale, setSale] = useState([])
   const [error, setError] = useState("")
+  const [category, setCategory] = useState('')
   const auth = useAuth()
   const [ salesInput, setSalesInput ] = useState({
     date: "",
@@ -23,14 +27,8 @@ useEffect(() => {
   try{
     axios.get(salesUrl).then((response) => {
       const data = response.data.sales
-      // console.log(data)
-      data.map((item) => 
-        setSales([item])
-        // return setSales((prev) => [...prev, item])
-      )
-
-      // setSales((prev) => [...prev, data])
-    })
+      setSales(data)
+     })
   }catch(err) {console.log(err.message)}
 }, [])
 
@@ -58,7 +56,7 @@ useEffect(() => {
       account: account_id,
       date: salesInput.date,
       description: salesInput.description,
-      category: salesInput.category,
+      category: category,
       qty: salesInput.qty,
       rate: salesInput.rate,
       total: salesInput.rate * salesInput.qty
@@ -71,7 +69,7 @@ useEffect(() => {
       account: account_id,
       date: salesInput.date,
       description: salesInput.description,
-      category: salesInput.category,
+      category: category,
       qty: salesInput.qty,
       rate: salesInput.rate,
       total: salesInput.rate * salesInput.qty
@@ -88,7 +86,7 @@ useEffect(() => {
 ///////// it should also send data to the backend from here and display it on the page at the same time
 const saveHandler = async() => {
   // const lastSaleEntry = sales.slice(-1)
-  // console.log(lastSaleEntry, sale)
+  console.log(category)
  try{
   axios({
         method: 'post',
@@ -96,7 +94,8 @@ const saveHandler = async() => {
         data: sale
       }).then((response) => {
         console.log("sales data posted", response)
-        setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
+        toast.success("Sales Posted Successfully")
+        // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
       })
  } catch(err) {console.log(err.message)}
  setSale([])
@@ -136,7 +135,7 @@ const editHandler = id => {
   
   setSalesInput({
     ...salesInput,
-    date: editItem.date,
+    date: moment(editItem.date).format('DD/MM/YYYY'),
     availGoods: editItem.availGoods,
     category: editItem.category,
     qty: editItem.qty,
@@ -161,7 +160,7 @@ const salesTotal = sales.reduce(reducer, 0)
     return (
       <>
        <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-4'>
-        <td className='table-header'>{date}</td>
+        <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
         <td className='bg-gray-200 md:w-72 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
         <td className='table-header'>{category}</td>
         <td className='table-header'>{qty}</td>
@@ -182,7 +181,16 @@ const salesTotal = sales.reduce(reducer, 0)
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={salesInput.date} onChange={onChange}/>
           <input type='text' placeholder='Sales Description' className='btn4' name='description' value={salesInput.description} onChange={onChange}/>
-          <input type='text' placeholder='Category' className='btn4' name='category' value={salesInput.category} onChange={onChange}/>
+          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={salesInput.category} onChange={onChange}/> */}
+
+          <Typeahead
+          className='btn6'
+          placeholder='Category'
+          onChange={(selected) => {
+            setCategory(selected[0]);
+          }}
+          options={['Animal', 'Cotton', 'Food', 'Tools']}
+        />
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={salesInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>
@@ -190,7 +198,7 @@ const salesTotal = sales.reduce(reducer, 0)
       </div>
       <table className='relative left-2 top-20 space-x-2 md:left-60 md:top-28 flex md:space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='text-xs bg-gray-200 md:w-72 h-10 rounded pt-2 md:text-lg'>Sales Description</th>0058013565
+        <th className='text-xs bg-gray-200 md:w-72 h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Category</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>

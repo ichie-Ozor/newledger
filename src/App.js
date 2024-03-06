@@ -1,5 +1,7 @@
 import Dashboard from './Component/Dashboard';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import LandingPage from './Component/LandingPage';
 import Creditor from './Component/Main/Creditor'
 import Sales from './Component/Main/Sales'

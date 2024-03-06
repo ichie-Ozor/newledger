@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Typeahead } from 'react-bootstrap-typeahead';
+import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
@@ -6,27 +8,41 @@ import { useAuth } from '../../Context/auth'
 import axios from 'axios'
 
 function Stock() {
-  const location = useLocation()
+  // const location = useLocation()
   const [ stock, setStock ] = useState([])
+  const auth = useAuth()
   const [error, setError] = useState("")
+  const [category, setCategory] = useState('')
   const [ stockInput, setStockInput ] = useState({
     date: "",
-    availGoods: "",
+    goods: "",
     category: "",
     qty: "",
-    cPrice: "",
-    sPrice: ""
+    cost: "",
+    sellingPrice: ""
   })
 
- ////////////data from category
-  const allCategory = (location.state)
-  console.log(allCategory)
+// console.log(category)
+//   const categoryData = [
+//     {name: 'Animal'},
+//     {name: 'Cotton'},
+//     {name: 'Tool'},
+//     {name: 'food'},
+//     {name: 'Drugs'}
+//   ]
 
- const stockCategory = allCategory.map((item) => {
-  return (
-    <option value={item}>{item}</option>
-  )
- }) 
+ /////////This loads the sales data once the page opens
+const stockUrl = "http://localhost:8080/stock"
+useEffect(() => {
+  try{
+    axios.get(stockUrl).then((response) => {
+      const data = response.data.Stocks
+      console.log(data)
+      setStock(data)
+     })
+  }catch(err) {console.log(err.message)}
+}, [])
+
   ///////////////////////////////////
   const onChange = (e) => {
     e.preventDefault()
@@ -36,30 +52,34 @@ function Stock() {
     })
   }
 
+
   const submitHandler = (e) => {
     e.preventDefault()
     // console.log("see am here", creditorInput)
+    const account_id = auth.user.response.data.userDetail._id
+    console.log(account_id)
    if(stockInput.date === "" && stockInput.category === "") return 
    setStock((prev) => [
     ...prev,
     {
       id: new Date().getMilliseconds(),
+      account: account_id,
       date: stockInput.date,
-      availGoods: stockInput.availGoods,
-      category: stockInput.category,
+      goods: stockInput.goods,
+      category: category,
       qty: stockInput.qty,
-      cPrice: stockInput.cPrice,
-      sPrice: stockInput.sPrice 
+      cost: stockInput.cost,
+      sellingPrice: stockInput.sellingPrice 
     },
   ])
 
   setStockInput({
     date: "",
-    availGoods: "",
+    goods: "",
     category: "",
     qty: "",
-    cPrice: "",
-    sPrice: ""
+    cost: "",
+    sellingPrice: ""
   })
     // it should also send data to the backend from here and display it on the page at the same time
   }
@@ -76,21 +96,18 @@ const editHandler = id => {
   
   setStockInput({
     ...stockInput,
-    date: editItem.date,
-    availGoods: editItem.availGoods,
-    category: editItem.category,
+    date: moment(editItem.date).format('DD/MM/YYYY'),
+    goods: editItem.goods,
+    category: category,
     qty: editItem.qty,
-    cPrice: editItem.cPrice,
-    sPrice: editItem.sPrice
+    cost: editItem.cost,
+    sellingPrice: editItem.sellingPrice
   })
   deleteHandler(id)
 } 
 
 ///////// it should also send data to the backend from here and display it on the page at the same time
-const stockUrl = "http://localhost:8080/stock"
 const saveHandler = async() => {
-  // const lastSaleEntry = sales.slice(-1)
-  // console.log(lastSaleEntry, sale)
  try{
   axios({
         method: 'post',
@@ -106,16 +123,16 @@ const saveHandler = async() => {
 
    
     const renderStock = stock.map((value, id) => {
-      const { sPrice, date, availGoods, category, qty, cPrice } = value;
+      const { sellingPrice, date, goods, category, qty, cost } = value;
       return (
         <>
            <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
-            <div className='table-header'>{date}</div>
-            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg'>{availGoods}</div>
+            <div className='table-header'>{moment(date).format('DD/MM/YYYY')}</div>
+            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg'>{goods}</div>
             <div className='table-header'>{category}</div>
             <div className='table-header'>{qty}</div>
-            <div className='table-header'>{cPrice}</div>
-            <div className='table-header'>{sPrice}</div>
+            <div className='table-header'>{cost}</div>
+            <div className='table-header'>{sellingPrice}</div>
             </div>
             <button className='btn7a btn7 top-28' onClick={() => deleteHandler(value.id)}>Delete</button>
             <button className='btn7a btn7 top-28 w-40' onClick={() => editHandler(value.id)}>Edit</button>
@@ -129,14 +146,22 @@ const saveHandler = async() => {
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn6' name='date' value={stockInput.date} onChange={onChange}/>
-          <input type='text' placeholder='Available Goods' className='btn6' name='availGoods' value={stockInput.availGoods} onChange={onChange}/>
+          <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange}/>
           {/* <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange}/> */}
-          <select name='category' className='btn6'>
-            {stockCategory}
-          </select>
+           <Typeahead
+          className='btn6'
+          placeholder='Category'
+          onChange={(selected) => {
+            console.log(selected)
+            setCategory(selected[0]);
+            // setCategory(selected)
+          }}
+          // options={categoryData.name}
+          options={['Animal', 'Cotton', 'Food', 'Tools']}
+        />
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange}/>
-          <input type='number' placeholder='Cost Price N'className='btn6' name='cPrice' value={stockInput.cPrice} onChange={onChange}/>
-          <input type='number' placeholder='Selling Price N'className='btn6' name='sPrice' value={stockInput.sPrice} onChange={onChange}/>
+          <input type='number' placeholder='Cost Price N'className='btn6' name='cost' value={stockInput.cost} onChange={onChange}/>
+          <input type='number' placeholder='Selling Price N'className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>

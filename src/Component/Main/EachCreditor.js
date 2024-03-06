@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { Typeahead } from 'react-bootstrap-typeahead';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'

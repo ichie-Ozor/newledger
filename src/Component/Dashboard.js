@@ -5,6 +5,7 @@ import CreditorModal from '../Utilities/CreditorModal'
 import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
 import DashboardModal from '../Utilities/DashboardModal'
+import { useAuth } from '../Context/auth'
 import axios from 'axios'
 
 
@@ -15,7 +16,8 @@ function Dashboard() {
   const [ showDebtorModal, setShowDebtorModal ] = useState(false)
   const [ showCategoryModal, setShowCategoryModal ] = useState(false)
   const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
-  // const [categoryTodo, setCategoryTodo] = useState({})
+  const auth = useAuth()
+  const [category, setCategory] = useState([])
   const [categoryTodo, setCategoryTodo] = useState({
     todo: ""
   })
@@ -41,29 +43,40 @@ const onChange = (e) => {
 }
 const CategoryHandler = (e) => {
   e.preventDefault()
-  console.log(categoryTodo)
+  const account_id = auth.user.response.data.userDetail._id
+  // console.log(categoryTodo)
   setCategoryList((prev) => [...prev, categoryTodo])
-  setCategoryTodo("")
+  // setCategory({account_id, categoryList})
+  setCategory((prev) => [
+    ...prev,
+    {
+    account: account_id,
+    name: categoryTodo.todo
+  }])
+  setCategoryTodo({todo: ""})
+  // console.log(categoryTodo)
 }
-console.log(categoryList)  //send thid to the backend for storage
+
+console.log(category)  //send thid to the backend for storage
 const categoryUrl = "http://localhost:8080/category/"
 const sendCategory = () => {
+  // const account_id = auth.user.response.data.userDetail._id
   try{
     axios({
       method: 'post',
       url: categoryUrl,
-      data: categoryList
+      data: category
     }).then((response) => {
       console.log("category data posted", response)
     })
   } catch (err) {console.log(err.message)}
 }
-
+console.log(categoryList)
 const renderCategory = categoryList.map((item, id) => {
   console.log(item)
   return (
     <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
-      <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item}</p>
+      <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item.todo}</p>
       <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(id)}>Delete</button>
     </div>
   )
@@ -130,8 +143,6 @@ const renderCategory = categoryList.map((item, id) => {
               <input 
               type='text' 
               placeholder='Enter Category here' 
-              // className='m-1 w-80 h-10 p-2' 
-
               name='todo' 
               value={categoryTodo.todo} 
               // onChange={(e) => setCategoryTodo(e.target.value)}

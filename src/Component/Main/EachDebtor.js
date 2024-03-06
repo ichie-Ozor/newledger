@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
+import moment from 'moment';
+import { Typeahead } from 'react-bootstrap-typeahead';
 // import { AuthContext } from '../../Context/auth';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
@@ -142,7 +144,7 @@ const editHandler = id => {
   return (
     <>
      <tr key={id} className='relative left-2 space-x-2 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4'>
-      <td className='table-header'>{date}</td>
+      <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
       <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-72'>{description}</td>
       <td className='table-header'>{category}</td>
       <td className='table-header'>{qty}</td>
