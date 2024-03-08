@@ -4,6 +4,7 @@ import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import { toast } from 'react-toastify';
 
 function Creditor() {
     const [client, setClient] = useState([])
@@ -18,7 +19,15 @@ function Creditor() {
     // this loads the creditor once the page loads
     useEffect(()=> {
           axios.get(baseUrl).then((response) => {
-            console.log(response)
+            console.log(response.data.creditors)
+            const creditorsDetail = response.data.creditors
+            if(creditorsDetail == []) {
+              toast.error("There is no creditor entered")
+            } else{
+              setClient(creditorsDetail)
+            }
+             //setClient(creditorsDetail)   // this one works
+            // creditorsDetail == [] ? setError(error.credMesg) : setClient(creditorsDetail)
             // setClient(() => response.data.allAccount)
           }).catch(error => {
              setError(error)
@@ -99,6 +108,7 @@ function Creditor() {
           <Header name={" Creditor Page"}/> 
           <div>
           {error ? error.message : render}
+          {/* {render == [] ? <div>There is nothing here</div> : render} */}
           </div>
           <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
           <form onSubmit={onsubmitDeleteHandler}>  

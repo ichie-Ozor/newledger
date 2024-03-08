@@ -9,12 +9,9 @@ import axios from 'axios'
 
 function EachCreditor(props) {
   let initialValue 
-  const baseUrl = "url here";
-  const baseUrl2 = "url here";
-  const location = useLocation()
-  // const { category, setCategory } = useContext(AuthContext)
   const [ creditor, setCreditor ] = useState([])
   const [cash, setCash] = useState(initialValue)
+  const [category, setCategory] = useState('')
   const [ totalCash, setTotalCash ] = useState(0)
   const [error, setError] = useState(null)
   const [ creditorInput, setCreditorInput ] = useState({
@@ -25,35 +22,27 @@ function EachCreditor(props) {
     rate: ""
   })
 
+  const location = useLocation()
   if(location.state === null){ console.log(error)}
   const eachCreditor = (location.state)
   console.log(eachCreditor)
-  const {fullName, _id} = eachCreditor
+  const {fullName, _id, createdBy} = eachCreditor
+  const baseUrl = `http://localhost:8080/credit/${_id}`;
+  const baseUrl2 = "url here";
+  // const { category, setCategory } = useContext(AuthContext)
+ 
+
+ 
 
 ////This fetches data from the backend and displays it here 
 useEffect(()=> {
-  // send the id to the backend and use it to query the creditor
-  
-
-  ////////this one will send the id to the backend so that we can fetch the individual data
-  axios({
-    method: 'post',
-    url: baseUrl,
-    data: _id
-  }).then((response) => 
-  console.log(response))
-  .catch(error => {
-    setError(error)
+ try{
+  axios.get(baseUrl).then((response) => {
+    console.log(response)
   })
+ }catch(err){console.log(err.message)} 
+}, [])
 
-  //////////this will fetch the data of the individual client from the DB
-  axios.get(baseUrl2).then((response) => {
-    setCreditor(() => response.data)
-  }).catch(error => {
-    setError(error)
-  })
-}, [_id])
-// console.log(category)
 
 const onChange = (e) => {
   e.preventDefault()
@@ -72,7 +61,7 @@ const onChange = (e) => {
       id: new Date().getMilliseconds(),
       date: creditorInput.date,
       description: creditorInput.description,
-      category: creditorInput.category,
+      category: category,
       qty: creditorInput.qty,
       rate: creditorInput.rate,
       total: creditorInput.rate * creditorInput.qty
@@ -90,7 +79,11 @@ const onChange = (e) => {
   }
   // setCategory("welcome")
   console.log(creditor)
-
+/////////////Save to the backend//////
+const saveHandler = () => {
+  console.log("see me, going to backend")
+  
+}
   
  //////////////Delete/////////////
 const deleteHandler = id => {
@@ -167,11 +160,14 @@ const creditorTotal = creditor.reduce(reducer, 0)
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
           <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/>
-          <select name='category' className='btn4'>
-            <option value={"Java"}>Java</option>
-            <option value={"JavaScript"}>JavaScript</option>
-            <option value={"C++"}>C++</option>
-          </select>
+          <Typeahead
+          className='btn6'
+          placeholder='Category'
+          onChange={(selected) => {
+            setCategory(selected[0]);
+          }}
+          options={['Animal', 'Cotton', 'Food', 'Tools']}
+        />
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
@@ -201,7 +197,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
           </div>
         <div className='btn5'>Bal:</div><div className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center text-xl relative left-32 -top-16'>{totalCash}</div>
       </div>
-      <button type='submit' className='save'>Save</button>
+      <button type='submit' onClick={saveHandler} className='save'>Save</button>
     </div>
   )
 }

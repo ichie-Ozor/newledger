@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../Context/auth'
 
 
 
 // this is an update
 function CreditorModal({visible, onClose}) {
+  const auth = useAuth()
   const navigate = useNavigate()
   const [ newCreditor, setNewCreditor ] = useState({
     firstName: "",
@@ -20,9 +22,12 @@ function CreditorModal({visible, onClose}) {
   // this collects all the data in the input field and store it in state
   const onChange = (e) => {
     e.preventDefault()
+    const account_id = auth.user.response.data.userDetail._id
     const { name, value } = e.target
     setNewCreditor({
-      ...newCreditor, [name] : value
+      ...newCreditor, 
+      [name] : value,
+      createdBy: account_id
     })
   }
 
@@ -38,8 +43,15 @@ function CreditorModal({visible, onClose}) {
     console.log("creditor", newCreditor)
   // this pushes the creditor to the database
   try {
-    const response = await axios.post(creditorUrl, newCreditor)
-    console.log("creditor data posted", response)
+    axios({
+      method: 'post',
+      url: creditorUrl,
+      data: newCreditor
+    }).then((response) => {
+      console.log("creditor posted successfully", response)
+    })
+    // const response = await axios.post(creditorUrl, newCreditor)
+    // console.log("creditor data posted", response)
   } catch(err){ console.log(err.message)}
 
   
