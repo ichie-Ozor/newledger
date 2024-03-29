@@ -1,15 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead';
+import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios'
 
 
 function EachCreditor(props) {
   let initialValue 
   const [ creditor, setCreditor ] = useState([])
+  const [credit, setCredit] = useState([])
   const [cash, setCash] = useState(initialValue)
   const [category, setCategory] = useState('')
   const [ totalCash, setTotalCash ] = useState(0)
@@ -26,9 +29,12 @@ function EachCreditor(props) {
   if(location.state === null){ console.log(error)}
   const eachCreditor = (location.state)
   console.log(eachCreditor)
-  const {fullName, _id, createdBy} = eachCreditor
-  const baseUrl = `http://localhost:8080/credit/${_id}`;
-  const baseUrl2 = "url here";
+  const {firstName, lastName,  _id, createdBy, phoneNumber} = eachCreditor
+  console.log(firstName,lastName, _id, createdBy)
+  // const baseUrl = `http://localhost:8080/credit/${_id}`;
+  const baseUrl2 = "http://localhost:8080/credit";
+  const baseUrl3 = "http://localhost:8080/creditorBal";
+
   // const { category, setCategory } = useContext(AuthContext)
  
 
@@ -37,11 +43,12 @@ function EachCreditor(props) {
 ////This fetches data from the backend and displays it here 
 useEffect(()=> {
  try{
-  axios.get(baseUrl).then((response) => {
-    console.log(response)
+  axios.get(baseUrl2).then((response) => {
+    const creditorData = response.data.creditors
+    setCreditor(creditorData)
   })
  }catch(err){console.log(err.message)} 
-}, [])
+}, [baseUrl2])
 
 
 const onChange = (e) => {
@@ -52,10 +59,28 @@ const onChange = (e) => {
   })
 }
 
+  ////////Total calculations are here////////////////////////////////
+  
+  const cashHandler = (e) => {
+    e.preventDefault()
+    setCash(e.target.value)
+    //  return bal = debtorTotal - cash
+  }
+
+  const totalCashHandler = (e) => {
+    e.preventDefault()
+    const total = creditorTotal - parseInt(cash)
+    console.log(creditorTotal)
+    setTotalCash(total)
+  }
+  console.log(totalCash, cash)
+     
+  ////////////////Submit and sending to the backend starts here///////////////////////
+
   const submitHandler = (e) => {
     e.preventDefault()
    if(creditorInput.date === "" && creditorInput.category === "") return 
-   setCreditor((prev) => [    //this is sent to the backend
+   setCreditor((prev) => [    
     ...prev,
     {
       id: new Date().getMilliseconds(),
@@ -68,6 +93,23 @@ const onChange = (e) => {
     },
   ])
   
+  setCredit((prev) => [    //this is sent to the backend
+    ...prev,
+    {
+      id: new Date().getMilliseconds(),
+      creditorId: _id,
+      date: creditorInput.date,
+      description: creditorInput.description,
+      category: category,
+      qty: creditorInput.qty,
+      rate: Number(creditorInput.rate),
+      // paid: cash,
+      total: creditorInput.rate * creditorInput.qty,
+      // balance: totalCash,
+      businessId: createdBy
+    },
+  ])
+
   setCreditorInput({
     date: "",
     description: "",
@@ -77,13 +119,6 @@ const onChange = (e) => {
   })
     // it should also send data to the backend from here and display it on the page at the same time
   }
-  // setCategory("welcome")
-  console.log(creditor)
-/////////////Save to the backend//////
-const saveHandler = () => {
-  console.log("see me, going to backend")
-  
-}
   
  //////////////Delete/////////////
 const deleteHandler = id => {
@@ -107,28 +142,51 @@ const editHandler = id => {
 } 
 
 
-  ////////Total calculations are here////////////////////////////////
-  
-  const cashHandler = (e) => {
-    e.preventDefault()
-    setCash(e.target.value)
-    //  return bal = debtorTotal - cash
-  }
+////////////Reducer/////////////
+const reducer = (accumulator, currentValue) => {
+  const returns = accumulator + Number(currentValue.total)
+  return returns
+}
+const creditorTotal = creditor.reduce(reducer, 0)
+console.log(creditorTotal)
 
-  const totalCashHandler = (e) => {
-    e.preventDefault()
-    const total = creditorTotal - cash
-    setTotalCash(total)
-  }
-  // console.log(cash)
-     
-  ////////////////Total ends here///////////////////////
+ 
+    /////////////Save to the backend//////
+    const saveHandler = () => {
+      const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
+      // const payload = [credit, amount]
+      console.log("see me, going to backend", credit, amount)
+      try{
+        if(credit.length === 0 ){
+          return toast.error("you have not entered any new data")
+        }
+        if(amount.paid === undefined){
+          return toast.error("You have not put in amount paid")
+        }
+        axios({
+          method: 'post', 
+          url: baseUrl2,
+          data: credit
+         })
+         axios({
+          method: 'post', 
+          url: baseUrl3,
+          data: amount
+         })
+         toast.success("Input is successfully saved at the database")
+         setCredit([])
+       }catch(err){
+        console.log(err.message)
+        toast.error("Something went wrong while trying to save, please try again later")
+      } 
+
+    }
 
  const renderCreditor = creditor.map((value, id) => {
   const { date, total, description, category, qty, rate } = value;
   return (
     <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-60 md:top-28 mt-2 flex md:space-x-4'>
-      <td className='table-data'>{date}</td>
+      <td className='table-data'>{moment(date).format('DD/MM/YYYY')}</td>
       <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-72'>{description}</td>
       <td className='table-header'>{category}</td>
       <td className='table-header'>{qty}</td>
@@ -142,20 +200,11 @@ const editHandler = id => {
  })
 
 
-////////////Reducer/////////////
-const reducer = (accumulator, currentValue) => {
-  const returns = accumulator + Number(currentValue.total)
-  // console.log(typeof returns);
-  return returns
-}
-const creditorTotal = creditor.reduce(reducer, 0)
-// console.log(creditorTotal)
-
   return (
     <div>
       <NavBar />
       <Header name={" Creditor Page"}/>
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{fullName}</div>
+      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+""+lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
@@ -166,7 +215,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
           onChange={(selected) => {
             setCategory(selected[0]);
           }}
-          options={['Animal', 'Cotton', 'Food', 'Tools']}
+          options={['Animal', 'Cotton', 'Food', 'Tools',"food", "transport", "home", "fun", "health", "other"]}
         />
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>

@@ -89,7 +89,7 @@ function CreditorModal({visible, onClose}) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
         </div>
-        <form className='grid justify-center'  onSubmit={onSubmitCreditorHandler}>
+        <form className='grid justify-center' onSubmit={onSubmitCreditorHandler}>
             <input className='btn3' type='text' placeholder='Enter First Name' name='firstName' value={newCreditor.firstName} onChange={onChange}/>
             <input className='btn3' type='text' placeholder='Enter Last Name' name='lastName' value={newCreditor.lastName} onChange={onChange}/>
             <input className='btn3' type='Number' placeholder='Enter Phone Number' name='phoneNumber' value={newCreditor.phoneNumber} onChange={onChange}/>
