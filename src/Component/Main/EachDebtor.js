@@ -4,17 +4,26 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 // import { AuthContext } from '../../Context/auth';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import {toast} from 'react-toastify'
 import axios from 'axios'
 
-function Debtor() {
+function EachDebtor() {
   let initialValue 
-  const baseUrl = "url here";
-  const baseUrl2 = "url here";
+  const params = useParams()
+  console.log(params)
+  const { accountId, debtorId } = params
+  
+  const baseUrl = `http://localhost:8080/debt/${debtorId}`;
+  const baseUrl2b = 'http://localhost:8080/debt';
+  const baseUrl3 = "http://localhost:8080/debtorBal";
   const location = useLocation()
+
+
   const [ debtor, setDebtor ] = useState([])
-  // const { category, setCategory } = useContext(AuthContext)
+  const [debt, setDebt] = useState([])
   const [cash, setCash] = useState(initialValue)
+  const [category, setCategory] = useState('')
   const [ totalCash, setTotalCash ] = useState(0)
   const [error, setError] = useState(null)
   const [ debtorInput, setDebtorInput ] = useState({
@@ -25,39 +34,24 @@ function Debtor() {
     rate: ""
   })
 
-  if(location.state === null){ console.log(error)}
-  const eachDebtor = (location.state)
-  console.log(eachDebtor)
-  const {fullName, _id} = eachDebtor
-
 ////This fetches data from the backend and displays it here 
 useEffect(()=> {
-  // send the id to the backend and use it to query the creditor
-  // axios.post(baseUrl, id).then((response) => 
-  // console.log(response))
-  // .catch(error => {
-  //   setError(error)
-  // })
-
-  ////////this one will send the id to the backend so that we can fetch the individual data
-  axios({
-    method: 'post',
-    url: baseUrl,
-    data: _id
-  }).then((response) => 
-  console.log(response))
-  .catch(error => {
-    setError(error)
-  })
-
   //////////this will fetch the data of the individual client from the DB
-  axios.get(baseUrl2).then((response) => {
-    setDebtor(() => response.data)
+  axios.get(baseUrl).then((response) => {
+    console.log(response.data)
+    setDebtor(() => response.data.debts)
   }).catch(error => {
+    console.log(error, "see the error")
     setError(error)
   })
-}, [_id])
+}, [])
 
+if(location.state === null) return
+console.log(location)
+const eachDebtor = (location.state)
+console.log(eachDebtor)
+// if(eachDebtor == null) return
+const { firstName, lastName, createdBy, phoneNumber, _id} = eachDebtor
 
 const onChange = (e) => {
   e.preventDefault()
@@ -79,12 +73,29 @@ const onChange = (e) => {
       id: new Date().getMilliseconds(),
       date: debtorInput.date,
       description: debtorInput.description,
-      category: debtorInput.category,
+      category: category,
       qty: debtorInput.qty,
       rate: debtorInput.rate,
       total: debtorInput.rate * debtorInput.qty
     },
   ])
+
+  setDebt((prev) => [    //this is sent to the backend
+  ...prev,
+  {
+    id: new Date().getMilliseconds(),
+    debtorId,
+    date: debtorInput.date,
+    description: debtorInput.description,
+    category: category,
+    qty: debtorInput.qty,
+    rate: Number(debtorInput.rate),
+    // paid: cash,
+    total: debtorInput.rate * debtorInput.qty,
+    // balance: totalCash,
+    businessId: createdBy
+  },
+])
 
   setDebtorInput({
     date: "",
@@ -138,6 +149,47 @@ const editHandler = id => {
   }
    
   ////////////////Total ends here///////////////////////
+  console.log(debtor)
+
+  ////////////Reducer/////////////
+const reducer = (accumulator, currentValue) => {
+  const returns = accumulator + Number(currentValue.total)
+  console.log(typeof returns);
+  return returns
+}
+const debtorTotal = debtor.reduce(reducer, 0)
+console.log(debtorTotal)
+  
+    /////////////Save to the backend//////
+    const saveHandler = () => {
+      const amount = {paid: cash, balance: totalCash, businessId : createdBy, debtorId : _id, phoneNumber, firstName, lastName, purchase: debtorTotal }
+      // const payload = [credit, amount]
+      console.log("see me, going to backend", debt, amount)
+      try{
+        if(debt.length === 0 ){
+          return toast.error("you have not entered any new data")
+        }
+        if(amount.paid === undefined){
+          return toast.error("You have not put in amount paid")
+        }
+        axios({
+          method: 'post', 
+          url: baseUrl2b,
+          data: debt
+         })
+         axios({
+          method: 'post', 
+          url: baseUrl3,
+          data: amount
+         })
+         toast.success("Input is successfully saved at the database")
+         setDebt([])
+       }catch(err){
+        console.log(err.message)
+        toast.error("Something went wrong while trying to save, please try again later")
+      } 
+
+    }
 
  const renderDebtor = debtor.map((value, id) => {
   const { total, date, description, category, qty, rate } = value;
@@ -157,24 +209,26 @@ const editHandler = id => {
   )
  })
 
-////////////Reducer/////////////
-const reducer = (accumulator, currentValue) => {
-  const returns = accumulator + Number(currentValue.total)
-  console.log(typeof returns);
-  return returns
-}
-const debtorTotal = debtor.reduce(reducer, 0)
-console.log(debtorTotal)
+
   return (
     <div>
       <NavBar />
       <Header name={" Debtor Page"}/>
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{fullName}</div>
+      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName + " " + lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={debtorInput.date} onChange={onChange}/>
           <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/>
-          <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/>
+          <Typeahead
+          key={debtor.id}
+          className='btn6'
+          placeholder='Category'
+          onChange={(selected) => {
+            setCategory(selected[0]);
+          }}
+          options={['Animal', 'Cotton', 'Food', 'Tools',"food", "transport", "home", "fun", "health", "other"]}
+        />
+          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={debtorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>
@@ -202,8 +256,9 @@ console.log(debtorTotal)
           </div>
         <div className='btn5'>Bal:</div><div className='bg-gray-100 h-10 rounded pt-2 flex justify-center text-xl relative left-32 -top-16 w-72'>{totalCash}</div>
       </div>
+      <button type='submit' onClick={saveHandler} className='save'>Save</button>
     </div>
   )
 }
 
-export default Debtor
+export default EachDebtor

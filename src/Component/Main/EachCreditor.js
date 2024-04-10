@@ -4,13 +4,16 @@ import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
 
 function EachCreditor(props) {
   let initialValue 
+  const params = useParams();
+  console.log(params)
+  const {accountId, creditorId} = params
   const [ creditor, setCreditor ] = useState([])
   const [credit, setCredit] = useState([])
   const [cash, setCash] = useState(initialValue)
@@ -25,31 +28,33 @@ function EachCreditor(props) {
     rate: ""
   })
 
+
+    // const baseUrl = `http://localhost:8080/credit/${_id}`;
+    const baseUrl2 = `http://localhost:8080/credit/creditor/${creditorId}`;
+    const baseUrl2b = 'http://localhost:8080/credit';
+    const baseUrl3 = "http://localhost:8080/creditorBal";
+  
+    // const { category, setCategory } = useContext(AuthContext)
+  ////This fetches data from the backend and displays it here 
+
+useEffect(()=> {
+  try{
+    if(creditorId == 'dashboard') return
+   axios.get(baseUrl2).then((response) => {
+     console.log(response)
+     const creditorData = response.data.credits
+     setCreditor(creditorData)
+   })
+  }catch(err){console.log(err.message)} 
+ }, [baseUrl2])
+
   const location = useLocation()
   if(location.state === null){ console.log(error)}
   const eachCreditor = (location.state)
   console.log(eachCreditor)
+  if(eachCreditor == null) return
   const {firstName, lastName,  _id, createdBy, phoneNumber} = eachCreditor
   console.log(firstName,lastName, _id, createdBy)
-  // const baseUrl = `http://localhost:8080/credit/${_id}`;
-  const baseUrl2 = "http://localhost:8080/credit";
-  const baseUrl3 = "http://localhost:8080/creditorBal";
-
-  // const { category, setCategory } = useContext(AuthContext)
- 
-
- 
-
-////This fetches data from the backend and displays it here 
-useEffect(()=> {
- try{
-  axios.get(baseUrl2).then((response) => {
-    const creditorData = response.data.creditors
-    setCreditor(creditorData)
-  })
- }catch(err){console.log(err.message)} 
-}, [baseUrl2])
-
 
 const onChange = (e) => {
   e.preventDefault()
@@ -165,7 +170,7 @@ console.log(creditorTotal)
         }
         axios({
           method: 'post', 
-          url: baseUrl2,
+          url: baseUrl2b,
           data: credit
          })
          axios({
@@ -201,10 +206,10 @@ console.log(creditorTotal)
 
 
   return (
-    <div>
+    <div >
       <NavBar />
       <Header name={" Creditor Page"}/>
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+""+lastName}</div>
+      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>

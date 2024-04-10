@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { useAuth } from '../Context/auth'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 
 
 function DebtorModal({visible, onClose}) {
+  const auth = useAuth()
+  const account_id = auth.user.response.data.userDetail._id
   const navigate = useNavigate()
   const [ newDebtor, setNewDebtor ] = useState({
-    fName: "",
-    lName: "",
-    pNumber: "",
-    bName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    businessName: "",
     address: ""
   })
 
@@ -19,24 +23,47 @@ function DebtorModal({visible, onClose}) {
     e.preventDefault()
     const { name, value } = e.target
     setNewDebtor({
-      ...newDebtor, [name] : value
+      ...newDebtor, 
+      [name] : value,
+      createdBy: account_id
     })
   }
+
+    // this collects the  data when you click the sibmit button
+    const debtorUrl = "http://localhost:8080/debtor/"
+
 
   // this collects the  data when you click the sibmit button
   const onSubmitDebtorHandler = (e) => {
     e.preventDefault()
+    console.log(newDebtor, "see am here")
+
+    try {
+      axios({
+        method: 'post',
+        url: debtorUrl,
+        data: newDebtor
+      }).then((response) => {
+        toast.success("debtor posted successfully")
+        console.log("debtor posted successfully", response)
+      })
+    } catch(err) {
+      console.log(err.message)
+      toast.error('An error occured while trying to post the debtor')
+    }
+
+
     onClose()
     setNewDebtor({
-      fName: "",
-      lName: "",
-      pNumber: "",
-      bName: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      businessName: "",
       address: ""
     })
-     navigate('debtor')
+     navigate(`debtor/${account_id}`)
   } 
-  console.log('debtor', newDebtor)
+  // console.log('debtor', newDebtor)
   // this closes the modal when you click outside the input form
     const handleOnClose = (e) => {
         if(e.target.id === "container") onClose()
@@ -55,10 +82,10 @@ function DebtorModal({visible, onClose}) {
         </svg>
         </div>
         <form className='grid justify-center' onSubmit={onSubmitDebtorHandler}>
-            <input className='btn3' type='text' placeholder='Enter First Name' name='fName' value={newDebtor.fName} onChange={onChange}/>
-            <input className='btn3' type='text' placeholder='Enter Last Name' name='lName' value={newDebtor.lName} onChange={onChange}/>
-            <input className='btn3' type='Number' placeholder='Enter Phone Number' name='pNumber' value={newDebtor.pNumber} onChange={onChange}/>
-            <input className='btn3' type='text' placeholder='Enter Business Name' name='bName' value={newDebtor.bName} onChange={onChange}/>
+            <input className='btn3' type='text' placeholder='Enter First Name' name='firstName' value={newDebtor.firstName} onChange={onChange}/>
+            <input className='btn3' type='text' placeholder='Enter Last Name' name='lastName' value={newDebtor.lastName} onChange={onChange}/>
+            <input className='btn3' type='Number' placeholder='Enter Phone Number' name='phoneNumber' value={newDebtor.phoneNumber} onChange={onChange}/>
+            <input className='btn3' type='text' placeholder='Enter Business Name' name='businessName' value={newDebtor.businessName} onChange={onChange}/>
             <input className='btn3' type='text' placeholder='Enter Address' name='address' value={newDebtor.address} onChange={onChange}/>
             <button className='w-28 h-11 bg-white relative top-24 left-28 rounded-sm -mt-12 shadow-xl hover:shadow hover:bg-slate-400 hover:text-white hover:font-bold'>Submit</button>
         </form>

@@ -7,13 +7,13 @@ import { NavLink, useNavigate } from 'react-router-dom'
 function Header({name}) {
   const adminUrl = ""  //this should be the url for the password of the owner account
   const navigate = useNavigate()
-  const [admin, setAdmin] = useState("")
+  const [admin, setAdmin] = useState(true)
   const [ open, setOpen ] = useState(false)
   const [profile, setProfile ] = useState({
-    fName: "",
-    lName: "",
-    bName: "",
-    adminPword: ""
+    firstName: "",
+    lastName: "",
+    businessName: "",
+    adminPassword: ""
   })
 
 
@@ -33,16 +33,17 @@ function Header({name}) {
       ...profile, [name] : value
      })
   }
+
   const profileHandler = (e) => {
     e.preventDefault()
     console.log(profile)
     setProfile({
-      fName: " ",
-      lName: "",
-      bName: "",
-      adminPword: ""
+      firstName: "",
+      lastName: "",
+      businessName: "",
+      adminPassword: ""
     })
-    setOpen(false)
+    setOpen(!open)
   }
 //const profileName = profile.fName + " " + profile.lName
 //console.log(profileName, profile.bName)
@@ -55,8 +56,8 @@ function Header({name}) {
 
 
   return (
-    <div className='bg-primary-200 h-36 flex'>
-      <NavLink to='dashboard'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate('dashboard')}>Welcome{name}</div></NavLink>
+    <div className='bg-primary-200 h-36 w-[100vw] flex'>
+      <NavLink to='dashboard'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{name}</div></NavLink>
       <div className='header-profile flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
         <div className='header-img bg-gray-400  left-10 relative'>
           <img src='' alt='' />
@@ -69,15 +70,18 @@ function Header({name}) {
       {open ?
          
           (!admin ?
-           <div className='profileAdmin relative -left-96 top-36 bg-gray-100 z-10 w-96 h-46 pt-10  grid justify-items-center text-2xl font-bold rounded-xl shadow-xl md:top-32 md:bg-white hover:shadow-md'>The Admin is already registered 😃😃😃</div> 
+           <div 
+             className='relative -left-96 top-36 bg-gray-100 p-4 z-10 w-96 h-46 pt-10  grid justify-items-center text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
+              The Admin is already registered 😃😃😃
+            </div> 
            :
-                <div className='profileAdmin relative -left-96 top-36 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:bg-white hover:shadow-md'>
+                <div className='relative -left-96 top-36 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
                   <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
                   <form onSubmit={profileHandler}>
-                    <input type='text' placeholder='Enter First Name' className='header-input' name='fName' value={profile.fName} onChange={onChange}/>
-                    <input type='text' placeholder='Enter Last Name' className='header-input' name='lName' value={profile.lName} onChange={onChange}/>
-                    <input type='text' placeholder='Enter Business Name' className='header-input' name='bName' value={profile.bName} onChange={onChange}/>
-                    <input type='password' placeholder='Password' className='header-input' name='adminPword' value={profile.adminPword} onChange={onChange}/>
+                    <input type='text' placeholder='Enter First Name' className='header-input' name='firstName' value={profile.firstName} onChange={onChange}/>
+                    <input type='text' placeholder='Enter Last Name' className='header-input' name='lastName' value={profile.lastName} onChange={onChange}/>
+                    <input type='text' placeholder='Enter Business Name' className='header-input' name='businessName' value={profile.businessName} onChange={onChange}/>
+                    <input type='password' placeholder='Password' className='header-input' name='adminPassword' value={profile.adminPassword} onChange={onChange}/>
                     <button type='submit' className='w-24 h-10 rounded relative left-36 top-1 text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
                   </form>
                 </div>)

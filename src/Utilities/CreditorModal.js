@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Context/auth'
+import { toast } from 'react-toastify'
 
 
 
@@ -9,6 +10,7 @@ import { useAuth } from '../Context/auth'
 function CreditorModal({visible, onClose}) {
   const auth = useAuth()
   const navigate = useNavigate()
+  const account_id = auth.user.response.data.userDetail._id
   const [ newCreditor, setNewCreditor ] = useState({
     firstName: "",
     lastName: "",
@@ -22,7 +24,6 @@ function CreditorModal({visible, onClose}) {
   // this collects all the data in the input field and store it in state
   const onChange = (e) => {
     e.preventDefault()
-    const account_id = auth.user.response.data.userDetail._id
     const { name, value } = e.target
     setNewCreditor({
       ...newCreditor, 
@@ -48,11 +49,15 @@ function CreditorModal({visible, onClose}) {
       url: creditorUrl,
       data: newCreditor
     }).then((response) => {
+      toast.success("creditor posted successfully")
       console.log("creditor posted successfully", response)
     })
     // const response = await axios.post(creditorUrl, newCreditor)
     // console.log("creditor data posted", response)
-  } catch(err){ console.log(err.message)}
+  } catch(err){ 
+    console.log(err.message)
+    toast.error("An error occured while trying to post the creditor")
+  }
 
   
     onClose()
@@ -63,7 +68,7 @@ function CreditorModal({visible, onClose}) {
       businessName: "",
       address: ""
     })
-    navigate('creditor')
+    navigate(`creditor/${account_id}`)
   }
 
 

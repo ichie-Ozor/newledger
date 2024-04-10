@@ -92,7 +92,7 @@ function Creditor() {
                  onClick={() => updateCreditor(item._id)}>
                    Update
                  </button>
-                 <Link to='eachcreditor' state={item}><button className='
+                 <Link to={`${item._id}`} state={item}><button className='
                 float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
                >Open</button></Link>

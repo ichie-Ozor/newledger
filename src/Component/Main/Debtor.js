@@ -4,6 +4,7 @@ import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import { toast } from 'react-toastify'
 
 function Debtor() {
     const [client, setClient] = useState([])
@@ -13,12 +14,20 @@ function Debtor() {
     const [deleteId, setDeleteId] = useState({
       id: ""
     })
-    const baseUrl = "http://localhost:8080/auth/getaccount"
+    const baseUrl = "http://localhost:8080/debtor"
     const deleteUrl = ""
 
     useEffect(()=> {
           axios.get(baseUrl).then((response) => {
-            setClient(() => response.data.allAccount)
+            console.log(response)
+            const debtorDetails = response.data.debtors
+            if(debtorDetails.length == 0) {
+              console.log("there is nothing here")
+              toast.error("There is no debtor detail entered! 😂😂😂")
+            } else {
+              setClient(debtorDetails)
+            }
+            // setClient(() => response.data.allAccount)
           }).catch(error => {
              setError(error)
           })
@@ -63,7 +72,7 @@ function Debtor() {
             onClick={() => deleteDebtorHandler(item._id)}>
               Delete
             </button>
-            <Link to='eachdebtor' state={item}><button className='
+            <Link to={`${item._id}`} state={item}><button className='
            float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
             hover:text-black hover:scale-90 duration-300 hover:font-bold' 
             >Open</button></Link>

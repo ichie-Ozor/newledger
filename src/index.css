@@ -77,7 +77,7 @@
     left: 192px;
 }
 .header-profile{
-    left: 67rem;
+    left: 59.5rem;
     width: 30rem;
 }
 .header-img{
@@ -149,10 +149,10 @@
         border-radius: 7px;
         color: #fff;
     }
-    .profileAdmin{
+    /* .profileAdmin{
         left: 53rem;
         font: 15px;
-    }
+    } */
     .del{
         /* left: -22rem; */
         /* overflow-y:scroll; */

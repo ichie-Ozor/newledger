@@ -58,7 +58,7 @@ const CategoryHandler = (e) => {
   // console.log(categoryTodo)
 }
 
-console.log(category)  //send thid to the backend for storage
+// console.log(category)  //send thid to the backend for storage
 const categoryUrl = "http://localhost:8080/category/"
 const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 
@@ -81,9 +81,9 @@ const sendCategory = () => {
     })
   } catch (err) {console.log(err.message)}
 }
-console.log(categoryList)
+// console.log(categoryList)
 const renderCategory = categoryList.map((item, id) => {
-  console.log(item)
+  // console.log(item)
   return (
     <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
       <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item.name}</p>
@@ -122,22 +122,22 @@ const renderCategory = categoryList.map((item, id) => {
        {/*******************  Main body here ***********************/}
        <div className='relative -left-64 -top-64 md:left-0'>
        <div className='absolute top-80 left-80'>
-        <NavLink to='stock' state={categoryList}><button className='btn1'>Stock</button></NavLink>
-        <NavLink to='sales'><button className='btn1'>Sales</button></NavLink>
+        <NavLink to={`stock/${account_id}`} state={categoryList}><button className='btn1'>Stock</button></NavLink>
+        <NavLink to={`sales/${account_id}`}><button className='btn1'>Sales</button></NavLink>
         <button className='btn1' onClick={creditorHandler}>Creditor</button>
         <button className='btn1' onClick={debtorHandler}>Debtor</button>
       </div>
       {openCreditor ? 
       <div className='creditor relative w-48 md:w-1/5 h-24 bg-white md:flex md:p-4 shadow-2xl rounded hover:shadow'>
         <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>
-        <NavLink to='creditor'><div className='btn2'>Old Account?</div></NavLink>
+        <NavLink to={`creditor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
       </div> :
       <div></div>
       }
       {openDebtor ? 
       <div className='debtor relative w-48 h-24 bg-white md:flex shadow-2xl rounded hover:shadow md:w-1/5 md:p-4'>
       <div className='btn2' onClick={() => setShowDebtorModal(true)}>New Account?</div>
-      <NavLink to='debtor'><div className='btn2'>Old Account?</div></NavLink>
+      <NavLink to={`debtor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
     </div> :
       <div></div>
       }

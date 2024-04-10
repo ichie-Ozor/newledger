@@ -17,15 +17,33 @@ import EachDebtor from './Component/Main/EachDebtor'
 const router = createBrowserRouter(
   createRoutesFromElements(
       <Route>
-        <Route path='/' element={<LandingPage />}/>
-        <Route path='dashboard' element={<Dashboard />}/>
-        <Route path='admin' element={<AdminDashboard />}/>
-        <Route path='dashboard/creditor' element={<Creditor />} />
-        <Route path='dashboard/creditor/eachcreditor' element={<EachCreditor />} />
-        <Route path='dashboard/debtor/eachdebtor' element={<EachDebtor />} />
-        <Route path='dashboard/sales' element={<Sales />} />
-        <Route path='dashboard/debtor' element={<Debtor />} />
-        <Route path='dashboard/stock' element={<Stock />} />
+        <Route 
+            path='/' 
+            element={<LandingPage />}/>
+        <Route 
+            path='dashboard' 
+            element={<Dashboard />}/>
+        <Route 
+            path='admin' 
+            element={<AdminDashboard />}/>
+        <Route 
+            path='dashboard/creditor/:accountId' 
+            element={<Creditor />} />
+        <Route 
+            path='dashboard/creditor/:accountId/:creditorId' 
+            element={<EachCreditor />} />
+        <Route 
+            path='dashboard/debtor/:accountId/:debtorId' 
+            element={<EachDebtor />} />
+        <Route 
+            path='dashboard/sales/:accounId' 
+            element={<Sales />} />
+        <Route 
+            path='dashboard/debtor/:accountId' 
+            element={<Debtor />} />
+        <Route 
+            path='dashboard/stock/:accountId' 
+            element={<Stock />} />
       </Route>
   )
 )
