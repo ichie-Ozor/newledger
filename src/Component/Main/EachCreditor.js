@@ -4,7 +4,7 @@ import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
@@ -12,14 +12,15 @@ import axios from 'axios'
 function EachCreditor(props) {
   let initialValue 
   const params = useParams();
-  console.log(params)
+  const navigate = useNavigate()
+  // console.log(params, "see am")
   const {accountId, creditorId} = params
   const [ creditor, setCreditor ] = useState([])
   const [credit, setCredit] = useState([])
   const [cash, setCash] = useState(initialValue)
   const [category, setCategory] = useState('')
   const [ totalCash, setTotalCash ] = useState(0)
-  const [error, setError] = useState(null)
+  const [error] = useState(null)
   const [ creditorInput, setCreditorInput ] = useState({
     date: "",
     description: "",
@@ -252,6 +253,9 @@ console.log(creditorTotal)
         <div className='btn5'>Bal:</div><div className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center text-xl relative left-32 -top-16'>{totalCash}</div>
       </div>
       <button type='submit' onClick={saveHandler} className='save'>Save</button>
+      <Link to={'transaction'} state={eachCreditor}>
+          <button className='bg-red-700'>Check Balance</button>
+      </Link>
     </div>
   )
 }

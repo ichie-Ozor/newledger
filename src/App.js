@@ -1,5 +1,5 @@
 import Dashboard from './Component/Dashboard';
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Navigate, Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import LandingPage from './Component/LandingPage';
@@ -11,6 +11,9 @@ import './App.css';
 import AdminDashboard from './Component/AdminDashboard';
 import EachCreditor from './Component/Main/EachCreditor';
 import EachDebtor from './Component/Main/EachDebtor'
+import CreditorTransaction from './Component/Main/CreditorTransaction';
+import DebtorTransaction from './Component/Main/DebtorTransaction';
+import PaymentPage from './Component/PaymentPage';
 
 
 
@@ -20,6 +23,9 @@ const router = createBrowserRouter(
         <Route 
             path='/' 
             element={<LandingPage />}/>
+        <Route 
+            path='payment' 
+            element={<PaymentPage />}/>
         <Route 
             path='dashboard' 
             element={<Dashboard />}/>
@@ -44,6 +50,18 @@ const router = createBrowserRouter(
         <Route 
             path='dashboard/stock/:accountId' 
             element={<Stock />} />
+        <Route 
+            path='dashboard/creditor/:accountId/:creditorId/transaction' 
+            element={<CreditorTransaction />} />
+        {/* <Route 
+            path='dashboard/creditorTransaction/:accountId/:creditorId' 
+            element={<CreditorTransaction />} /> */}
+        {/* <Route
+            path="transactionSummary"
+            element={<Navigate to="dashboard/creditorTransaction/:accountId/:creditorId" />} /> */}
+        <Route 
+            path='DebtorTransaction/:creditorId' 
+            element={<DebtorTransaction />} />
       </Route>
   )
 )

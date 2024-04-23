@@ -26,9 +26,13 @@ export const AuthProvider = ({children}) => {
 
    const login = (user) => {
     setUser(user)
+    const {assessToken, refreshToken, userDetail} = user
+    console.log(user, assessToken, refreshToken, userDetail)
+    // const userToken = {assessToken, refreshToken}
+    localStorage.setItem("user", assessToken)
    }
    const logout = () => {
-    setUser(null)
+    // setUser(null)
    }
 
    return <AuthContext.Provider value={{user, login, logout}}>{children}</AuthContext.Provider>

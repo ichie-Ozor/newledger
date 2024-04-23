@@ -167,5 +167,16 @@
     .catForm{
         width: 32.3rem;
     }
+    table {
+        /* border-collapse: collapse; */
+        display: block;
+        grid-template-columns: auto auto auto auto;
+    }
+    th, td {
+        gap: 10px;
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
 }
 

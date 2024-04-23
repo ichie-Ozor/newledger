@@ -41,6 +41,7 @@ const onChange = (e) => {
     ...categoryTodo, [name] : value
   })
 }
+// console.log(auth.user)
 const account_id = auth.user.response.data.userDetail._id
 const CategoryHandler = (e) => {
   e.preventDefault()

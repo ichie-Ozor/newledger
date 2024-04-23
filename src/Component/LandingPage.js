@@ -12,6 +12,7 @@ function LandingPage() {
   const [ isRegister, setIsRegister ] = useState({
     fullName: "",
     businessName: "",
+    phoneNumber: "",
     email: "",
     password:""
   })
@@ -36,6 +37,7 @@ function LandingPage() {
       setIsRegister({
         fullName: isRegister.fullName,
         businessName: isRegister.businessName,
+        phoneNumber: isRegister.phoneNumber,
         email: isRegister.email,
         password:isRegister.password
       })
@@ -46,7 +48,9 @@ function LandingPage() {
         if(response.data.status === "Failed"){
           setVerifyEmail(response.data.message)
         } else {
-          setVerifyEmail("Please verify your email to continue")
+          // setVerifyEmail("Please verify your email to continue")
+          ////////this should take you to the payment page
+          // navigate('dashboard')
         }
       })
       .catch(error => setErrorText(error))
@@ -54,6 +58,7 @@ function LandingPage() {
       setIsRegister({
         fullName: "",
         businessName: "",
+        phoneNumber: "",
         email: "",
         password:""
        })
@@ -63,6 +68,7 @@ function LandingPage() {
      setIsRegister({
       fullName: "",
       businessName: "",
+      phoneNumber: "",
       email: "",
       password:""
      })
@@ -82,7 +88,7 @@ function LandingPage() {
   const isSignInHandler = (e) => {
     e.preventDefault()
     const {email, password} = isSigneIn
-    console.log(isSigneIn)
+    // console.log(isSigneIn)
     /////////////////this sends data to the back for signin 
     axios({
       method: 'post',
@@ -90,20 +96,25 @@ function LandingPage() {
       data: {email, password}
     }).then((response) => {
     const status = response.data.status
-    const userDetail = {email, response}
-    // console.log(response, status)
+    // console.log(response)
+    const {assessToken, refreshToken, userDetail} = response.data
+    const userDetails = {email, response, assessToken, refreshToken, userDetail}
+    // console.log(response.data.assessToken, response, status)
+    //save in the auth context here
       if (status === "Success"){
-          auth.login(userDetail)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
-          navigate('dashboard')
+          auth.login(userDetails)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+          // navigate('dashboard')
+          navigate('payment')
     } else {
       setErrorText("Please register 😂😂😂")
       setClicked(false)
       setIsRegister({
         fullName: "",
-        bizName: "",
+        businessName: "",
+        phoneNumber: "",
         email: "",
         password:""
-      })
+       })
     } 
   }).catch(error => {
     setErrorText(error,"This name does not exist, please register")
@@ -120,11 +131,11 @@ function LandingPage() {
   return (
     <div>
       <div className='float-left w-1/2 h-screen grid items-center justify-items-center'>
-          <div className='absolute top-32 w-64 left-10 md:top-52 md:left-72'>
+          <div className='absolute top-32 w-64 left-10 md:top-34 md:left-72'>
             <span className='text-4xl font-bold'>Welcome Back</span>
             <p className='relative left-8'>Enter Your Details Below</p>
           </div>
-          <div className='absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-72 md:left-80'>{errorText}</div>
+          <div className='absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-60 md:left-80'>{errorText}</div>
           <div>{verifyEmail}</div>
           { clicked?
           <>
@@ -136,9 +147,10 @@ function LandingPage() {
           <div className='relative -top-32 text-sm flex'>Don't have an A<p className='text-white md:text-black'>ccount? </p><span onClick={() => setClicked(false)} className='cursor-pointer text-white md:text-primary-200'>Register</span></div>
           </> :
           <>
-          <form className='absolute md:relative top-44 md:top-44 p-2 left-16 w-96' onSubmit={isRegiterHandler}>
+          <form className='absolute md:relative top-44 md:top-24 p-2 left-16 w-96' onSubmit={isRegiterHandler}>
             <input type='text' placeholder='Full Name' className='input' name='fullName' value={isRegister.fullName} onChange={onRegister}/>
             <input type='text' placeholder='Business Name' className='input' name='businessName' value={isRegister.businessName} onChange={onRegister}/>
+            <input type='text' placeholder='Phone Number' className='input' name='phoneNumber' value={isRegister.phoneNumber} onChange={onRegister}/>
             <input type='email' placeholder='Email Address' className='input' name='email' value={isRegister.email} onChange={onRegister}/>
             <input type='password' placeholder='Password' className='input' name='password' value={isRegister.password} onChange={onRegister}/>
             <button type='submit' className='btn'>Register</button>
