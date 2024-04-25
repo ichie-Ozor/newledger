@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // import { useSelector, useDispatch } from 'react-redux'
 // import { AuthContext } from '../Context/auth'
+import { toast } from 'react-toastify';
 import axios from 'axios'
 
 function AdminDashboard() {
@@ -56,7 +57,10 @@ const renewTimerHandler = (id) => {
   console.log(updateDetail, typeof updateDetail.approval)
 
   try{
-    axios.put(baseUrl2, updateDetail)
+    axios.put(baseUrl2, updateDetail).then((response) => {
+      console.log(response)
+      toast.success("Successfully saved")
+    })
   } catch (err) {
     console.log(err.message)
   }

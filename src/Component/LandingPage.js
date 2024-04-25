@@ -94,30 +94,43 @@ function LandingPage() {
       method: 'post',
       url: baseUrl,
       data: {email, password}
-    }).then((response) => {
-    const status = response.data.status
-    // console.log(response)
-    const {assessToken, refreshToken, userDetail} = response.data
-    const userDetails = {email, response, assessToken, refreshToken, userDetail}
-    // console.log(response.data.assessToken, response, status)
-    //save in the auth context here
-      if (status === "Success"){
-          auth.login(userDetails)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
-          // navigate('dashboard')
-          navigate('payment')
-    } else {
-      setErrorText("Please register 😂😂😂")
-      setClicked(false)
-      setIsRegister({
-        fullName: "",
-        businessName: "",
-        phoneNumber: "",
-        email: "",
-        password:""
-       })
-    } 
+      }).then((response) => {
+            const status = response.data.status
+            const code = response.data.code
+            console.log(response, typeof code)
+            const {assessToken, refreshToken, userDetail} = response.data
+            const userDetails = {email, response, assessToken, refreshToken, userDetail}
+
+            // if verification is false and approval > 30 redirect to payment page
+            if(code === 900 || code === 901){
+              navigate('payment')
+            }
+            
+            if(code === 402 || code === 401 ) {
+              setErrorText("Please register 😂😂😂")
+              setClicked(false)
+              setIsRegister({
+                fullName: "",
+                businessName: "",
+                phoneNumber: "",
+                email: "",
+                password:""
+              })
+            } 
+            if (status === "Success" || code === 200){
+                  auth.login(userDetails)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+                  navigate('dashboard')
+                }
   }).catch(error => {
     setErrorText(error,"This name does not exist, please register")
+    setClicked(false)
+    setIsRegister({
+      fullName: "",
+      businessName: "",
+      phoneNumber: "",
+      email: "",
+      password:""
+     })
   })
 
     setIsSigneIn({
