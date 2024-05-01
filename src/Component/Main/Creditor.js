@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
@@ -7,22 +7,26 @@ import Header from '../../Utilities/Header'
 import { toast } from 'react-toastify';
 
 function Creditor() {
+   const params = useParams()
+   const {accountId}  = params
+  //  console.log(params, accountId)
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [name, setName] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState({id: ""})
-    const baseUrl = "http://localhost:8080/creditor/"    //this is not the right endpoint
+    const baseUrl = `http://localhost:8080/creditor/${accountId}`    //this is not the right endpoint
     const deleteUrl = "http://localhost:8080/creditor/:id"
 
 
     // this loads the creditor once the page loads
     useEffect(()=> {
           axios.get(baseUrl).then((response) => {
-            console.log(response.data.creditors)
-            const creditorsDetail = response.data.creditors
-            if(creditorsDetail == []) {
+            console.log(response)
+            const creditorsDetail = response.data.creditor
+            if(creditorsDetail.length === 0) {
               toast.error("There is no creditor entered")
+              setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
             } else{
               setClient(creditorsDetail)
             }
@@ -30,6 +34,7 @@ function Creditor() {
             // creditorsDetail == [] ? setError(error.credMesg) : setClient(creditorsDetail)
             // setClient(() => response.data.allAccount)
           }).catch(error => {
+            console.log(error)
              setError(error)
           })
       }, [])    
@@ -107,7 +112,7 @@ function Creditor() {
           <NavBar /> 
           <Header name={" Creditor Page"}/> 
           <div>
-          {error ? error.message : render}
+          {error ? error : render}
           {/* {render == [] ? <div>There is nothing here</div> : render} */}
           </div>
           <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>

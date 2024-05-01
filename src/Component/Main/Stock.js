@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
+// import  Select from 'react-select'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
@@ -9,7 +10,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios'
 
 function Stock() {
-  // const location = useLocation()
+  const location = useLocation()
+  const list = location.state
   const [ stock, setStock ] = useState([])
   const [ stocks, setStocks ] = useState([])
   const auth = useAuth()
@@ -25,26 +27,40 @@ function Stock() {
   })
 
 // console.log(category)
-//   const categoryData = [
-//     {name: 'Animal'},
-//     {name: 'Cotton'},
-//     {name: 'Tool'},
-//     {name: 'food'},
-//     {name: 'Drugs'}
-//   ]
+  // const categoryData = [
+  //   {name: 'Animal'},
+  //   {name: 'Cotton'},
+  //   {name: 'Tool'},
+  //   {name: 'food'},
+  //   {name: 'Drugs'}
+  // ]
 
  /////////This loads the sales data once the page opens
-const stockUrl = "http://localhost:8080/stock"
+ const account_id = auth.user.response.data.userDetail._id
+    console.log(account_id)
+const stockUrl = `http://localhost:8080/stock/${account_id}`
+const stockUrl2 = "http://localhost:8080/stock/"
+// const categoryUrl = "http://localhost:8080/category"
 useEffect(() => {
   try{
     axios.get(stockUrl).then((response) => {
-      const data = response.data.Stocks
-      console.log(data)
+      const data = response.data.Stock
+      console.log(response, data)
       setStock(data)
      })
+    //  axios.get(categoryUrl).then((response) => {
+    //   console.log(response)
+    // })
   }catch(err) {console.log(err.message)}
 }, [])
 
+// useEffect(() => {
+//   try{
+//     //   axios.get(categoryUrl).then((response) => {
+//     //   console.log(response)
+//     // })
+//   }catch(err) {console.log(err.message)}
+// })
   ///////////////////////////////////
   const onChange = (e) => {
     e.preventDefault()
@@ -127,7 +143,7 @@ const saveHandler = async() => {
  try{
   axios({
         method: 'post',
-        url: stockUrl,
+        url: stockUrl2,
         data: stocks
       }).then((response) => {
         console.log("sales data posted", response)
@@ -164,18 +180,17 @@ const saveHandler = async() => {
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn6' name='date' value={stockInput.date} onChange={onChange}/>
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange}/>
-          {/* <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange}/> */}
+
            <Typeahead
           className='btn6'
           placeholder='Category'
           onChange={(selected) => {
             console.log(selected)
             setCategory(selected[0]);
-            // setCategory(selected)
           }}
-          // options={categoryData.name}
-          options={['Animal', 'Cotton', 'Food', 'Tools']}
+          options={list}
         />
+
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Cost Price N'className='btn6' name='cost' value={stockInput.cost} onChange={onChange}/>
           <input type='number' placeholder='Selling Price N'className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange}/>

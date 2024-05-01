@@ -24,13 +24,31 @@ function Dashboard() {
   const [ categoryList, setCategoryList ] = useState([])
   const [error, setError] = useState(null)
 
+// console.log(category)  //send thid to the backend for storage
+const account_id = auth.user.response.data.userDetail._id
+// console.log(account_id)
+const categoryUrl = "http://localhost:8080/category/"
+const categoryUrl2 = `http://localhost:8080/category/${account_id}`
+
 /////////////////////Category Delete//////////////////////
 const deleteCategory = (id) => {
-  console.log(id)
-  const itemToDelete = categoryList.splice(id, 1)  //i had to do this because the mapped items do not have an id so is used splice to remove it from the array 
-  const remnant = categoryList.filter((item) => item !== itemToDelete )
+  console.log(id, 'see')
+  // const itemToDelete = categoryList.splice(id, 1)  //i had to do this because the mapped items do not have an id so is used splice to remove it from the array 
+  const remnant = categoryList.filter((item) => item._id !== id )
   setCategoryList(remnant)
-  console.log(categoryList)
+  console.log( remnant, categoryList)
+
+  try{
+    axios({
+      method: 'delete',
+      url: categoryUrl2,
+      data: remnant
+    }).then((response) => {
+      console.log(response)
+    })
+  } catch(err) {
+    console.log(err.message)
+  }
 }
 
 //////////Category Todo //////////////////////
@@ -42,57 +60,62 @@ const onChange = (e) => {
   })
 }
 // console.log(auth.user)
-const account_id = auth.user.response.data.userDetail._id
-const CategoryHandler = (e) => {
+
+const CategoryHandler = async (e) => {
   e.preventDefault()
+  console.log(categoryTodo)
+  let data = {
+    account: account_id,
+    name: categoryTodo.name
+  }
+  console.log(data)
+  try{
+    axios({
+      method: 'post',
+      url: categoryUrl,
+      data: data
+    }).then((response) => {
+      console.log("category data posted", response)
+    })
+  } catch (err) {console.log(err.message)}
   // const account_id = auth.user.response.data.userDetail._id
   // console.log(categoryTodo)
   setCategoryList((prev) => [...prev, categoryTodo])
   // setCategory({account_id, categoryList})
-  setCategory((prev) => [
-    ...prev,
-    {
-    account: account_id,
-    name: categoryTodo.name
-  }])
+  // setCategory((prev) => [
+  //   ...prev,
+  //   {
+  //   account: account_id,
+  //   name: categoryTodo.name
+  // }])
   setCategoryTodo({name: ""})
   // console.log(categoryTodo)
 }
 
-// console.log(category)  //send thid to the backend for storage
-const categoryUrl = "http://localhost:8080/category/"
-const categoryUrl2 = `http://localhost:8080/category/${account_id}`
+
 
 useEffect(() => {
   try{
-    axios.get(categoryUrl).then((response) => {
-       setCategoryList(response.data.categories)
+    axios.get(categoryUrl2).then((response) => {
+      // console.log(response)
+       setCategoryList(response.data.category)
     })
   }catch(err) {console.log(err.message)}
 })
 const sendCategory = () => {
   // const account_id = auth.user.response.data.userDetail._id
-  try{
-    axios({
-      method: 'post',
-      url: categoryUrl,
-      data: category
-    }).then((response) => {
-      console.log("category data posted", response)
-    })
-  } catch (err) {console.log(err.message)}
+  
 }
-// console.log(categoryList)
+const list = []
 const renderCategory = categoryList.map((item, id) => {
-  // console.log(item)
+  list.push(item.name)
   return (
     <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
       <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item.name}</p>
-      <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(id)}>Delete</button>
+      <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(item._id)}>Delete</button>
     </div>
   )
 })
-
 
 //credit handle here
   const creditorHandler = (e) => {
@@ -123,8 +146,8 @@ const renderCategory = categoryList.map((item, id) => {
        {/*******************  Main body here ***********************/}
        <div className='relative -left-64 -top-64 md:left-0'>
        <div className='absolute top-80 left-80'>
-        <NavLink to={`stock/${account_id}`} state={categoryList}><button className='btn1'>Stock</button></NavLink>
-        <NavLink to={`sales/${account_id}`}><button className='btn1'>Sales</button></NavLink>
+        <NavLink to={`stock/${account_id}`} state={list}><button className='btn1'>Stock</button></NavLink>
+        <NavLink to={`sales/${account_id}`} state={list}><button className='btn1'>Sales</button></NavLink>
         <button className='btn1' onClick={creditorHandler}>Creditor</button>
         <button className='btn1' onClick={debtorHandler}>Debtor</button>
       </div>
@@ -162,7 +185,7 @@ const renderCategory = categoryList.map((item, id) => {
               <button className='w-14 h-8 bg-gray-200'>Enter</button>
             </form>
             <div className='mt-10 h-7/7'>{renderCategory}</div> 
-            <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button>
+            {/* <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button> */}
         </div>
       </DashboardModal>
       :

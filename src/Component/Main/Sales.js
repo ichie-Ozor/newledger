@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import NavBar from '../../Utilities/NavBar'
+import { useLocation } from 'react-router-dom';
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
 function Sales() {
+  const location = useLocation()
+  const list = location.state
   const [ sales, setSales ] = useState([])
   const [sale, setSale] = useState([])
   const [error, setError] = useState("")
@@ -189,7 +192,7 @@ const salesTotal = sales.reduce(reducer, 0)
           onChange={(selected) => {
             setCategory(selected[0]);
           }}
-          options={['Animal', 'Cotton', 'Food', 'Tools']}
+          options={list}
         />
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={salesInput.rate} onChange={onChange}/>

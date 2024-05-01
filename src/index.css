@@ -21,7 +21,7 @@
     @apply ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-52 md:h-12 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4
 }
 .btn5{
-    @apply w-20 h-8 bg-gray-400 ml-2 text-center relative left-3 top-1 rounded-md text-white font-bold text-lg 
+    @apply w-20 h-6 bg-[#676552] ml-2 text-center relative left-3 top-1 rounded-md text-white font-bold text-base 
 }
 .btn6{
     @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-44 md:h-12
@@ -35,9 +35,6 @@
 .save{
     @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:-top-10 md:ml-2
 }
-/* .save{
-    @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
-} */
 .header-input{
     @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600
 }
@@ -47,14 +44,32 @@
 .table-data{
     @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
 }
-/* w-40 ml-2 h-10 */
+.btnz,.btny{
+  position: relative;
+  top: 15px;
+  left: 100px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #1606f5;
+  width: 90px;
+  height: 30px;
+  transition: 0.5s;
+  box-shadow: #948989 2px 1px;
+}
+.btny:hover,
+.btnz:hover{
+    scale: 1.2;
+    background-color: #b3af8f; 
+    color: #333;
+    box-shadow: #5b19b2 2px 1px;
+}
 .save{
    position: relative;
    color: #fff;
    top: 7rem;
    margin: 10px;
    background: rgb(193, 187, 187);
-   left: 85rem;
+   left: 68rem;
    width: 150px;
    height: 40px;
    border-radius: 10px;
@@ -137,7 +152,7 @@
     }
     .btn7a{
         position: relative;
-        left: 84rem;
+        left: 78rem;
     }
     .deletebtn{
         position: absolute;

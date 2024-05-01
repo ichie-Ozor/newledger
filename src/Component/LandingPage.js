@@ -45,12 +45,14 @@ function LandingPage() {
       const baseUrl3 = 'http://localhost:8080/account/signup'
       axios.post(baseUrl3, isRegister)
       .then((response) => {
+        console.log(response)
         if(response.data.status === "Failed"){
           setVerifyEmail(response.data.message)
-        } else {
+        } 
+        if(response.data.status === "Success") {
           // setVerifyEmail("Please verify your email to continue")
           ////////this should take you to the payment page
-          // navigate('dashboard')
+          navigate('payment')
         }
       })
       .catch(error => setErrorText(error))
@@ -155,9 +157,9 @@ function LandingPage() {
           <form className='relative p-2 w-96 top-20 md:top-36 md:left-16 ' onSubmit={isSignInHandler}>
             <input type='email' placeholder='Email Address' className='input'name="email" value={isSigneIn.email} onChange={onChange}/>
             <input type='password' placeholder='Password' className='input' name="password"  value={isSigneIn.password} onChange={onChange}/>
-            <button type='submit' className='btn' >Sign In</button>
+            <button type='submit' className='btnz' >Sign In</button>
           </form>
-          <div className='relative -top-32 text-sm flex'>Don't have an A<p className='text-white md:text-black'>ccount? </p><span onClick={() => setClicked(false)} className='cursor-pointer text-white md:text-primary-200'>Register</span></div>
+          <div className='relative -top-5 md:top-1 text-sm flex'>Don't have an A<p className='text-black md:text-black'>ccount? </p><span onClick={() => setClicked(false)} className='cursor-pointer text-blue-500 md:text-primary-200'>Register</span></div>
           </> :
           <>
           <form className='absolute md:relative top-44 md:top-24 p-2 left-16 w-96' onSubmit={isRegiterHandler}>
@@ -166,9 +168,9 @@ function LandingPage() {
             <input type='text' placeholder='Phone Number' className='input' name='phoneNumber' value={isRegister.phoneNumber} onChange={onRegister}/>
             <input type='email' placeholder='Email Address' className='input' name='email' value={isRegister.email} onChange={onRegister}/>
             <input type='password' placeholder='Password' className='input' name='password' value={isRegister.password} onChange={onRegister}/>
-            <button type='submit' className='btn'>Register</button>
+            <button type='submit' className='btny'>Register</button>
           </form>
-          <div className='relative top-60 left-24 md:top-0 md:left-4 text-sm'>Already have an Account? <span onClick={() => setClicked(true)} className='cursor-pointer text-white md:text-primary-200'>Sign In</span></div>
+          <div className='relative top-60 left-24 md:top-6 md:left-4 text-sm'>Already have an Account? <span onClick={() => setClicked(true)} className='cursor-pointer text-blue md:text-primary-200'>Sign In</span></div>
           </>}
       </div>
 
