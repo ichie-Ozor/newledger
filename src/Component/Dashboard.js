@@ -26,7 +26,7 @@ function Dashboard() {
 
 // console.log(category)  //send thid to the backend for storage
 const account_id = auth.user.response.data.userDetail._id
-// console.log(account_id)
+// console.log(account_id, auth)
 const categoryUrl = "http://localhost:8080/category/"
 const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 

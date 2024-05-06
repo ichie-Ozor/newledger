@@ -12,11 +12,12 @@ import axios from 'axios'
 function Stock() {
   const location = useLocation()
   const list = location.state
+  console.log(list)
   const [ stock, setStock ] = useState([])
   const [ stocks, setStocks ] = useState([])
   const auth = useAuth()
   const [error, setError] = useState("")
-  const [category, setCategory] = useState('')
+  // const [category, setCategory] = useState('')
   const [ stockInput, setStockInput ] = useState({
     date: "",
     goods: "",
@@ -84,7 +85,7 @@ useEffect(() => {
       account: account_id,
       date: stockInput.date,
       goods: stockInput.goods,
-      category: category,
+      category: stockInput.category,
       qty: stockInput.qty,
       cost: stockInput.cost,
       sellingPrice: stockInput.sellingPrice 
@@ -98,7 +99,7 @@ useEffect(() => {
       account: account_id,
       date: stockInput.date,
       goods: stockInput.goods,
-      category: category,
+      category: stockInput.category,
       qty: stockInput.qty,
       cost: stockInput.cost,
       sellingPrice: stockInput.sellingPrice 
@@ -130,7 +131,7 @@ const editHandler = id => {
     ...stockInput,
     date: moment(editItem.date).format('DD/MM/YYYY'),
     goods: editItem.goods,
-    category: category,
+    category: editItem.category,
     qty: editItem.qty,
     cost: editItem.cost,
     sellingPrice: editItem.sellingPrice
@@ -180,8 +181,9 @@ const saveHandler = async() => {
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn6' name='date' value={stockInput.date} onChange={onChange}/>
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange}/>
+          <input type='text' placeholder='Available Goods' className='btn6' name='category' value={stockInput.category} onChange={onChange}/>
 
-           <Typeahead
+           {/* <Typeahead
           className='btn6'
           placeholder='Category'
           onChange={(selected) => {
@@ -189,7 +191,7 @@ const saveHandler = async() => {
             setCategory(selected[0]);
           }}
           options={list}
-        />
+        /> */}
 
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Cost Price N'className='btn6' name='cost' value={stockInput.cost} onChange={onChange}/>

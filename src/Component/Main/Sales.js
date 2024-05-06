@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
-import { Typeahead } from 'react-bootstrap-typeahead';
+// import { Typeahead } from 'react-bootstrap-typeahead';
 import NavBar from '../../Utilities/NavBar'
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
 function Sales() {
-  const location = useLocation()
-  const list = location.state
+  // const location = useLocation()
+  // const list = location.state
   const [ sales, setSales ] = useState([])
   const [sale, setSale] = useState([])
   const [error, setError] = useState("")
-  const [category, setCategory] = useState('')
+  const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
+  const [isClose, setIsClose] = useState(false)  /// goods description
+  const [category, setCategory] = useState([])  ///category
+  const [description, setDescription] = useState([])
+  const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
   const [ salesInput, setSalesInput ] = useState({
     date: "",
@@ -25,16 +29,24 @@ function Sales() {
   })
 
 /////////This loads the sales data once the page opens
+const account_id = auth.user.response.data.userDetail._id
+// console.log(account_id)
 const salesUrl = "http://localhost:8080/sales"
+const baseUrl5 = `http://localhost:8080/stock/${account_id}`
 useEffect(() => {
   try{
     axios.get(salesUrl).then((response) => {
       const data = response.data.sales
       setSales(data)
      })
+     axios.get(baseUrl5).then((response) => {
+       const data = response.data.Stock
+       console.log(response, data)
+      setLists(data)
+     })
   }catch(err) {console.log(err.message)}
 }, [])
-
+console.log(lists)
 
 
   const onChange = (e) => {
@@ -49,16 +61,16 @@ useEffect(() => {
   const submitHandler = async (e) => {
     e.preventDefault()
     // console.log("see am here", creditorInput)
-    console.log(auth)
+    // console.log(auth)
     const account_id = auth.user.response.data.userDetail._id
-   if(salesInput.date === "" && salesInput.category === "") return 
+  //  if(salesInput.date === "" && salesInput.category === "") return 
    setSales((prev) => [
     ...prev,
     {
       id: new Date().getMilliseconds(),
       account: account_id,
       date: salesInput.date,
-      description: salesInput.description,
+      description: description,
       category: category,
       qty: salesInput.qty,
       rate: salesInput.rate,
@@ -71,7 +83,7 @@ useEffect(() => {
       id: new Date().getMilliseconds(),
       account: account_id,
       date: salesInput.date,
-      description: salesInput.description,
+      description: description,
       category: category,
       qty: salesInput.qty,
       rate: salesInput.rate,
@@ -85,11 +97,13 @@ useEffect(() => {
     qty: "",
     rate: ""
   })
+  setCategory('')
+  setDescription('')
 }
 ///////// it should also send data to the backend from here and display it on the page at the same time
 const saveHandler = async() => {
   // const lastSaleEntry = sales.slice(-1)
-  console.log(category)
+  // console.log(category)
  try{
   axios({
         method: 'post',
@@ -103,7 +117,18 @@ const saveHandler = async() => {
  } catch(err) {console.log(err.message)}
  setSale([])
 }
-
+/////////////Dropdown///////////
+const dropDownDescHandler = (value) => {
+  console.log(value)
+  setIsClose(false)
+  setDescription(value)
+}
+const dropDownHandler = (value) => {
+  // e.preventDefault()
+  console.log(value)
+  setIsOpen(false)
+  setCategory(value)
+}
 //////////////Delete/////////////
 const deleteHandler = item => {
    if(item.id !== undefined){  //this is to check if it is stored in the backend or not by checking if it has an _id
@@ -111,7 +136,7 @@ const deleteHandler = item => {
   console.log(item.id)
   const id = item.id
    setSales(sales.filter(sale => sale.id !== id))
-   setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>sales successfully deleted</div>)
+  //  setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>sales successfully deleted</div>)
    }
   //this is the singular item that i want deleted being sent to the backend
   if(item._id){
@@ -183,17 +208,48 @@ const salesTotal = sales.reduce(reducer, 0)
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={salesInput.date} onChange={onChange}/>
-          <input type='text' placeholder='Sales Description' className='btn4' name='description' value={salesInput.description} onChange={onChange}/>
+          {/********************************/}
+          {/* <input type='text' placeholder='Sales Description' className='btn4' name='description' value={salesInput.description} onChange={onChange}/> */}
+          <div>
+            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+              {console.log(description.length, "see 208")}
+              {description.length > 0 ? description : "Description"}
+            </button>
+            {isClose && (
+              <div className='dropContainer'>
+                {lists.map((item, index) =>(
+                  // console.log(item, "see list")
+                  <div key={index}  className='dropdown' onClick={() => dropDownDescHandler(item.goods)}>{item.goods}</div>
+                ))}
+              </div>
+            )}
+         </div>
+          {/********************************/}
+          {/********************************/}
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={salesInput.category} onChange={onChange}/> */}
-
-          <Typeahead
+          <div>
+            <button type='button' className='btn4' onClick={() => setIsOpen(!isOpen)}>
+              {console.log(category.length, "see 208")}
+              {category.length > 0 ? category : "Category"}
+            </button>
+            {isOpen && (
+              <div className='dropContainer'>
+                {lists.map((item, index) =>(
+                  // console.log(item, "see list")
+                  <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.category)}>{item.category}</div>
+                ))}
+              </div>
+            )}
+         </div>
+         {/*************************/}
+          {/* <Typeahead
           className='btn6'
           placeholder='Category'
           onChange={(selected) => {
             setCategory(selected[0]);
           }}
           options={list}
-        />
+        /> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={salesInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>

@@ -44,6 +44,12 @@
 .table-data{
     @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
 }
+/* .dropContainer{
+    @apply relative top-3 bg-white max-h-40 h-24
+} */
+.dropdown{
+    @apply z-10 flex flex-col left-12 top-3 text-center justify-center mt-1 w-40 h-8 bg-slate-100 hover:bg-slate-200 cursor-pointer
+}
 .btnz,.btny{
   position: relative;
   top: 15px;
@@ -163,11 +169,7 @@
         background-color: rgb(21, 175, 21);
         border-radius: 7px;
         color: #fff;
-    }
-    /* .profileAdmin{
-        left: 53rem;
-        font: 15px;
-    } */
+    } 
     .del{
         /* left: -22rem; */
         /* overflow-y:scroll; */

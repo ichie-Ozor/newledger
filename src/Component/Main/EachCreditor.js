@@ -13,13 +13,17 @@ function EachCreditor(props) {
   let initialValue 
   const params = useParams();
   const navigate = useNavigate()
-  console.log(params, "see am")
+  // console.log(params, "see am")
   const {accountId, creditorId} = params
   const [ creditor, setCreditor ] = useState([])
-  const [lists, setLists] = useState([])
+  const [isOpen, setIsOpen] = useState(false) //// goods description dropdown
+  const [isClose, setIsClose] = useState(false)
+  const [desc, setDesc] = useState([])  /// goods description
+  const [description, setDescription] = useState('')  /// goods description
   const [credit, setCredit] = useState([])
   const [cash, setCash] = useState(initialValue)
-  const [category, setCategory] = useState('')
+  const [lists, setLists] = useState([])   //// category dropdown
+  const [category, setCategory] = useState('')  ////category
   const [ totalCash, setTotalCash ] = useState(0)
   const [error] = useState(null)
   const [ creditorInput, setCreditorInput ] = useState({
@@ -31,9 +35,9 @@ function EachCreditor(props) {
   })
 
   const location = useLocation()
-  if(location.state === null){ console.log(error)}
+  // if(location.state === null){ console.log(error)}
   const eachCreditor = (location.state)
-  console.log(eachCreditor)
+  // console.log(eachCreditor)
   
 
     // const baseUrl = `http://localhost:8080/credit/${_id}`;
@@ -52,7 +56,8 @@ useEffect(()=> {
   console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
 
   const baseUrl2 = `http://localhost:8080/credit/creditor/${creditorId}`;
-  const baseUrl4 = `http://localhost:8080/category/${createdBy}`
+  // const baseUrl4 = `http://localhost:8080/category/${createdBy}`
+  const baseUrl5 = `http://localhost:8080/stock/${createdBy}`
 
   try{
     if(creditorId == 'dashboard') return
@@ -61,23 +66,30 @@ useEffect(()=> {
      const creditorData = response.data.credits
      setCreditor(creditorData)
    })
-   axios.get(baseUrl4).then((response) => {
-    console.log(response.data.category, "see 59")
-    setLists(response.data.category)
+  //  axios.get(baseUrl4).then((response) => {
+  //   console.log(response.data.category, "see 59")
+  //   setLists(response.data.category)
+  //  })
+   axios.get(baseUrl5).then((response) => {
+    console.log(response.data.Stock, "see 71")
+    setDesc(response.data.Stock)
    })
   }catch(err){console.log(err.message)} 
  }, [creditorId, eachCreditor])
 
  if(eachCreditor == null) return
   const {firstName, lastName,  _id, createdBy, phoneNumber} = eachCreditor
-  console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
-let list = []
+  // console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
+// let list = []
+// let goodsDesc =[]
 
-lists.map((item) => {
-  return list.push(item.name)
-})
-
-console.log(list, lists)
+// lists.map((item) => {
+//   return list.push(item.name)
+// })
+// desc.map((item) => {
+//   return goodsDesc.push(item.goods)
+// })
+// console.log( desc)
 
 
 const onChange = (e) => {
@@ -102,43 +114,44 @@ const onChange = (e) => {
     console.log(creditorTotal)
     setTotalCash(total)
   }
-  console.log(totalCash, cash)
+  // console.log(totalCash, cash)
      
   ////////////////Submit and sending to the backend starts here///////////////////////
 
   const submitHandler = (e) => {
     e.preventDefault()
-   if(creditorInput.date === "" && creditorInput.category === "") return 
-   setCreditor((prev) => [    
-    ...prev,
-    {
-      id: new Date().getMilliseconds(),
-      date: creditorInput.date,
-      description: creditorInput.description,
-      category: category,
-      qty: creditorInput.qty,
-      rate: creditorInput.rate,
-      total: creditorInput.rate * creditorInput.qty
-    },
-  ])
-  
-  setCredit((prev) => [    //this is sent to the backend
-    ...prev,
-    {
-      id: new Date().getMilliseconds(),
-      creditorId: _id,
-      date: creditorInput.date,
-      description: creditorInput.description,
-      category: category,
-      qty: creditorInput.qty,
-      rate: Number(creditorInput.rate),
-      // paid: cash,
-      total: creditorInput.rate * creditorInput.qty,
-      // balance: totalCash,
-      businessId: createdBy
-    },
-  ])
-
+    // console.log("see us")
+   if(creditorInput.date === "" && category === "") {
+    toast.error("Please put in the date or category")
+        }else{
+        setCreditor((prev) => [    
+          ...prev,
+          {
+            id: new Date().getMilliseconds(),
+            date: creditorInput.date,
+            description: description,
+            category: category,
+            qty: creditorInput.qty,
+            rate: creditorInput.rate,
+            total: creditorInput.rate * creditorInput.qty
+          },
+        ])
+        
+        setCredit((prev) => [    //this is sent to the backend
+          ...prev,
+          {
+            id: new Date().getMilliseconds(),
+            creditorId: _id,
+            date: creditorInput.date,
+            description: description,
+            category: category,
+            qty: creditorInput.qty,
+            rate: Number(creditorInput.rate),
+            total: creditorInput.rate * creditorInput.qty,
+            businessId: createdBy
+          },
+        ])
+   }
   setCreditorInput({
     date: "",
     description: "",
@@ -146,9 +159,12 @@ const onChange = (e) => {
     qty: "",
     rate: ""
   })
+  setDescription('')
+  setCategory('')
     // it should also send data to the backend from here and display it on the page at the same time
   }
   
+  console.log(creditor, credit)
  //////////////Delete/////////////
 const deleteHandler = id => {
   console.log(id)
@@ -177,9 +193,20 @@ const reducer = (accumulator, currentValue) => {
   return returns
 }
 const creditorTotal = creditor.reduce(reducer, 0)
-console.log(creditorTotal)
+// console.log(creditorTotal)
 
- 
+
+////////////////////////////////////////dropdown//////////////
+  const dropDownHandler = (value) => {
+    console.log(value)
+    setIsOpen(false)
+    setDescription(value)
+  }
+ const dropDownCategoryHandler = (value) => {
+  console.log(value, "category")
+  setIsClose(false)
+  setCategory(value)
+ }
     /////////////Save to the backend//////
     const saveHandler = () => {
       const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
@@ -196,12 +223,12 @@ console.log(creditorTotal)
           method: 'post', 
           url: baseUrl2b,
           data: credit
-         })
+         }).then((response) => {console.log(response)})
          axios({
           method: 'post', 
           url: baseUrl3,
           data: amount
-         })
+         }).then((response) => {console.log(response)})
          toast.success("Input is successfully saved at the database")
          setCredit([])
        }catch(err){
@@ -231,25 +258,56 @@ console.log(creditorTotal)
 
   return (
     <div >
-      <NavBar />
-      <Header name={" Creditor Page"}/>
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
+      {/* <NavBar /> */}
+      {/* <Header name={" Creditor Page"}/> */}
+      {JSON.stringify(creditor)}
+      {/* <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div> */}
       <div className='absolute md:-left-10 top-22 '>
-        <form className='relative flex  left-56' onSubmit={submitHandler}>
+        <form className='relative flex  left-56'>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
-          <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/>
-          <Typeahead
+          {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/> */}
+          
+         <div>
+            <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
+              {description ? description : "Description"}
+            </button>
+            {isOpen && (
+              <div className='dropContainer'>
+                {desc.map((item, index) => (
+                  <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
+                ))}
+              </div>
+            )}
+         </div>
+         {/*************************/}
+
+         <div>
+            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+              {/* {console.log(category.length, "see 208")} */}
+              {category.length > 0 ? category : "Category"}
+            </button>
+            {isClose && (
+              <div className='dropContainer'>
+                {desc.map((item, index) =>(
+                  <div key={index}  className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
+                ))}
+              </div>
+            )}
+         </div>
+         {/*************************/}
+          {/* <Typeahead
           className='btn6'
           placeholder='Category'
           onChange={(selected) => {
+            // console.log(selected)
             setCategory(selected[0]);
           }}
           options={list}
-        />
+        /> */}
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
-          <button type='submit' className='submit'>Submit</button>
+          <button type='submit' className='submit' onClick={submitHandler}>Submit</button>
         </form>
       </div>
       <table className='relative left-2 top-20 md:left-[200px] md:top-28 flex space-x-4'>
