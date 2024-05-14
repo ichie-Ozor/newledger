@@ -24,6 +24,7 @@ function EachCreditor(props) {
   const [cash, setCash] = useState(initialValue)
   const [lists, setLists] = useState([])   //// category dropdown
   const [category, setCategory] = useState('')  ////category
+  const [save, setSave] = useState(false)
   const [ totalCash, setTotalCash ] = useState(0)
   const [error] = useState(null)
   const [ creditorInput, setCreditorInput ] = useState({
@@ -129,7 +130,8 @@ const onChange = (e) => {
           {
             id: new Date().getMilliseconds(),
             date: creditorInput.date,
-            description: description,
+            // description: creditorInput.description,
+            description,
             category: category,
             qty: creditorInput.qty,
             rate: creditorInput.rate,
@@ -143,7 +145,8 @@ const onChange = (e) => {
             id: new Date().getMilliseconds(),
             creditorId: _id,
             date: creditorInput.date,
-            description: description,
+            // description: creditorInput.description,
+            description,
             category: category,
             qty: creditorInput.qty,
             rate: Number(creditorInput.rate),
@@ -193,14 +196,14 @@ const reducer = (accumulator, currentValue) => {
   return returns
 }
 const creditorTotal = creditor.reduce(reducer, 0)
-// console.log(creditorTotal)
 
 
 ////////////////////////////////////////dropdown//////////////
-  const dropDownHandler = (value) => {
-    console.log(value)
+  const dropDownHandler = (event) => {
+    console.log(event.target.value)
+    setDescription(event.target.value)
     setIsOpen(false)
-    setDescription(value)
+    
   }
  const dropDownCategoryHandler = (value) => {
   console.log(value, "category")
@@ -208,9 +211,8 @@ const creditorTotal = creditor.reduce(reducer, 0)
   setCategory(value)
  }
     /////////////Save to the backend//////
+    const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
     const saveHandler = () => {
-      const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
-      // const payload = [credit, amount]
       console.log("see me, going to backend", credit, amount)
       try{
         if(credit.length === 0 ){
@@ -223,19 +225,36 @@ const creditorTotal = creditor.reduce(reducer, 0)
           method: 'post', 
           url: baseUrl2b,
           data: credit
-         }).then((response) => {console.log(response)})
-         axios({
-          method: 'post', 
-          url: baseUrl3,
-          data: amount
-         }).then((response) => {console.log(response)})
-         toast.success("Input is successfully saved at the database")
+         }).then((response) => {
+          console.log(response, "credit res")
+          if(response.data.code === 100){
+            setSave(false)
+            const id = response.data.credit.id
+            console.log(id)
+            const removeIt = creditor.filter((item) => item.id !== id)
+            setCreditor(removeIt)
+            return toast.error(response.data.message)
+          }else{
+            setSave(true)
+          }
+        })
          setCredit([])
        }catch(err){
         console.log(err.message)
         toast.error("Something went wrong while trying to save, please try again later")
       } 
+    }
 
+    if(save){
+      axios({
+        method: 'post', 
+        url: baseUrl3,
+        data: amount
+       }).then((response) => {
+        console.log(response)
+        toast.success("Input is successfully saved at the database")
+      })
+      setSave(false)
     }
 
  const renderCreditor = creditor.map((value, id) => {
@@ -258,18 +277,32 @@ const creditorTotal = creditor.reduce(reducer, 0)
 
   return (
     <div >
-      {/* <NavBar /> */}
-      {/* <Header name={" Creditor Page"}/> */}
-      {JSON.stringify(creditor)}
-      {/* <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div> */}
+      <NavBar />
+      <Header name={" Creditor Page"}/>
+      {/* {JSON.stringify(creditor)} */}
+      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
       <div className='absolute md:-left-10 top-22 '>
-        <form className='relative flex  left-56'>
+        <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
           {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/> */}
           
-         <div>
+         {/* <select className='btn4' >
+               {desc.map((item, index) => (
+                  // <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
+                  <option  name='description' value={creditorInput.description} onChange={onChange}>{item.goods}</option>
+                ))}
+         </select> */}
+
+          <select className='btn4' onChange={dropDownHandler}>
+               {desc.map((item, index) => (
+                  // <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
+                  <option  name='description' value={item.good} >{item.goods}</option>
+                ))}
+         </select>
+
+         {/* <div>
             <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
-              {description ? description : "Description"}
+              {description.length > 0 ? description : "Description"}
             </button>
             {isOpen && (
               <div className='dropContainer'>
@@ -278,12 +311,11 @@ const creditorTotal = creditor.reduce(reducer, 0)
                 ))}
               </div>
             )}
-         </div>
+         </div> */}
          {/*************************/}
 
          <div>
             <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
-              {/* {console.log(category.length, "see 208")} */}
               {category.length > 0 ? category : "Category"}
             </button>
             {isClose && (
@@ -307,7 +339,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
-          <button type='submit' className='submit' onClick={submitHandler}>Submit</button>
+          <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
       <table className='relative left-2 top-20 md:left-[200px] md:top-28 flex space-x-4'>

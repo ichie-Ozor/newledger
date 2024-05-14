@@ -120,12 +120,18 @@ const saveHandler = async() => {
 /////////////Dropdown///////////
 const dropDownDescHandler = (value) => {
   console.log(value)
+  // if(!isOpen){
+  //   setIsOpen(false)
+  // }
   setIsClose(false)
   setDescription(value)
 }
 const dropDownHandler = (value) => {
   // e.preventDefault()
   console.log(value)
+  // if(!isClose){
+  //   setIsClose(false)
+  // }
   setIsOpen(false)
   setCategory(value)
 }
