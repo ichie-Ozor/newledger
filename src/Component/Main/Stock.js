@@ -162,7 +162,7 @@ const saveHandler = async() => {
         <>
            <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
             <div className='table-header'>{moment(date).format('DD/MM/YYYY')}</div>
-            <div className='bg-gray-200 w-72 h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
+            <div className='bg-gray-200 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
             <div className='table-header'>{category}</div>
             <div className='table-header'>{qty}</div>
             <div className='table-header'>{cost}</div>
@@ -201,7 +201,7 @@ const saveHandler = async() => {
       </div>
       <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
         <div className='table-header'>Date</div>
-        <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>
+        <div className='bg-gray-200 md:w-60 text-center h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>
         <div className='table-header'>Category</div>
         <div className='table-header'>Quantity</div>
         <div className='table-header'>Cost Price</div>

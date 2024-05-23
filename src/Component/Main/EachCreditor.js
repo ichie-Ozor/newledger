@@ -260,7 +260,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
  const renderCreditor = creditor.map((value, id) => {
   const { date, total, description, category, qty, rate } = value;
   return (
-    <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-[200px] md:top-28 mt-2 flex md:space-x-4'>
+    <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-data'>{moment(date).format('DD/MM/YYYY')}</td>
       <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{category}</td>
@@ -281,7 +281,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
       <Header name={" Creditor Page"}/>
       {/* {JSON.stringify(creditor)} */}
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
-      <div className='absolute md:-left-10 top-22 '>
+      <div className='absolute md:-left-4 top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
           {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/> */}
@@ -342,7 +342,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-20 md:left-[200px] md:top-28 flex space-x-4'>
+      <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
         <th className='bg-gray-200 w-26 text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
         <th className='table-header'>Category</th>

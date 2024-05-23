@@ -197,7 +197,7 @@ console.log(debtorTotal)
     <>
      <tr key={id} className='relative left-2 space-x-2 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
-      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-72'>{description}</td>
+      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{category}</td>
       <td className='table-header'>{qty}</td>
       <td className='table-header'>{rate}</td>
@@ -236,7 +236,7 @@ console.log(debtorTotal)
       </div>
       <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-40 text-xs md:w-72 h-10 rounded pt-2'>Goods Description</th>
+        <th className='bg-gray-200 w-40 text-xs md:text-lg md:w-60 text-center h-10 rounded pt-2'>Goods Description</th>
         <th className='table-header'>Category</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>

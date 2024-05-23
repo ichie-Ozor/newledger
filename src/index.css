@@ -12,19 +12,19 @@
     @apply w-64 h-24 bg-white border rounded-xl mt-4 ml-4 border-none text-blue-200 text-3xl font-extrabold hover:bg-primary-500 shadow-xl hover:scale-75
 }
 .btn2{
-    @apply mr-2 ml-2 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-32 md:h-14 md:text-lg
+    @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-lg
 }
 .btn3{
     @apply w-80 h-12 bg-white mt-3 relative left-1 top-4 rounded-md p-4 text-lg shadow-xl hover:shadow
 }
 .btn4{
-    @apply ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-52 md:h-12 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4
+    @apply ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-48 md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4
 }
 .btn5{
     @apply w-20 h-6 bg-[#676552] ml-2 text-center relative left-3 top-1 rounded-md text-white font-bold text-base 
 }
 .btn6{
-    @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-44 md:h-12
+    @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-[10.3rem] md:h-12
 }
 .btn7{
     @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative top-10 md:top-20 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white 
@@ -39,14 +39,11 @@
     @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600
 }
 .table-header{
-    @apply flex text-center justify-center bg-gray-200 w-36 h-10 rounded pt-2 text-xs md:text-lg
+    @apply flex text-center justify-center bg-gray-200 w-[8.5rem] h-10 rounded pt-2 text-xs md:text-lg
 }
 .table-data{
     @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
 }
-/* .dropContainer{
-    @apply relative top-3 bg-white max-h-40 h-24
-} */
 .dropdown{
     @apply z-10 flex flex-col left-12 top-3 text-center justify-center mt-1 w-40 h-8 bg-slate-100 hover:bg-slate-200 cursor-pointer
 }
@@ -114,7 +111,7 @@
 .debtor{
     position: absolute;
     top: 450px;
-    left: 73rem
+    left: 71rem
 }
 /**************For small screen***********************/
 @media (max-width: 768px) {
@@ -158,7 +155,7 @@
     }
     .btn7a{
         position: relative;
-        left: 78rem;
+        left: 77.4rem;
     }
     .deletebtn{
         position: absolute;
@@ -170,10 +167,6 @@
         border-radius: 7px;
         color: #fff;
     } 
-    .del{
-        /* left: -22rem; */
-        /* overflow-y:scroll; */
-    }
     .Del{
         width: 40rem;
         left: 12rem;

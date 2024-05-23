@@ -152,14 +152,14 @@ const renderCategory = categoryList.map((item, id) => {
         <button className='btn1' onClick={debtorHandler}>Debtor</button>
       </div>
       {openCreditor ? 
-      <div className='creditor relative w-48 md:w-1/5 h-24 bg-white md:flex md:p-4 shadow-2xl rounded hover:shadow'>
+      <div className='creditor relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
         <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>
         <NavLink to={`creditor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
       </div> :
       <div></div>
       }
       {openDebtor ? 
-      <div className='debtor relative w-48 h-24 bg-white md:flex shadow-2xl rounded hover:shadow md:w-1/5 md:p-4'>
+      <div className='debtor relative w-48 h-24 bg-white md:flex shadow-2xl rounded hover:shadow md:w-[20rem] md:p-2'>
       <div className='btn2' onClick={() => setShowDebtorModal(true)}>New Account?</div>
       <NavLink to={`debtor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
     </div> :

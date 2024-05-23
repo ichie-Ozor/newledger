@@ -17,6 +17,7 @@ function Sales() {
   const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
   const [isClose, setIsClose] = useState(false)  /// goods description
   const [category, setCategory] = useState([])  ///category
+  const [save, setSave] = useState(false)
   const [description, setDescription] = useState([])
   const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
@@ -41,12 +42,12 @@ useEffect(() => {
      })
      axios.get(baseUrl5).then((response) => {
        const data = response.data.Stock
-       console.log(response, data)
+      //  console.log(response, data)
       setLists(data)
      })
   }catch(err) {console.log(err.message)}
 }, [])
-console.log(lists)
+// console.log(lists)
 
 
   const onChange = (e) => {
@@ -60,8 +61,6 @@ console.log(lists)
   
   const submitHandler = async (e) => {
     e.preventDefault()
-    // console.log("see am here", creditorInput)
-    // console.log(auth)
     const account_id = auth.user.response.data.userDetail._id
   //  if(salesInput.date === "" && salesInput.category === "") return 
    setSales((prev) => [
@@ -99,23 +98,34 @@ console.log(lists)
   })
   setCategory('')
   setDescription('')
+  setSave(true)
 }
 ///////// it should also send data to the backend from here and display it on the page at the same time
 const saveHandler = async() => {
-  // const lastSaleEntry = sales.slice(-1)
-  // console.log(category)
  try{
-  axios({
+  const response = await axios({
         method: 'post',
         url: salesUrl,
         data: sale
-      }).then((response) => {
+      })
         console.log("sales data posted", response)
         toast.success("Sales Posted Successfully")
-        // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
-      })
- } catch(err) {console.log(err.message)}
+ } catch(err) {
+  // toast.error(err.response.data.message)
+  console.log(err,"error")
+  const id = err.response.data.sale.id
+  console.log(sales,id, "sales 1")
+  const removeIt = sales.filter((item) => item.id !== id)
+  console.log(removeIt, id, "sale")
+  setSales(removeIt)
+}
  setSale([])
+ setSave(false)
+}
+
+if(save){
+  saveHandler()
+  setSave(false)
 }
 /////////////Dropdown///////////
 const dropDownDescHandler = (value) => {
@@ -142,8 +152,7 @@ const deleteHandler = item => {
   console.log(item.id)
   const id = item.id
    setSales(sales.filter(sale => sale.id !== id))
-  //  setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>sales successfully deleted</div>)
-   }
+  }
   //this is the singular item that i want deleted being sent to the backend
   if(item._id){
   const id = item._id
@@ -195,7 +204,7 @@ const salesTotal = sales.reduce(reducer, 0)
       <>
        <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-4'>
         <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
-        <td className='bg-gray-200 md:w-72 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
+        <td className='bg-gray-200 md:w-60 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
         <td className='table-header'>{category}</td>
         <td className='table-header'>{qty}</td>
         <td className='table-header'>{rate}</td>
@@ -263,7 +272,7 @@ const salesTotal = sales.reduce(reducer, 0)
       </div>
       <table className='relative left-2 top-20 space-x-2 md:left-60 md:top-28 flex md:space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='text-xs bg-gray-200 md:w-72 h-10 rounded pt-2 md:text-lg'>Sales Description</th>
+        <th className='text-xs bg-gray-200 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Category</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
@@ -276,7 +285,7 @@ const salesTotal = sales.reduce(reducer, 0)
           <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
         </div>
       </div>
-      <button className='save' onClick={saveHandler}>Save</button>
+      {/* <button className='save' onClick={saveHandler}>Save</button> */}
     </div>
   )
 }
