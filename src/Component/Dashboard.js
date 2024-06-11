@@ -17,16 +17,18 @@ function Dashboard() {
   const [ showCategoryModal, setShowCategoryModal ] = useState(false)
   const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
   const auth = useAuth()
-  const [category, setCategory] = useState([])
+  // const [category, setCategory] = useState([])
   const [categoryTodo, setCategoryTodo] = useState({
     name: ""
   })
   const [ categoryList, setCategoryList ] = useState([])
-  const [error, setError] = useState(null)
+  // const [error, setError] = useState(null)
 
 // console.log(category)  //send thid to the backend for storage
+console.log(auth)
 const account_id = auth.user.response.data.userDetail._id
-// console.log(account_id, auth)
+const {fullName, businessName} = auth.user.response.data.userDetail
+console.log(account_id, auth)
 const categoryUrl = "http://localhost:8080/category/"
 const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 
@@ -139,10 +141,10 @@ const renderCategory = categoryList.map((item, id) => {
   return (
     <div>
       <NavBar>
-        <div onClick={() => setShowCategoryModal(true)}>Category</div>
+        {/* <div onClick={() => setShowCategoryModal(true)}>Category</div> */}
         <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div>
       </NavBar>
-      <Header name={" Dashboard"}/>
+      <Header pageTitle={" Dashboard"} name={businessName + " "+ fullName}/>
        {/*******************  Main body here ***********************/}
        <div className='relative -left-64 -top-64 md:left-0'>
        <div className='absolute top-80 left-80'>
@@ -169,27 +171,28 @@ const renderCategory = categoryList.map((item, id) => {
       <DebtorModal onClose={handleDebtorOnClose} visible={showDebtorModal} />
       </div>
       {/***************CategoryModal*******************/}
-      {showCategoryModal ? 
-      <DashboardModal visible={showCategoryModal} close={() => setShowCategoryModal(false)}>
-         {/* <div className='del relative top-1  h-4/5'> */}
-         <div className='relative -top-2 -left-96 overflow-auto'>
-            <form onSubmit={CategoryHandler} className='catForm fixed bg-white z-30'>
-              <input 
-              type='text' 
-              placeholder='Enter Category here' 
-              name='name' 
-              value={categoryTodo.name} 
-              // onChange={(e) => setCategoryTodo(e.target.value)}
-              onChange={onChange}
-              />
-              <button className='w-14 h-8 bg-gray-200'>Enter</button>
-            </form>
-            <div className='mt-10 h-7/7'>{renderCategory}</div> 
-            {/* <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button> */}
-        </div>
-      </DashboardModal>
-      :
-      <div></div>
+      {
+      // showCategoryModal ? 
+      // <DashboardModal visible={showCategoryModal} close={() => setShowCategoryModal(false)}>
+      //    {/* <div className='del relative top-1  h-4/5'> */}
+      //    <div className='relative -top-2 -left-96 overflow-auto'>
+      //       <form onSubmit={CategoryHandler} className='catForm fixed bg-white z-30'>
+      //         <input 
+      //         type='text' 
+      //         placeholder='Enter Category here' 
+      //         name='name' 
+      //         value={categoryTodo.name} 
+      //         // onChange={(e) => setCategoryTodo(e.target.value)}
+      //         onChange={onChange}
+      //         />
+      //         <button className='w-14 h-8 bg-gray-200'>Enter</button>
+      //       </form>
+      //       <div className='mt-10 h-7/7'>{renderCategory}</div> 
+      //       {/* <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button> */}
+      //   </div>
+      // </DashboardModal>
+      // :
+      // <div></div>
       }
       {/*******************Credit Balance Modal*/}
       {showCreditBalModal ? 

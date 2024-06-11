@@ -58,11 +58,11 @@ useEffect(() => {
     })
   }
 
+  const {fullName, businessName} = auth.user.response.data.userDetail
   
   const submitHandler = async (e) => {
     e.preventDefault()
     const account_id = auth.user.response.data.userDetail._id
-  //  if(salesInput.date === "" && salesInput.category === "") return 
    setSales((prev) => [
     ...prev,
     {
@@ -219,12 +219,10 @@ const salesTotal = sales.reduce(reducer, 0)
   return (
     <div>
       <NavBar />
-      <Header name={" Sales Page"}/>
+      <Header pageTitle={" Sales Page"} name={businessName + " " + fullName}/>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={salesInput.date} onChange={onChange}/>
-          {/********************************/}
-          {/* <input type='text' placeholder='Sales Description' className='btn4' name='description' value={salesInput.description} onChange={onChange}/> */}
           <div>
             <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
               {console.log(description.length, "see 208")}
@@ -233,16 +231,12 @@ const salesTotal = sales.reduce(reducer, 0)
             {isClose && (
               <div className='dropContainer'>
                 {lists.map((item, index) =>(
-                  // console.log(item, "see list")
                   <div key={index}  className='dropdown' onClick={() => dropDownDescHandler(item.goods)}>{item.goods}</div>
                 ))}
               </div>
             )}
          </div>
-          {/********************************/}
-          {/********************************/}
-          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={salesInput.category} onChange={onChange}/> */}
-          <div>
+         <div>
             <button type='button' className='btn4' onClick={() => setIsOpen(!isOpen)}>
               {console.log(category.length, "see 208")}
               {category.length > 0 ? category : "Category"}
@@ -250,21 +244,11 @@ const salesTotal = sales.reduce(reducer, 0)
             {isOpen && (
               <div className='dropContainer'>
                 {lists.map((item, index) =>(
-                  // console.log(item, "see list")
                   <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.category)}>{item.category}</div>
                 ))}
               </div>
             )}
          </div>
-         {/*************************/}
-          {/* <Typeahead
-          className='btn6'
-          placeholder='Category'
-          onChange={(selected) => {
-            setCategory(selected[0]);
-          }}
-          options={list}
-        /> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={salesInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>

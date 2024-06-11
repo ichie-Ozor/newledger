@@ -7,13 +7,15 @@ import Header from '../../Utilities/Header'
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
+import { useAuth } from '../../Context/auth';
 
 
 function EachCreditor(props) {
   let initialValue 
   const params = useParams();
   const navigate = useNavigate()
-  // console.log(params, "see am")
+  const auth = useAuth()
+  const {fullName, businessName} = auth.user.response.data.userDetail
   const {accountId, creditorId} = params
   const [ creditor, setCreditor ] = useState([])
   const [isOpen, setIsOpen] = useState(false) //// goods description dropdown
@@ -278,12 +280,40 @@ const creditorTotal = creditor.reduce(reducer, 0)
   return (
     <div >
       <NavBar />
-      <Header name={" Creditor Page"}/>
+      <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName}/>
       {/* {JSON.stringify(creditor)} */}
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
       <div className='absolute md:-left-4 top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
+          
+         {/*************************/}
+
+                <div>
+                    <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+                      {category.length > 0 ? category : "Category"}
+                    </button>
+                    {isClose && (
+                      <div className='dropContainer'>
+                        {desc.map((item, index) =>(
+                          <div key={index}  className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
+                        ))}
+                      </div>
+                    )}
+                </div>
+                {/*************************/}
+                  {/* <Typeahead
+                  className='btn6'
+                  placeholder='Category'
+                  onChange={(selected) => {
+                    // console.log(selected)
+                    setCategory(selected[0]);
+                  }}
+                  options={list}
+                /> */}
+                  {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
+                  
+          {/********************************/}
           {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/> */}
           
          {/* <select className='btn4' >
@@ -293,7 +323,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
                 ))}
          </select> */}
 
-          <select className='btn4' onChange={dropDownHandler}>
+        <select className='btn4' onChange={dropDownHandler}>
                {desc.map((item, index) => (
                   // <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
                   <option  name='description' value={item.good} >{item.goods}</option>
@@ -312,31 +342,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
               </div>
             )}
          </div> */}
-         {/*************************/}
 
-         <div>
-            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
-              {category.length > 0 ? category : "Category"}
-            </button>
-            {isClose && (
-              <div className='dropContainer'>
-                {desc.map((item, index) =>(
-                  <div key={index}  className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
-                ))}
-              </div>
-            )}
-         </div>
-         {/*************************/}
-          {/* <Typeahead
-          className='btn6'
-          placeholder='Category'
-          onChange={(selected) => {
-            // console.log(selected)
-            setCategory(selected[0]);
-          }}
-          options={list}
-        /> */}
-          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>

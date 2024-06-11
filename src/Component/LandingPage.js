@@ -87,6 +87,7 @@ function LandingPage() {
   }
   // const baseUrl = `http://localhost:8080/auth/getaccount/${isSigneIn.email}$${isSigneIn.password}`   //the detail ofthe client with that email//this url is used to get 
   const baseUrl = "http://localhost:8080/auth/signin"
+
   const isSignInHandler = (e) => {
     e.preventDefault()
     const {email, password} = isSigneIn
@@ -99,13 +100,14 @@ function LandingPage() {
       }).then((response) => {
             const status = response.data.status
             const code = response.data.code
-            console.log(response, typeof code)
+            console.log(response)
             const {assessToken, refreshToken, userDetail} = response.data
-            const userDetails = {email, response, assessToken, refreshToken, userDetail}
+            // const userDetails = {email, response, assessToken, refreshToken, userDetail}
 
             // if verification is false and approval > 30 redirect to payment page
             if(code === 900 || code === 901){
               navigate('payment')
+              window.location.reload()
             }
             
             if(code === 402 || code === 401 ) {
@@ -119,9 +121,16 @@ function LandingPage() {
                 password:""
               })
             } 
+            if(response.data.role === "admin"){
+              navigate('admin')
+              window.location.reload()
+            }
             if (status === "Success" || code === 200){
-                  auth.login(userDetails)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+                  // console.log(response.data.assessToken, "landing page")
+                  auth.login(response.data.assessToken)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+                  // localStorage.setItem("user2", JSON.stringify(response.data.assessToken))
                   navigate('dashboard')
+                  // window.location.reload()
                 }
   }).catch(error => {
     setErrorText(error,"This name does not exist, please register")

@@ -19,7 +19,7 @@ function CreditorTransaction() {
     const creditorDetails = location.state
     const {firstName, lastName, phoneNumber, _id } = creditorDetails
     const y = Number(_id)
-    console.log(location.state, typeof _id, typeof creditorId, typeof y)
+    console.log(location.state, typeof _id, typeof creditorId, typeof y, creditorDetails)
 
 
     const CreditorUrl = `http://localhost:8080/creditorBal/${creditorId}`
@@ -62,7 +62,7 @@ function CreditorTransaction() {
     //  paids = item.paid
     // setPaid([item.paid])
     return(
-        <div key={id}>
+        <div key={id} className='table'>
               <tr>
                 <td>{moment(item.createdAt).format('DD/MM/YYYY')}</td>
                 <td>{item.purchase}</td>
@@ -102,7 +102,7 @@ function CreditorTransaction() {
   return (
     <div>
       <Header />
-      <NavBar />
+      <NavBar pageTitle={firstName} name={lastName}/>
       <div className='relative left-80 top-12 font-bold text-3xl text-gray-600'>Transaction detail of {firstName + " " + lastName}</div>
       <span>{phoneNumber}</span>
       <div >

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 import moment from 'moment';
-import { Typeahead } from 'react-bootstrap-typeahead';
-// import { AuthContext } from '../../Context/auth';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useLocation, useParams } from 'react-router-dom';
 import {toast} from 'react-toastify'
 import axios from 'axios'
+import { useAuth } from '../../Context/auth';
 
 function EachDebtor() {
   let initialValue 
   const params = useParams()
-  console.log(params)
+  const auth = useAuth()
+  const {fullName, businessName} = auth.user.response.data.userDetail
   const { accountId, debtorId } = params
   
   const baseUrl = `http://localhost:8080/debt/${debtorId}`;
@@ -73,7 +73,7 @@ const onChange = (e) => {
       id: new Date().getMilliseconds(),
       date: debtorInput.date,
       description: debtorInput.description,
-      category: category,
+      category: debtorInput.category,
       qty: debtorInput.qty,
       rate: debtorInput.rate,
       total: debtorInput.rate * debtorInput.qty
@@ -87,7 +87,7 @@ const onChange = (e) => {
     debtorId,
     date: debtorInput.date,
     description: debtorInput.description,
-    category: category,
+    category: debtorInput.category,
     qty: debtorInput.qty,
     rate: Number(debtorInput.rate),
     // paid: cash,
@@ -213,13 +213,12 @@ console.log(debtorTotal)
   return (
     <div>
       <NavBar />
-      <Header name={" Debtor Page"}/>
+      <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName}/>
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName + " " + lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={debtorInput.date} onChange={onChange}/>
-          <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/>
-          <Typeahead
+          {/* <Typeahead
           key={debtor.id}
           className='btn6'
           placeholder='Category'
@@ -227,8 +226,9 @@ console.log(debtorTotal)
             setCategory(selected[0]);
           }}
           options={['Animal', 'Cotton', 'Food', 'Tools',"food", "transport", "home", "fun", "health", "other"]}
-        />
-          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/> */}
+        /> */}
+          <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/>
+          <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/>
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={debtorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>

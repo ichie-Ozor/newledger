@@ -10,18 +10,18 @@ function NavBar({children}) {
         <ul className='md:text-2xl '>
           Accounting
         </ul>
-        <ul className='md:text-base mt-2'>
+        {/* <ul className='md:text-base mt-2'>
           Statement
-        </ul>
+        </ul> */}
         {/* <ul className='md:text-base mt-2'>
           {children}
         </ul> */}
-        <ul className='md:text-base mt-2'>
+        {/* <ul className='md:text-base mt-2'>
           Debit Balance
-        </ul>
-        <ul className='md:text-xl mt-2'>
+        </ul> */}
+        {/* <ul className='md:text-xl mt-2'>
           Stocks
-        </ul>
+        </ul> */}
         <ul>
           {children}
         </ul>

@@ -113,6 +113,21 @@
     top: 450px;
     left: 71rem
 }
+.table:nth-child(even) {
+    background-color: #aaa;
+}
+td, th {
+    border: 1px solid #0d0a0a;
+    text-align: center;
+    width: 10%;
+    padding: 8px;
+  }
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    width: 80%;
+  }
 /**************For small screen***********************/
 @media (max-width: 768px) {
     .header-profile{

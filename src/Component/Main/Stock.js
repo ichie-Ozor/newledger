@@ -38,7 +38,8 @@ function Stock() {
 
  /////////This loads the sales data once the page opens
  const account_id = auth.user.response.data.userDetail._id
-    console.log(account_id)
+const {fullName, businessName} = auth.user.response.data.userDetail
+    // console.log(account_id)
 const stockUrl = `http://localhost:8080/stock/${account_id}`
 const stockUrl2 = "http://localhost:8080/stock/"
 // const categoryUrl = "http://localhost:8080/category"
@@ -176,7 +177,7 @@ const saveHandler = async() => {
   return (
     <div>
       <NavBar />
-      <Header name={" Stocks Page"}/>
+      <Header pageTitle={" Stocks Page"} name={businessName+ " "+ fullName}/>
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn6' name='date' value={stockInput.date} onChange={onChange}/>

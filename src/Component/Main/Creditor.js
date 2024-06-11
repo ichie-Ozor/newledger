@@ -4,12 +4,14 @@ import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import { useAuth } from '../../Context/auth'
 import { toast } from 'react-toastify';
 
 function Creditor() {
    const params = useParams()
    const {accountId}  = params
-  //  console.log(params, accountId)
+   const auth = useAuth()
+  const {fullName, businessName} = auth.user.response.data.userDetail
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [name, setName] = useState("")
@@ -110,7 +112,7 @@ function Creditor() {
     return (
         <div>
           <NavBar /> 
-          <Header name={" Creditor Page"}/> 
+          <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName}/> 
           <div>
           {error ? error : render}
           {/* {render == [] ? <div>There is nothing here</div> : render} */}

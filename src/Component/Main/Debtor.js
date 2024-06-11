@@ -5,9 +5,12 @@ import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { toast } from 'react-toastify'
+import { useAuth } from '../../Context/auth'
 
 function Debtor() {
     const [client, setClient] = useState([])
+    const auth = useAuth()
+    const {fullName, businessName} = auth.user.response.data.userDetail
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [name, setName] = useState("")
     const [error, setError] = useState(null)
@@ -82,7 +85,7 @@ function Debtor() {
     return (
         <div>
           <NavBar />
-          <Header name={" Debtor Page"}/>
+          <Header pageTitle={" Debtor Page"} name={businessName+ " " + fullName}/>
           <div>
           {error ? error.message :render}
           </div>
