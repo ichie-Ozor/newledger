@@ -25,19 +25,15 @@ export const AuthProvider = ({children}) => {
    const [user, setUser ] = useState(null)
 
    const login = (assessToken) => {
-    setUser(assessToken)
-    // const {assessToken, refreshToken, userDetail} = user
-    // console.log(user, assessToken, refreshToken, userDetail)
-    // const userToken = {assessToken, refreshToken}
-    localStorage.setItem("user", assessToken)
+    setUser(assessToken.userDetail)
+    localStorage.setItem("user", assessToken.token)
     return assessToken
    }
    const logout = () => {
-    localStorage.removeItem("user")
-    // setUser(null)
+    return localStorage.removeItem("user")
    }
    const getUserDetail = (userDetail) => {
-    localStorage.getItem(userDetail)
+    return localStorage.getItem(userDetail)
    }
    return <AuthContext.Provider value={{user, login, logout, getUserDetail}}>{children}</AuthContext.Provider>
 }

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 
 function DebtorModal({visible, onClose}) {
   const auth = useAuth()
-  const account_id = auth.user.response.data.userDetail._id
+  const account_id = auth.user._id
   const navigate = useNavigate()
   const [ newDebtor, setNewDebtor ] = useState({
     firstName: "",

@@ -59,7 +59,20 @@
   transition: 0.5s;
   box-shadow: #948989 2px 1px;
 }
+.btnq{
+  position: relative;
+  top: 15px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #1606f5;
+  /* width: 10%; */
+  width: 90px;
+  height: 30px;
+  transition: 0.5s;
+  box-shadow: #948989 2px 1px;
+}
 .btny:hover,
+.btnq:hover,
 .btnz:hover{
     scale: 1.2;
     background-color: #b3af8f; 
@@ -125,7 +138,7 @@ td, th {
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     width: 80%;
   }
 /**************For small screen***********************/

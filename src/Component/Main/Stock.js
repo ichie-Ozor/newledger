@@ -37,8 +37,8 @@ function Stock() {
   // ]
 
  /////////This loads the sales data once the page opens
- const account_id = auth.user.response.data.userDetail._id
-const {fullName, businessName} = auth.user.response.data.userDetail
+ const account_id = auth.user._id
+const {fullName, businessName} = auth.user
     // console.log(account_id)
 const stockUrl = `http://localhost:8080/stock/${account_id}`
 const stockUrl2 = "http://localhost:8080/stock/"
@@ -76,7 +76,7 @@ useEffect(() => {
   const submitHandler = (e) => {
     e.preventDefault()
     // console.log("see am here", creditorInput)
-    const account_id = auth.user.response.data.userDetail._id
+    const account_id = auth.user._id
     console.log(account_id)
    if(stockInput.date === "" && stockInput.category === "") return 
    setStock((prev) => [
@@ -119,11 +119,27 @@ useEffect(() => {
   }
   console.log(stock)
 //////////////Delete/////////////
-const deleteHandler = id => {
-  console.log(id)
-  setStock(stock.filter(stocks => stocks.id !== id))
+const deleteHandler = item => {
+  if(item.id !== undefined){
+    setStock(stock.filter(stocks => stocks.id !== item.id))
+  }
+  if(item._id){
+    console.log(item._id, "stock")
+    const deleteItem = stock.filter(stock => stock._id === item._id)
+    setStock(stock.filter(stock => stock._id !== item._id))
+    const stockDeleteUrl = `http://localhost:8080/stock/${item._id}`
+    try{
+      axios({
+        method: 'delete',
+        url: stockDeleteUrl,
+        data: deleteItem
+      }).then((response) => {
+        console.log(response)
+        toast.error(response.message)
+      })
+    } catch(err) {console.log(err.message)}
+  }
 }
-
 
 const editHandler = id => {
   const editItem = stock.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
@@ -169,7 +185,7 @@ const saveHandler = async() => {
             <div className='table-header'>{cost}</div>
             <div className='table-header'>{sellingPrice}</div>
             </div>
-            <button className='btn7a btn7 top-28' onClick={() => deleteHandler(value.id)}>Delete</button>
+            <button className='btn7a btn7 top-28' onClick={() => deleteHandler(value)}>Delete</button>
             <button className='btn7a btn7 top-28 w-40' onClick={() => editHandler(value.id)}>Edit</button>
           </>
         )

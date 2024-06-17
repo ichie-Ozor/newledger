@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 function CreditorModal({visible, onClose}) {
   const auth = useAuth()
   const navigate = useNavigate()
-  const account_id = auth.user.response.data.userDetail._id
+  const account_id = auth.user._id
   const [ newCreditor, setNewCreditor ] = useState({
     firstName: "",
     lastName: "",

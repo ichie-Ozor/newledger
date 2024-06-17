@@ -10,7 +10,7 @@ import { useAuth } from '../../Context/auth'
 function Debtor() {
     const [client, setClient] = useState([])
     const auth = useAuth()
-    const {fullName, businessName} = auth.user.response.data.userDetail
+    const {fullName, businessName} = auth.user
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [name, setName] = useState("")
     const [error, setError] = useState(null)

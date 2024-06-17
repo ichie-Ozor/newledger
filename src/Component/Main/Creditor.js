@@ -11,14 +11,14 @@ function Creditor() {
    const params = useParams()
    const {accountId}  = params
    const auth = useAuth()
-  const {fullName, businessName} = auth.user.response.data.userDetail
+  const {fullName, businessName} = auth.user
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [name, setName] = useState("")
+    const [password, setPassword] = useState({})
     const [error, setError] = useState(null)
-    const [deleteId, setDeleteId] = useState({id: ""})
+    const [deleteId, setDeleteId] = useState()
     const baseUrl = `http://localhost:8080/creditor/${accountId}`    //this is not the right endpoint
-    const deleteUrl = "http://localhost:8080/creditor/:id"
+    
 
 
     // this loads the creditor once the page loads
@@ -27,14 +27,11 @@ function Creditor() {
             console.log(response)
             const creditorsDetail = response.data.creditor
             if(creditorsDetail.length === 0) {
-              toast.error("There is no creditor entered")
+              // toast.error("There is no creditor entered")
               setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
             } else{
               setClient(creditorsDetail)
             }
-             //setClient(creditorsDetail)   // this one works
-            // creditorsDetail == [] ? setError(error.credMesg) : setClient(creditorsDetail)
-            // setClient(() => response.data.allAccount)
           }).catch(error => {
             console.log(error)
              setError(error)
@@ -44,32 +41,35 @@ function Creditor() {
      
       const onsubmitDeleteHandler = (e, id) => {
         e.preventDefault()
-        // setDeleteId({...deleteId, name: name})  this is supposed to copy the prev content and change only a part of the object
-        setName("")
+        //////this is sent to the backend and crossed checkecked if the password match with the profile password before it can delete
         const deleteData = {
-          id : deleteId.id,
-          name : name
+          id : deleteId,
+          accountId,
+          password
         }
         console.log(deleteData)
        
         ////////////////////////////////////send to the backend where the logic is to be done
-        if(!deleteData){
+        if(deleteData.length !== 0){
+          console.log("here, delete")
+          const deleteUrl = `http://localhost:8080/creditor/${accountId}/${password}/${deleteId}`
           axios.delete(deleteUrl, deleteData).then((response) => 
-          console.log(response))
-          .catch(error => {
-          setError(error)
+          console.log(response)
+        ).catch(error => {
+          console.log(error)
+          toast.error("You are not authorized to do this")
         })
         setShowDeleteModal(false)
         } else {
           setShowDeleteModal(false)
-        }
-                
+        }   
+        setPassword({})
       }
 
       /////////This is to delete client
       const deleteCreditor = (id) => {
         console.log(id)
-        setDeleteId({id: id})
+        setDeleteId(id)
         setShowDeleteModal(true)
       }
     
@@ -119,7 +119,14 @@ function Creditor() {
           </div>
           <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
           <form onSubmit={onsubmitDeleteHandler}>  
-              <input placeholder='put in your password here' type='password' value={name} onChange={(e) => setName(e.target.value)} className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'/>
+              <input 
+                  type='text' 
+                  placeholder='Put in your password here'
+                  value={password} 
+                  name='password'
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'
+              />
               <button className='deletebtn'>Enter</button>
           </form>
           </DeleteModal>

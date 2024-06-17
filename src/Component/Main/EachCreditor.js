@@ -15,7 +15,7 @@ function EachCreditor(props) {
   const params = useParams();
   const navigate = useNavigate()
   const auth = useAuth()
-  const {fullName, businessName} = auth.user.response.data.userDetail
+  const {fullName, businessName} = auth.user
   const {accountId, creditorId} = params
   const [ creditor, setCreditor ] = useState([])
   const [isOpen, setIsOpen] = useState(false) //// goods description dropdown
@@ -59,7 +59,6 @@ useEffect(()=> {
   console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
 
   const baseUrl2 = `http://localhost:8080/credit/creditor/${creditorId}`;
-  // const baseUrl4 = `http://localhost:8080/category/${createdBy}`
   const baseUrl5 = `http://localhost:8080/stock/${createdBy}`
 
   try{
@@ -69,10 +68,6 @@ useEffect(()=> {
      const creditorData = response.data.credits
      setCreditor(creditorData)
    })
-  //  axios.get(baseUrl4).then((response) => {
-  //   console.log(response.data.category, "see 59")
-  //   setLists(response.data.category)
-  //  })
    axios.get(baseUrl5).then((response) => {
     console.log(response.data.Stock, "see 71")
     setDesc(response.data.Stock)

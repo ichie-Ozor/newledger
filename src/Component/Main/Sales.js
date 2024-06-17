@@ -30,7 +30,7 @@ function Sales() {
   })
 
 /////////This loads the sales data once the page opens
-const account_id = auth.user.response.data.userDetail._id
+const account_id = auth.user._id
 // console.log(account_id)
 const salesUrl = "http://localhost:8080/sales"
 const baseUrl5 = `http://localhost:8080/stock/${account_id}`
@@ -58,11 +58,11 @@ useEffect(() => {
     })
   }
 
-  const {fullName, businessName} = auth.user.response.data.userDetail
+  const {fullName, businessName} = auth.user
   
   const submitHandler = async (e) => {
     e.preventDefault()
-    const account_id = auth.user.response.data.userDetail._id
+    const account_id = auth.user._id
    setSales((prev) => [
     ...prev,
     {
@@ -165,7 +165,8 @@ const deleteHandler = item => {
     url: salesDeleteUrl,
     data: deleteItem
   }).then((response) => {
-    setError(<div className='absolute flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>{response.data.message}</div>)
+    toast.error(response.message)
+    // setError(<div className='absolute flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>{response.data.message}</div>)
     // console.log('bring the error here', response)
   })
 } catch(err) {console.log(err.message)}

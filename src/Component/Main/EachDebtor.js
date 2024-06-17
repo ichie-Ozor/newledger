@@ -11,7 +11,7 @@ function EachDebtor() {
   let initialValue 
   const params = useParams()
   const auth = useAuth()
-  const {fullName, businessName} = auth.user.response.data.userDetail
+  const {fullName, businessName} = auth.user
   const { accountId, debtorId } = params
   
   const baseUrl = `http://localhost:8080/debt/${debtorId}`;

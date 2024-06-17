@@ -14,6 +14,9 @@ import EachDebtor from './Component/Main/EachDebtor'
 import CreditorTransaction from './Component/Main/CreditorTransaction';
 import DebtorTransaction from './Component/Main/DebtorTransaction';
 import PaymentPage from './Component/PaymentPage';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useAuth } from './Context/auth';
 
 
 
@@ -66,6 +69,35 @@ const router = createBrowserRouter(
   )
 )
 function App() {
+    const auth = useAuth()
+    console.log(auth, 'app')
+    const authToken = auth.getUserDetail('user')
+    // const headers = {Authorization: `Bearer ${token}`};
+    // console.log(token)
+    const verifyUrl = 'http://localhost:8080/auth/verifyToken'
+
+  useEffect(() => {
+     verifyToken(authToken).then((data) => {
+        console.log(data, "from App.js")
+    })
+  }, [])
+
+async function verifyToken(token){
+    try {
+      let response = await fetch(verifyUrl, {
+        method: 'GET',
+        headers: {
+            Authorization: token
+        },
+      })
+      let data = await response.json()
+      console.log(data, "xxxx")
+      return data
+    }catch(error) {
+        console.log(error)
+    }
+}
+
   return (
     <div className='App'>
       <RouterProvider router={router} />
