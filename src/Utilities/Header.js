@@ -1,11 +1,14 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../Context/auth'
 
 
 
 function Header({name, pageTitle}) {
-  const adminUrl = ""  //this should be the url for the password of the owner account
+  const auth = useAuth()
+  const id = auth.user._id
+  const adminUrl = `http://localhost:8080/profile/${id}`
   const navigate = useNavigate()
   const [admin, setAdmin] = useState(true)
   const [ open, setOpen ] = useState(false)
@@ -17,14 +20,14 @@ function Header({name, pageTitle}) {
   })
 
 
-// useEffect(() => {
-//   axios.get(adminUrl).then((response) => {
-//     setAdmin(() => response.data)
-//   }).catch(error => {
-//     console.log(error.message)
-//   })
-// })
-
+useEffect(() => {
+  axios.get(adminUrl).then((response) => {
+    setAdmin(() => response.data.getProfile[0])
+  }).catch(error => {
+    console.log(error.message)
+  })
+})
+console.log(admin, "header admin")
 
   const onChange = (e) => {
      e.preventDefault()
@@ -69,7 +72,7 @@ function Header({name, pageTitle}) {
       </div>
       {open ?
          
-          (!admin ?
+          (admin.lenght !== 0 ?
            <div 
              className='relative -left-96 top-36 bg-gray-100 p-4 z-10 w-96 h-46 pt-10  grid justify-items-center text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
               The Admin is already registered 😃😃😃

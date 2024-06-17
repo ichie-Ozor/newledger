@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
@@ -9,14 +9,13 @@ import { useAuth } from '../../Context/auth'
 
 function Debtor() {
     const [client, setClient] = useState([])
+    const { accountId } = useParams()
     const auth = useAuth()
     const {fullName, businessName} = auth.user
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [name, setName] = useState("")
     const [error, setError] = useState(null)
-    const [deleteId, setDeleteId] = useState({
-      id: ""
-    })
+    const [deleteId, setDeleteId] = useState()
     const baseUrl = "http://localhost:8080/debtor"
     const deleteUrl = ""
 
@@ -42,8 +41,9 @@ function Debtor() {
         // setDeleteId({...deleteId, name: name})  this is supposed to copy the prev content and change only a part of the object
         setName("")
         const deleteData = {
-          id : deleteId.id,
-          name : name
+          id : deleteId,
+          name,
+          accountId
         }
         console.log(deleteData)
         /////////////////////////////////////send to the backend where the logic is to be done
@@ -58,8 +58,13 @@ function Debtor() {
       ///////////////This is to delete the debtor by only the owner
       const deleteDebtorHandler = (id) => {
         console.log(id)
-        setDeleteId({id: id})
+        setDeleteId(id)
         setShowDeleteModal(true)
+      }
+
+      ///////This is for the Update button
+      const updateCreditor = (id) => {
+
       }
 
     const render = client.map((item, id) => {
@@ -75,6 +80,11 @@ function Debtor() {
             onClick={() => deleteDebtorHandler(item._id)}>
               Delete
             </button>
+            <button className='float-right ml-2 h-10 w-36 bg-gray-500 text-white rounded-xl hover:bg-gray-500
+                 hover:text-black hover:scale-90 duration-300 hover:font-bold' 
+                 onClick={() => updateCreditor(item._id)}>
+                   Update
+                 </button>
             <Link to={`${item._id}`} state={item}><button className='
            float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
             hover:text-black hover:scale-90 duration-300 hover:font-bold' 

@@ -123,7 +123,7 @@ function Creditor() {
                   type='text' 
                   placeholder='Put in your password here'
                   value={password} 
-                  name='password'
+                  // name='password'
                   onChange={(e) => setPassword(e.target.value)} 
                   className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'
               />
