@@ -25,7 +25,7 @@ function Dashboard() {
   // const [error, setError] = useState(null)
 
 // console.log(category)  //send thid to the backend for storage
-console.log(auth)
+// console.log(auth)
 const account_id = auth.user._id
 const {fullName, businessName} = auth.user
 // console.log(account_id, auth)
@@ -142,7 +142,9 @@ const renderCategory = categoryList.map((item, id) => {
     <div>
       <NavBar>
         {/* <div onClick={() => setShowCategoryModal(true)}>Category</div> */}
-        <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div>
+        <div>Total Debtor Statement</div>
+        <div>Total Creditor Statement</div>
+        {/* <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div> */}
       </NavBar>
       <Header pageTitle={" Dashboard"} name={businessName + " "+ fullName}/>
        {/*******************  Main body here ***********************/}

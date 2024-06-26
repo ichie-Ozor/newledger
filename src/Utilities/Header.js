@@ -27,7 +27,6 @@ useEffect(() => {
     console.log(error.message)
   })
 })
-console.log(admin, "header admin")
 
   const onChange = (e) => {
      e.preventDefault()

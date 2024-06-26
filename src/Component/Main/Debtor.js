@@ -13,19 +13,19 @@ function Debtor() {
     const auth = useAuth()
     const {fullName, businessName} = auth.user
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState()
     const baseUrl = "http://localhost:8080/debtor"
-    const deleteUrl = ""
+    
 
     useEffect(()=> {
           axios.get(baseUrl).then((response) => {
             console.log(response)
             const debtorDetails = response.data.debtors
-            if(debtorDetails.length == 0) {
+            if(debtorDetails.length === 0) {
               console.log("there is nothing here")
-              toast.error("There is no debtor detail entered! 😂😂😂")
+              setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
             } else {
               setClient(debtorDetails)
             }
@@ -39,20 +39,27 @@ function Debtor() {
       const submitHandler = (e, id) => {
         e.preventDefault()
         // setDeleteId({...deleteId, name: name})  this is supposed to copy the prev content and change only a part of the object
-        setName("")
+        
         const deleteData = {
           id : deleteId,
-          name,
+          password,
           accountId
         }
         console.log(deleteData)
         /////////////////////////////////////send to the backend where the logic is to be done
-        axios.post(deleteUrl, deleteData).then((response) => 
+        if(deleteData.length !== 0){
+        const deleteUrl = `http://localhost:8080/debtor/${accountId}/${password}/${deleteId}`
+        axios.delete(deleteUrl, deleteData).then((response) => 
         console.log(response))
         .catch(error => {
-          setError(error)
+          console.log(error)
+          toast.error("You are not authorized to do this")
         })
         setShowDeleteModal(false)
+        } else {
+          setShowDeleteModal(false)
+        }
+        setPassword("")
       }
 
       ///////////////This is to delete the debtor by only the owner
@@ -97,11 +104,16 @@ function Debtor() {
           <NavBar />
           <Header pageTitle={" Debtor Page"} name={businessName+ " " + fullName}/>
           <div>
-          {error ? error.message :render}
+          {error ? error :render}
           </div>
-          <DeleteModal visible={showDeleteModal}>
+          <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
           <form onSubmit={submitHandler}>  
-              <input placeholder='put in your password here' type='password' value={name} onChange={(e) => setName(e.target.value)} className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-10 pl-4'/>
+              <input 
+                  placeholder='put in your password here' 
+                  type='password' 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-10 pl-4'/>
               <button className='deletebtn'>Enter</button>
           </form>
           </DeleteModal>

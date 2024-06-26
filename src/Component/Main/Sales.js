@@ -12,12 +12,12 @@ function Sales() {
   // const location = useLocation()
   // const list = location.state
   const [ sales, setSales ] = useState([])
-  const [sale, setSale] = useState([])
+  // const [sale, setSale] = useState([])
   const [error, setError] = useState("")
   const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
   const [isClose, setIsClose] = useState(false)  /// goods description
   const [category, setCategory] = useState([])  ///category
-  const [save, setSave] = useState(false)
+  // const [save, setSave] = useState(false)
   const [description, setDescription] = useState([])
   const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
@@ -42,12 +42,10 @@ useEffect(() => {
      })
      axios.get(baseUrl5).then((response) => {
        const data = response.data.Stock
-      //  console.log(response, data)
       setLists(data)
      })
   }catch(err) {console.log(err.message)}
 }, [])
-// console.log(lists)
 
 
   const onChange = (e) => {
@@ -63,6 +61,7 @@ useEffect(() => {
   const submitHandler = async (e) => {
     e.preventDefault()
     const account_id = auth.user._id
+    //this is displayed on the frontend
    setSales((prev) => [
     ...prev,
     {
@@ -76,19 +75,44 @@ useEffect(() => {
       total: salesInput.rate * salesInput.qty
     },
   ])
-  setSale((prev) => [
-    ...prev, 
-    {
-      id: new Date().getMilliseconds(),
-      account: account_id,
-      date: salesInput.date,
-      description: description,
-      category: category,
-      qty: salesInput.qty,
-      rate: salesInput.rate,
-      total: salesInput.rate * salesInput.qty
-  }
-])
+  //this is saved in the backend
+//   setSale((prev) => [
+//     ...prev, 
+//     {
+//       id: new Date().getMilliseconds(),
+//       account: account_id,
+//       date: salesInput.date,
+//       description: description,
+//       category: category,
+//       qty: salesInput.qty,
+//       rate: salesInput.rate,
+//       total: salesInput.rate * salesInput.qty
+//   }
+// ])
+const sale = {
+        id: new Date().getMilliseconds(),
+        account: account_id,
+        date: salesInput.date,
+        description: description,
+        category: category,
+        qty: salesInput.qty,
+        rate: salesInput.rate,
+        total: salesInput.rate * salesInput.qty
+    }
+console.log(sale, "to the backend from sale")
+    await axios({
+        method: 'post',
+        url: salesUrl,
+        data: sale
+      }).then((response) => {
+        console.log(response)
+        toast.success(response.data.message)
+      }).catch((error) => {
+        console.log(error)
+        toast.error(error.data.message)
+      })
+
+
   setSalesInput({
     date: "",
     description: "",
@@ -98,38 +122,40 @@ useEffect(() => {
   })
   setCategory('')
   setDescription('')
-  setSave(true)
-}
-///////// it should also send data to the backend from here and display it on the page at the same time
-const saveHandler = async() => {
- try{
-  const response = await axios({
-        method: 'post',
-        url: salesUrl,
-        data: sale
-      })
-        console.log("sales data posted", response)
-        toast.success("Sales Posted Successfully")
- } catch(err) {
-  // toast.error(err.response.data.message)
-  console.log(err,"error")
-  const id = err.response.data.sale.id
-  console.log(sales,id, "sales 1")
-  const removeIt = sales.filter((item) => item.id !== id)
-  console.log(removeIt, id, "sale")
-  setSales(removeIt)
-}
- setSale([])
- setSave(false)
+  // setSave(true)
+  // saveHandler()
 }
 
-if(save){
-  saveHandler()
-  setSave(false)
+
+///////// it should also send data to the backend from here and display it on the page at the same time
+// const saveHandler = async() => {
+ async function saveHandler(){
+ try{
+  // const response = await axios({
+  //       method: 'post',
+  //       url: salesUrl,
+  //       data: sale
+  //     })
+  //       console.log("sales data posted", response)
+  //       toast.success("Sales Posted Successfully")
+ } catch(err) {
+  console.log(err,"error")
+  toast.error(err.response.data.message)
+  const id = await err.response.data?.sale.id
+  const removeIt = sales.filter((item) => item.id !== id)
+  setSales(removeIt)
 }
+//  setSale([])
+//  console.log(save)
+}
+
+// if(save){
+//   saveHandler()
+//   setSave(false)
+// }
 /////////////Dropdown///////////
 const dropDownDescHandler = (value) => {
-  console.log(value)
+  // console.log(value)
   // if(!isOpen){
   //   setIsOpen(false)
   // }
@@ -138,7 +164,7 @@ const dropDownDescHandler = (value) => {
 }
 const dropDownHandler = (value) => {
   // e.preventDefault()
-  console.log(value)
+  // console.log(value)
   // if(!isClose){
   //   setIsClose(false)
   // }
@@ -205,8 +231,8 @@ const salesTotal = sales.reduce(reducer, 0)
       <>
        <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-4'>
         <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
-        <td className='bg-gray-200 md:w-60 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
         <td className='table-header'>{category}</td>
+        <td className='bg-gray-200 md:w-60 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
         <td className='table-header'>{qty}</td>
         <td className='table-header'>{rate}</td>
         <td className='table-header'>{total}</td>
@@ -225,27 +251,25 @@ const salesTotal = sales.reduce(reducer, 0)
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={salesInput.date} onChange={onChange}/>
           <div>
-            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
-              {console.log(description.length, "see 208")}
-              {description.length > 0 ? description : "Description"}
-            </button>
-            {isClose && (
-              <div className='dropContainer'>
-                {lists.map((item, index) =>(
-                  <div key={index}  className='dropdown' onClick={() => dropDownDescHandler(item.goods)}>{item.goods}</div>
-                ))}
-              </div>
-            )}
-         </div>
-         <div>
             <button type='button' className='btn4' onClick={() => setIsOpen(!isOpen)}>
-              {console.log(category.length, "see 208")}
               {category.length > 0 ? category : "Category"}
             </button>
             {isOpen && (
               <div className='dropContainer'>
                 {lists.map((item, index) =>(
                   <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.category)}>{item.category}</div>
+                ))}
+              </div>
+            )}
+         </div>
+         <div>
+            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+              {description.length > 0 ? description : "Description"}
+            </button>
+            {isClose && (
+              <div className='dropContainer'>
+                {lists.map((item, index) =>(
+                  <div key={index}  className='dropdown' onClick={() => dropDownDescHandler(item.goods)}>{item.goods}</div>
                 ))}
               </div>
             )}
@@ -257,8 +281,8 @@ const salesTotal = sales.reduce(reducer, 0)
       </div>
       <table className='relative left-2 top-20 space-x-2 md:left-60 md:top-28 flex md:space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='text-xs bg-gray-200 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Category</th>
+        <th className='text-xs bg-gray-200 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>

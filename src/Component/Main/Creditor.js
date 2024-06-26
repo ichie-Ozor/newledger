@@ -14,7 +14,7 @@ function Creditor() {
   const {fullName, businessName} = auth.user
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [password, setPassword] = useState({})
+    const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState()
     const baseUrl = `http://localhost:8080/creditor/${accountId}`    //this is not the right endpoint
@@ -63,7 +63,7 @@ function Creditor() {
         } else {
           setShowDeleteModal(false)
         }   
-        setPassword({})
+        setPassword("")
       }
 
       /////////This is to delete client
@@ -115,15 +115,14 @@ function Creditor() {
           <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName}/> 
           <div>
           {error ? error : render}
-          {/* {render == [] ? <div>There is nothing here</div> : render} */}
           </div>
           <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
           <form onSubmit={onsubmitDeleteHandler}>  
               <input 
-                  type='text' 
+                  type='password' 
                   placeholder='Put in your password here'
                   value={password} 
-                  // name='password'
+                  name='password'
                   onChange={(e) => setPassword(e.target.value)} 
                   className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'
               />

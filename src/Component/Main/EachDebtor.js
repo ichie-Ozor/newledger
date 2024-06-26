@@ -18,11 +18,16 @@ function EachDebtor() {
   const baseUrl2b = 'http://localhost:8080/debt';
   const baseUrl3 = "http://localhost:8080/debtorBal";
   const location = useLocation()
-
+  const eachDebtor = (location.state)
+ 
 
   const [ debtor, setDebtor ] = useState([])
   const [debt, setDebt] = useState([])
   const [cash, setCash] = useState(initialValue)
+  const [isClose, setIsClose] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [desc, setDesc] = useState([])
+  const [description, setDescription] = useState("description")
   const [category, setCategory] = useState('')
   const [ totalCash, setTotalCash ] = useState(0)
   const [error, setError] = useState(null)
@@ -34,23 +39,31 @@ function EachDebtor() {
     rate: ""
   })
 
+   
 ////This fetches data from the backend and displays it here 
 useEffect(()=> {
+  if(location.state === null) return
+  const {createdBy} = eachDebtor
+  const baseUrl2 = `http://localhost:8080/stock/${createdBy}`
   //////////this will fetch the data of the individual client from the DB
-  axios.get(baseUrl).then((response) => {
-    console.log(response.data)
-    setDebtor(() => response.data.debts)
-  }).catch(error => {
-    console.log(error, "see the error")
-    setError(error)
-  })
+  try{
+    axios.get(baseUrl).then((response) => {
+      console.log(response.data)
+      setDebtor(() => response.data.debts)
+    }).catch(error => {
+      console.log(error, "see the error")
+      setError(error)
+    })
+    axios.get(baseUrl2).then((response) => {
+      // console.log(response.data.Stock, "debtor stock")
+      setDesc(response.data.Stock)
+    })
+  }catch(err){console.log(err.message)}
 }, [])
 
-if(location.state === null) return
-console.log(location)
-const eachDebtor = (location.state)
-console.log(eachDebtor)
+
 // if(eachDebtor == null) return
+if(location.state === null) return
 const { firstName, lastName, createdBy, phoneNumber, _id} = eachDebtor
 
 const onChange = (e) => {
@@ -66,14 +79,16 @@ const onChange = (e) => {
   const submitHandler = (e) => {
     e.preventDefault()
     // console.log("see am here", creditorInput)
-   if(debtorInput.date === "" && debtorInput.category === "") return 
+   if(debtorInput.date === "" && category === ""){
+    toast.error("Please input make sure you have put in all the data")
+   } else{
    setDebtor((prev) => [
     ...prev,
     {
       id: new Date().getMilliseconds(),
       date: debtorInput.date,
-      description: debtorInput.description,
-      category: debtorInput.category,
+      description,
+      category,
       qty: debtorInput.qty,
       rate: debtorInput.rate,
       total: debtorInput.rate * debtorInput.qty
@@ -86,8 +101,8 @@ const onChange = (e) => {
     id: new Date().getMilliseconds(),
     debtorId,
     date: debtorInput.date,
-    description: debtorInput.description,
-    category: debtorInput.category,
+    description,
+    category,
     qty: debtorInput.qty,
     rate: Number(debtorInput.rate),
     // paid: cash,
@@ -96,7 +111,7 @@ const onChange = (e) => {
     businessId: createdBy
   },
 ])
-
+}
   setDebtorInput({
     date: "",
     description: "",
@@ -104,8 +119,9 @@ const onChange = (e) => {
     qty: "",
     rate: ""
   })
-    // it should also send data to the backend from here and display it on the page at the same time
-  }
+    setCategory("")
+    setDescription("Description")
+}
 
 
   //////////////Delete/////////////
@@ -121,8 +137,8 @@ const editHandler = id => {
   setDebtorInput({
     ...debtorInput,
     date: editItem.date,
-    description: editItem.description,
-    category: editItem.category,
+    description,
+    category,
     qty: editItem.qty,
     rate: editItem.rate,
   })
@@ -130,9 +146,17 @@ const editHandler = id => {
 } 
 
 
-//////////////////Category 
-// console.log(category)
-// setCategory("god")
+//////////////////Category and Dropdown
+const dropDownCategoryHandler = (value) => {
+  setIsClose(false)
+  setCategory(value)
+}
+
+const dropDownHandler = (event) => {
+  setDescription(event.target.value)
+  setIsOpen(false)
+}
+
 
   ////////Total calculations are here////////////////////////////////
   
@@ -149,22 +173,19 @@ const editHandler = id => {
   }
    
   ////////////////Total ends here///////////////////////
-  console.log(debtor)
+ 
 
   ////////////Reducer/////////////
 const reducer = (accumulator, currentValue) => {
   const returns = accumulator + Number(currentValue.total)
-  console.log(typeof returns);
   return returns
 }
 const debtorTotal = debtor.reduce(reducer, 0)
-console.log(debtorTotal)
   
     /////////////Save to the backend//////
     const saveHandler = () => {
+      console.log(debt, "this is debt")
       const amount = {paid: cash, balance: totalCash, businessId : createdBy, debtorId : _id, phoneNumber, firstName, lastName, purchase: debtorTotal }
-      // const payload = [credit, amount]
-      console.log("see me, going to backend", debt, amount)
       try{
         if(debt.length === 0 ){
           return toast.error("you have not entered any new data")
@@ -197,8 +218,8 @@ console.log(debtorTotal)
     <>
      <tr key={id} className='relative left-2 space-x-2 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
-      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{category}</td>
+      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{qty}</td>
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
@@ -218,17 +239,46 @@ console.log(debtorTotal)
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={debtorInput.date} onChange={onChange}/>
-          {/* <Typeahead
-          key={debtor.id}
-          className='btn6'
-          placeholder='Category'
-          onChange={(selected) => {
-            setCategory(selected[0]);
-          }}
-          options={['Animal', 'Cotton', 'Food', 'Tools',"food", "transport", "home", "fun", "health", "other"]}
-        /> */}
-          <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/>
-          <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/>
+          {/* <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/> */}
+          {/********************************/}
+          <div>
+            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+              {category.length > 0 ? category : "Category"}
+            </button>
+            {isClose && (
+              <div className='dropContainer'>
+                 {desc.map((item, index) => (
+                  <div key={index} className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
+                 ))}
+              </div>
+            )}
+          </div>
+          {/********************************/}
+          <select className='btn4' onChange={dropDownHandler}>
+            <option value=''>Description</option>
+               {desc.map((item, index) => (
+                 <option  key={index} value={item.goods} >{item.goods}</option>
+                ))}
+         </select>
+         {/* <div>
+            <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
+              {description.length > 0 ? description : "Description"}
+            </button>
+            {isOpen && (
+              <div className='dropContainer'>
+                {desc.map((item, index) => (
+                  <div key={index}  
+                  className='dropdown' 
+                  onClick={() => dropDownHandler(item.goods)}
+                  >
+                    {item.goods}
+                  </div>
+                ))}
+              </div>
+            )}
+         </div>  */}
+
+          {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={debtorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>
@@ -236,8 +286,8 @@ console.log(debtorTotal)
       </div>
       <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-40 text-xs md:text-lg md:w-60 text-center h-10 rounded pt-2'>Goods Description</th>
         <th className='table-header'>Category</th>
+        <th className='bg-gray-200 w-40 text-xs md:text-lg md:w-60 text-center h-10 rounded pt-2'>Goods Description</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>

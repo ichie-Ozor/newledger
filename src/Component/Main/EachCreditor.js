@@ -56,20 +56,20 @@ useEffect(()=> {
   
   if(eachCreditor == null) return
   const {firstName, lastName,  _id, createdBy} = eachCreditor
-  console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
+  // console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
 
   const baseUrl2 = `http://localhost:8080/credit/creditor/${creditorId}`;
   const baseUrl5 = `http://localhost:8080/stock/${createdBy}`
 
   try{
-    if(creditorId == 'dashboard') return
+    if(creditorId === 'dashboard') return
    axios.get(baseUrl2).then((response) => {
      console.log(response)
      const creditorData = response.data.credits
      setCreditor(creditorData)
    })
    axios.get(baseUrl5).then((response) => {
-    console.log(response.data.Stock, "see 71")
+    // console.log(response.data.Stock, "see 71")
     setDesc(response.data.Stock)
    })
   }catch(err){console.log(err.message)} 
@@ -109,7 +109,7 @@ const onChange = (e) => {
   const totalCashHandler = (e) => {
     e.preventDefault()
     const total = creditorTotal - parseInt(cash)
-    console.log(creditorTotal)
+    // console.log(creditorTotal)
     setTotalCash(total)
   }
   // console.log(totalCash, cash)
@@ -164,7 +164,6 @@ const onChange = (e) => {
     // it should also send data to the backend from here and display it on the page at the same time
   }
   
-  console.log(creditor, credit)
  //////////////Delete/////////////
 const deleteHandler = id => {
   console.log(id)
@@ -178,8 +177,8 @@ const editHandler = id => {
   setCreditorInput({
     ...creditorInput,
     date: editItem.date,
-    description: editItem.description,
-    category: editItem.category,
+    description,
+    category,
     qty: editItem.qty,
     rate: editItem.rate,
   })
@@ -197,10 +196,8 @@ const creditorTotal = creditor.reduce(reducer, 0)
 
 ////////////////////////////////////////dropdown//////////////
   const dropDownHandler = (event) => {
-    console.log(event.target.value)
     setDescription(event.target.value)
     setIsOpen(false)
-    
   }
  const dropDownCategoryHandler = (value) => {
   console.log(value, "category")
@@ -210,8 +207,8 @@ const creditorTotal = creditor.reduce(reducer, 0)
     /////////////Save to the backend//////
     const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
     const saveHandler = () => {
-      console.log("see me, going to backend", credit, amount)
-      try{
+      // console.log("see me, going to backend", credit, amount)
+      
         if(credit.length === 0 ){
           return toast.error("you have not entered any new data")
         }
@@ -235,11 +232,17 @@ const creditorTotal = creditor.reduce(reducer, 0)
             setSave(true)
           }
         })
-         setCredit([])
-       }catch(err){
-        console.log(err.message)
-        toast.error("Something went wrong while trying to save, please try again later")
-      } 
+        .catch(err=>{
+          console.log(err, 'error here')
+          setSave(false)
+          const id = err.response.data.credit.id
+          const removeIt = creditor.filter((item) => item.id !== id)
+          console.log(id, removeIt)
+          setCreditor(removeIt)
+          toast.error(err.response.data.message)
+        } )
+               
+      //  setCredit([])
     }
 
     if(save){
@@ -259,8 +262,8 @@ const creditorTotal = creditor.reduce(reducer, 0)
   return (
     <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-data'>{moment(date).format('DD/MM/YYYY')}</td>
-      <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{category}</td>
+      <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
       <td className='table-header'>{qty}</td>
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
@@ -274,7 +277,11 @@ const creditorTotal = creditor.reduce(reducer, 0)
 
   return (
     <div >
-      <NavBar />
+      <NavBar>
+      <Link className='no-underline' to={'transaction'} state={eachCreditor}>
+          <button className='nav text-white'>Check Balance</button>
+      </Link>
+      </NavBar>
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName}/>
       {/* {JSON.stringify(creditor)} */}
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
@@ -319,24 +326,30 @@ const creditorTotal = creditor.reduce(reducer, 0)
          </select> */}
 
         <select className='btn4' onChange={dropDownHandler}>
+               <option value=''>Description</option>
                {desc.map((item, index) => (
-                  // <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
-                  <option  name='description' value={item.good} >{item.goods}</option>
+                  <option  key={index} value={item.good} >{item.goods}</option>
                 ))}
          </select>
 
-         {/* <div>
+        
+          {/* <div>
             <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
               {description.length > 0 ? description : "Description"}
             </button>
             {isOpen && (
               <div className='dropContainer'>
                 {desc.map((item, index) => (
-                  <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
+                  <div key={index}  
+                  className='dropdown' 
+                  onClick={() => dropDownHandler(item.goods)}
+                  >
+                    {item.goods}
+                  </div>
                 ))}
               </div>
             )}
-         </div> */}
+         </div>  */}
 
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
@@ -345,8 +358,8 @@ const creditorTotal = creditor.reduce(reducer, 0)
       </div>
       <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-4'>
         <th className='table-header'>Date</th>
-        <th className='bg-gray-200 w-26 text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
         <th className='table-header'>Category</th>
+        <th className='bg-gray-200 w-26 text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>
@@ -367,9 +380,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
         <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{totalCash}</div>
       </div>
       <button type='submit' onClick={saveHandler} className='save'>Save</button>
-      <Link to={'transaction'} state={eachCreditor}>
-          <button className='save'>Check Balance</button>
-      </Link>
+      
     </div>
   )
 }

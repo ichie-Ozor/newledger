@@ -179,8 +179,8 @@ const saveHandler = async() => {
         <>
            <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
             <div className='table-header'>{moment(date).format('DD/MM/YYYY')}</div>
-            <div className='bg-gray-200 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
             <div className='table-header'>{category}</div>
+            <div className='bg-gray-200 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
             <div className='table-header'>{qty}</div>
             <div className='table-header'>{cost}</div>
             <div className='table-header'>{sellingPrice}</div>
@@ -197,8 +197,8 @@ const saveHandler = async() => {
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn6' name='date' value={stockInput.date} onChange={onChange}/>
+          <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange}/>
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange}/>
-          <input type='text' placeholder='Available Goods' className='btn6' name='category' value={stockInput.category} onChange={onChange}/>
 
            {/* <Typeahead
           className='btn6'
@@ -218,8 +218,8 @@ const saveHandler = async() => {
       </div>
       <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
         <div className='table-header'>Date</div>
-        <div className='bg-gray-200 md:w-60 text-center h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>
         <div className='table-header'>Category</div>
+        <div className='bg-gray-200 md:w-60 text-center h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>
         <div className='table-header'>Quantity</div>
         <div className='table-header'>Cost Price</div>
         <div className='table-header'>Selling Price</div>
