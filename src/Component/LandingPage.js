@@ -56,7 +56,7 @@ function LandingPage() {
         if(response.data.status === "Success") {
           // setVerifyEmail("Please verify your email to continue")
           ////////this should take you to the payment page
-          navigate('payment')
+          navigate('/payment')
         }
       })
       .catch(error => setErrorText(error))
@@ -104,7 +104,7 @@ function LandingPage() {
       }).then((response) => {
             const status = response.data.status
             const code = response.data.code
-            console.log(response)
+            console.log(response, "signin")
             const {assessToken, userDetail} = response.data
             // const userDetails = {email, response, assessToken, refreshToken, userDetail}
 
@@ -115,8 +115,8 @@ function LandingPage() {
                 userDetail: response.data.userDetail
               } 
               auth.login(user)
-              navigate('payment')
-              window.location.reload()
+              navigate('/payment')
+              // window.location.reload()
             }
             
             if(code === 402 || code === 401 ) {
@@ -131,16 +131,17 @@ function LandingPage() {
               })
             } 
             if(response.data.role === "admin"){
-              navigate('admin')
-              window.location.reload()
+              navigate('/admin')
+              // window.location.reload()
             }
             if (status === "Success" || code === 200){
                   const user = {
                     token: response.data.assessToken,
                     userDetail: response.data.userDetail
                   } 
-                  auth.login(user)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
-                  navigate('dashboard')
+                  auth.login(response.data.userDetail)      //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+                  localStorage.setItem("myToken", user.token)
+                  navigate('/dashboard')
                   // window.location.reload()
                 }
   }).catch(error => {
@@ -173,6 +174,15 @@ function LandingPage() {
 
   const forgetHandler = (e) => {
     e.preventDefault()
+    const forgetUrl = `http://localhost:8080/account/${forget.email}`
+    console.log(forget)
+    axios({
+      method: 'POST',
+      url: forgetUrl,
+      data:{ password: forget.password}
+    }).then((response) => {
+      console.log(response)
+    })
   }
 
   return (

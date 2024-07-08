@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Typeahead } from 'react-bootstrap-typeahead';
 import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
@@ -58,7 +57,7 @@ useEffect(()=> {
   const {firstName, lastName,  _id, createdBy} = eachCreditor
   // console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
 
-  const baseUrl2 = `http://localhost:8080/credit/creditor/${creditorId}`;
+  const baseUrl2 = `http://localhost:8080/credit/${creditorId}`;
   const baseUrl5 = `http://localhost:8080/stock/${createdBy}`
 
   try{
@@ -77,18 +76,6 @@ useEffect(()=> {
 
  if(eachCreditor == null) return
   const {firstName, lastName,  _id, createdBy, phoneNumber} = eachCreditor
-  // console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
-// let list = []
-// let goodsDesc =[]
-
-// lists.map((item) => {
-//   return list.push(item.name)
-// })
-// desc.map((item) => {
-//   return goodsDesc.push(item.goods)
-// })
-// console.log( desc)
-
 
 const onChange = (e) => {
   e.preventDefault()
@@ -109,10 +96,30 @@ const onChange = (e) => {
   const totalCashHandler = (e) => {
     e.preventDefault()
     const total = creditorTotal - parseInt(cash)
-    // console.log(creditorTotal)
-    setTotalCash(total)
+   
+    const amount = {
+      paid: cash, 
+      balance: total, 
+      businessId : createdBy, 
+      creditorId : _id, 
+      phoneNumber, 
+      firstName, 
+      lastName, 
+      purchase: creditorTotal 
+    }
+
+    axios({
+      method: 'post', 
+      url: baseUrl3,
+      data: amount
+     }).then((response) => {
+      console.log(response)
+      toast.success("Input is successfully saved at the database")
+    }).catch(error => {
+      console.log(error)
+      toast.error(error.response.data.message)
+    })
   }
-  // console.log(totalCash, cash)
      
   ////////////////Submit and sending to the backend starts here///////////////////////
 
@@ -127,7 +134,6 @@ const onChange = (e) => {
           {
             id: new Date().getMilliseconds(),
             date: creditorInput.date,
-            // description: creditorInput.description,
             description,
             category: category,
             qty: creditorInput.qty,
@@ -136,21 +142,36 @@ const onChange = (e) => {
           },
         ])
         
-        setCredit((prev) => [    //this is sent to the backend
-          ...prev,
+        setCredit((prev) => [
+            ...prev,
           {
             id: new Date().getMilliseconds(),
             creditorId: _id,
             date: creditorInput.date,
-            // description: creditorInput.description,
             description,
             category: category,
             qty: creditorInput.qty,
             rate: Number(creditorInput.rate),
             total: creditorInput.rate * creditorInput.qty,
             businessId: createdBy
-          },
+        }
         ])
+        
+        // setCredit((prev) => [    //this is sent to the backend
+        //   ...prev,
+        //   {
+        //     id: new Date().getMilliseconds(),
+        //     creditorId: _id,
+        //     date: creditorInput.date,
+        //     // description: creditorInput.description,
+        //     description,
+        //     category: category,
+        //     qty: creditorInput.qty,
+        //     rate: Number(creditorInput.rate),
+        //     total: creditorInput.rate * creditorInput.qty,
+        //     businessId: createdBy
+        //   },
+        // ])
    }
   setCreditorInput({
     date: "",
@@ -165,9 +186,20 @@ const onChange = (e) => {
   }
   
  //////////////Delete/////////////
-const deleteHandler = id => {
-  console.log(id)
-  setCreditor(creditor.filter(stocks => stocks.id !== id))
+const deleteHandler = value => {
+  if(value.id !== undefined){
+  setCreditor(creditor.filter(stocks => stocks.id !== value.id))
+  toast.success("Items successfully deleted")
+ } else {
+  const deleteUrl = `http://localhost:8080/credit/${value._id}`;
+  axios.delete(deleteUrl, value)
+  .then((response) => {
+     const afterDelete = creditor.filter((item) => item._id !== value._id)
+     setCreditor(afterDelete)
+  })
+  setCreditor(creditor.filter(stocks => stocks._id !== value.id))
+  toast.success("Items successfully deleted")
+ }
 }
 
 //////////////Edit//////////////////////
@@ -205,60 +237,26 @@ const creditorTotal = creditor.reduce(reducer, 0)
   setCategory(value)
  }
     /////////////Save to the backend//////
-    const amount = {paid: cash, balance: totalCash, businessId : createdBy, creditorId : _id, phoneNumber, firstName, lastName, purchase: creditorTotal }
+    
     const saveHandler = () => {
-      // console.log("see me, going to backend", credit, amount)
-      
-        if(credit.length === 0 ){
-          return toast.error("you have not entered any new data")
-        }
-        if(amount.paid === undefined){
-          return toast.error("You have not put in amount paid")
-        }
         axios({
-          method: 'post', 
+          method: 'post',
           url: baseUrl2b,
           data: credit
-         }).then((response) => {
-          console.log(response, "credit res")
-          if(response.data.code === 100){
-            setSave(false)
-            const id = response.data.credit.id
-            console.log(id)
+        }).then((response) => {
+          console.log(response, "credit sent")
+          toast.success("Credit saved successfully")
+        }).catch(error => {
+          console.log(error)
+          const id = error.response.data.credit.id
             const removeIt = creditor.filter((item) => item.id !== id)
             setCreditor(removeIt)
-            return toast.error(response.data.message)
-          }else{
-            setSave(true)
-          }
+          toast.error(error.response.data.message)
         })
-        .catch(err=>{
-          console.log(err, 'error here')
-          setSave(false)
-          const id = err.response.data.credit.id
-          const removeIt = creditor.filter((item) => item.id !== id)
-          console.log(id, removeIt)
-          setCreditor(removeIt)
-          toast.error(err.response.data.message)
-        } )
-               
-      //  setCredit([])
-    }
-
-    if(save){
-      axios({
-        method: 'post', 
-        url: baseUrl3,
-        data: amount
-       }).then((response) => {
-        console.log(response)
-        toast.success("Input is successfully saved at the database")
-      })
-      setSave(false)
     }
 
  const renderCreditor = creditor.map((value, id) => {
-  const { date, total, description, category, qty, rate } = value;
+  const { date, total, description, category, qty, rate,  } = value;
   return (
     <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4'>
       <td className='table-data'>{moment(date).format('DD/MM/YYYY')}</td>
@@ -268,7 +266,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
       </tr>
-      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
+      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value)}>Delete</button>
       <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
     </>
   )
@@ -279,18 +277,15 @@ const creditorTotal = creditor.reduce(reducer, 0)
     <div >
       <NavBar>
       <Link className='no-underline' to={'transaction'} state={eachCreditor}>
-          <button className='nav text-white'>Check Balance</button>
+          <button  className='nav text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
       </Link>
       </NavBar>
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName}/>
-      {/* {JSON.stringify(creditor)} */}
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName+" "+lastName}</div>
       <div className='absolute md:-left-4 top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date'className='btn4' name='date' value={creditorInput.date} onChange={onChange}/>
-          
          {/*************************/}
-
                 <div>
                     <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
                       {category.length > 0 ? category : "Category"}
@@ -304,53 +299,12 @@ const creditorTotal = creditor.reduce(reducer, 0)
                     )}
                 </div>
                 {/*************************/}
-                  {/* <Typeahead
-                  className='btn6'
-                  placeholder='Category'
-                  onChange={(selected) => {
-                    // console.log(selected)
-                    setCategory(selected[0]);
-                  }}
-                  options={list}
-                /> */}
-                  {/* <input type='text' placeholder='Category' className='btn4' name='category' value={creditorInput.category} onChange={onChange}/> */}
-                  
-          {/********************************/}
-          {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={creditorInput.description} onChange={onChange}/> */}
-          
-         {/* <select className='btn4' >
-               {desc.map((item, index) => (
-                  // <div key={index}  className='dropdown' onClick={() => dropDownHandler(item.goods)}>{item.goods}</div>
-                  <option  name='description' value={creditorInput.description} onChange={onChange}>{item.goods}</option>
-                ))}
-         </select> */}
-
-        <select className='btn4' onChange={dropDownHandler}>
-               <option value=''>Description</option>
-               {desc.map((item, index) => (
-                  <option  key={index} value={item.good} >{item.goods}</option>
-                ))}
-         </select>
-
-        
-          {/* <div>
-            <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
-              {description.length > 0 ? description : "Description"}
-            </button>
-            {isOpen && (
-              <div className='dropContainer'>
-                {desc.map((item, index) => (
-                  <div key={index}  
-                  className='dropdown' 
-                  onClick={() => dropDownHandler(item.goods)}
-                  >
-                    {item.goods}
-                  </div>
-                ))}
-              </div>
-            )}
-         </div>  */}
-
+            <select className='btn4' onChange={dropDownHandler}>
+                  <option value=''>Description</option>
+                  {desc.map((item, index) => (
+                      <option  key={index} value={item.good}  className='dropdown'>{item.goods}</option>
+                    ))}
+            </select>
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
           <button type='submit' className='submit'>Submit</button>
@@ -364,7 +318,6 @@ const creditorTotal = creditor.reduce(reducer, 0)
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>
       </table>
-      {/* <div>{renderCreditor}</div> */}
       <div>
         {error ? error.message : renderCreditor}
       </div>

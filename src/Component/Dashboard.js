@@ -16,6 +16,7 @@ function Dashboard() {
   const [ showDebtorModal, setShowDebtorModal ] = useState(false)
   const [ showCategoryModal, setShowCategoryModal ] = useState(false)
   const [ showCreditBalModal, setShowCreditBalModal] = useState(false)
+  const [user, setUser] = useState()
   const auth = useAuth()
   // const [category, setCategory] = useState([])
   const [categoryTodo, setCategoryTodo] = useState({
@@ -23,35 +24,55 @@ function Dashboard() {
   })
   const [ categoryList, setCategoryList ] = useState([])
   // const [error, setError] = useState(null)
+  // const authToken = localStorage.getItem("myToken")
+  // console.log(authToken)
 
+  // useEffect(() => {
+  // //   console.log('object')
+  //   const verifyToken = async () => {
+  //         try {
+  //            const verifyUrl = 'http://localhost:8080/auth/verifyToken'
+  //         const response = await axios.get(verifyUrl, {
+  //             headers: {
+  //                 Authorization: "Bearer " + authToken
+  //             }
+  //         });
+  //         console.log(response.data, "xxxx dashboard")
+  //         auth.setUser(response.data)
+  //     } catch (error) {
+  //         console.log('Error verifying token', error)
+  //     }
+  // } 
+  // verifyToken(authToken)
+  // }, [authToken]);
 // console.log(category)  //send thid to the backend for storage
-// console.log(auth)
+console.log(auth)
 const account_id = auth.user._id
 const {fullName, businessName} = auth.user
-// console.log(account_id, auth)
+console.log(account_id, auth)
 const categoryUrl = "http://localhost:8080/category/"
 const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 
 /////////////////////Category Delete//////////////////////
-const deleteCategory = (id) => {
-  console.log(id, 'see')
-  // const itemToDelete = categoryList.splice(id, 1)  //i had to do this because the mapped items do not have an id so is used splice to remove it from the array 
-  const remnant = categoryList.filter((item) => item._id !== id )
-  setCategoryList(remnant)
-  console.log( remnant, categoryList)
+// const deleteCategory = (id) => {
+//   console.log(id, 'see')
+//   // const itemToDelete = categoryList.splice(id, 1)  //i had to do this because the mapped items do not have an id so is used splice to remove it from the array 
+//   const remnant = categoryList.filter((item) => item._id !== id )
+//   setCategoryList(remnant)
+//   console.log( remnant, categoryList)
 
-  try{
-    axios({
-      method: 'delete',
-      url: categoryUrl2,
-      data: remnant
-    }).then((response) => {
-      console.log(response)
-    })
-  } catch(err) {
-    console.log(err.message)
-  }
-}
+//   try{
+//     axios({
+//       method: 'delete',
+//       url: categoryUrl2,
+//       data: remnant
+//     }).then((response) => {
+//       console.log(response)
+//     })
+//   } catch(err) {
+//     console.log(err.message)
+//   }
+// }
 
 //////////Category Todo //////////////////////
 const onChange = (e) => {
@@ -104,20 +125,20 @@ useEffect(() => {
     })
   }catch(err) {console.log(err.message)}
 })
-const sendCategory = () => {
-  // const account_id = auth.user.response.data.userDetail._id
+// const sendCategory = () => {
+//   const account_id = auth.user.response.data.userDetail._id
   
-}
-const list = []
-const renderCategory = categoryList.map((item, id) => {
-  list.push(item.name)
-  return (
-    <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
-      <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item.name}</p>
-      <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(item._id)}>Delete</button>
-    </div>
-  )
-})
+// }
+ const list = []
+// const renderCategory = categoryList.map((item, id) => {
+//   list.push(item.name)
+//   return (
+//     <div className='flex bg-gray-100 mt-1 h-8 divide-x-4 divide-green-500'>
+//       <p className='w-64 h-6 bg-white m-1 pl-2 mr-2'>{item.name}</p>
+//       <button className='ml-1 pl-4 w-60 hover:bg-red-500 m-1' onClick={()=> deleteCategory(item._id)}>Delete</button>
+//     </div>
+//   )
+// })
 
 //credit handle here
   const creditorHandler = (e) => {
@@ -142,8 +163,8 @@ const renderCategory = categoryList.map((item, id) => {
     <div>
       <NavBar>
         {/* <div onClick={() => setShowCategoryModal(true)}>Category</div> */}
-        <div>Total Debtor Statement</div>
-        <div>Total Creditor Statement</div>
+        <div className='text-xs font-bold ml-3 cursor-pointer'>TOTAL DEBTOR STATEMENT</div>
+        <div className='text-xs font-bold ml-3 mt-3 cursor-pointer'>TOTAL CREDITOR STATEMENT</div>
         {/* <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div> */}
       </NavBar>
       <Header pageTitle={" Dashboard"} name={businessName + " "+ fullName}/>

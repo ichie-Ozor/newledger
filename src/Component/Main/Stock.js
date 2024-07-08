@@ -164,8 +164,8 @@ const saveHandler = async() => {
         url: stockUrl2,
         data: stocks
       }).then((response) => {
-        console.log("sales data posted", response)
-        toast.success("Sales Posted Successfully")
+        console.log("stock data posted", response)
+        toast.success("Stocks Posted Successfully")
         // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
       })
  } catch(err) {console.log(err.message)}

@@ -25,17 +25,25 @@ export const AuthProvider = ({children}) => {
    const [user, setUser ] = useState(null)
 
    const login = (assessToken) => {
-    setUser(assessToken.userDetail)
-    localStorage.setItem("user", assessToken.token)
+    console.log(assessToken, "auth assessToken")
+    setUser(assessToken)
+    // localStorage.setItem("user", assessToken.token)
     return assessToken
    }
-   const logout = () => {
-    return localStorage.removeItem("user")
+   const isAutheticated = () => {
+    if(user){
+        return true
+    } else {
+        return false
+    }
    }
-   const getUserDetail = (userDetail) => {
-    return localStorage.getItem(userDetail)
+   const logout = (userToken) => {
+    return localStorage.removeItem(userToken)
    }
-   return <AuthContext.Provider value={{user, login, logout, getUserDetail}}>{children}</AuthContext.Provider>
+   const getUserDetail = (userToken) => {
+    return localStorage.getItem(userToken)
+   }
+   return <AuthContext.Provider value={{user, isAutheticated, setUser, login, logout, getUserDetail}}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {

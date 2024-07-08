@@ -1,7 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../Context/auth'
 
 function NavBar({children}) {
+  const navigate = useNavigate()
+  const auth = useAuth()
   const signOutHandler = () => {
+    auth.logout("myToken")
+    navigate('/index')
     console.log("sign out")
   }
   return (
@@ -14,7 +20,7 @@ function NavBar({children}) {
           {children}
         </div>
         
-        <div className='md:text-xl mt-2' onClick={signOutHandler}>
+        <div  className='text-xs font-bold ml-3 mt-7  cursor-pointer' onClick={signOutHandler}>
           Sign Out
         </div>
       </div>

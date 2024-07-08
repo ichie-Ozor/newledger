@@ -109,7 +109,10 @@ console.log(sale, "to the backend from sale")
         toast.success(response.data.message)
       }).catch((error) => {
         console.log(error)
-        toast.error(error.data.message)
+        toast.error(error.response.data.message)
+        const id = error.response.data.sale.id
+        const removeIt = sales.filter((item) => item.id !== id)
+        setSales(removeIt)
       })
 
 
@@ -122,8 +125,6 @@ console.log(sale, "to the backend from sale")
   })
   setCategory('')
   setDescription('')
-  // setSave(true)
-  // saveHandler()
 }
 
 
