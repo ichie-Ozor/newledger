@@ -16,6 +16,8 @@ import Debtor from './Component/Main/Debtor';
 import Stock from './Component/Main/Stock';
 import CreditorTransaction from './Component/Main/CreditorTransaction';
 import DebtorTransaction from './Component/Main/DebtorTransaction';
+import CreditorTotal from './Component/CreditorTotal';
+import DebtorTotal from './Component/DebtorTotal';
 // import { useAuth } from './Context/auth';
 // import axios from 'axios';
 
@@ -56,6 +58,8 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="/emailsent/:email" element={<EmailSent />} />
             <Route path="/:email?" element={<LandingPage />} />
+            <Route path="dashboard/creditorTotal/:accountId" element={<CreditorTotal />} />
+            <Route path="dashboard/debtorTotal/:accountId" element={<DebtorTotal />} />
             <Route path="payment" element={<PaymentPage />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="admin" element={<AdminDashboard />} />
@@ -66,7 +70,7 @@ function App() {
             <Route path="dashboard/debtor/:accountId" element={<Debtor />} />
             <Route path="dashboard/stock/:accountId" element={<Stock />} />
             <Route path="dashboard/creditor/:accountId/:creditorId/transaction" element={<CreditorTransaction />} />
-            <Route path="DebtorTransaction/:creditorId" element={<DebtorTransaction />} />
+            <Route path="dashboard/debtor/:accountId/:debtorId/transaction" element={<DebtorTransaction />} />
           </Route>
         </Routes>
       </Router>

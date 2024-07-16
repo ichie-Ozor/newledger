@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from './Context/auth';
 
 
 function Home() {
+    const navigate = useNavigate()
     const auth = useAuth();
     const [loading, setLoading] = useState(true); // State to manage loading indicator
     const location = useLocation()
@@ -41,9 +42,11 @@ function Home() {
                     } else {
                         // Handle case where verification fails
                         console.log('Token verification failed');
+                        navigate("/index")
                     }
                 } catch (error) {
                     console.error('Error verifying token:', error);
+                    navigate('/index')
                 } finally {
                     setLoading(false); // Set loading to false when finished
                 }

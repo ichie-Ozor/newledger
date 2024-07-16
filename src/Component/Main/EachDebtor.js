@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import moment from 'moment';
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import { useAuth } from '../../Context/auth';
@@ -125,9 +125,22 @@ const onChange = (e) => {
 
 
   //////////////Delete/////////////
-const deleteHandler = id => {
-  console.log(id)
-  setDebtor(debtor.filter(debtors => debtors.id !== id))
+const deleteHandler = (item) => {
+  console.log(item)
+  ////////if not saved at the backend, delte it from the front
+  if(item.id !== undefined){
+    setDebtor(debtor.filter((element) => element.id !== item.id))
+  } else {
+     //////delete the credit details from the backend
+  const deleteUrl = `http://localhost:8080/debt/${item._id}`;
+  axios.delete(deleteUrl, item)
+  .then((response) => {
+    console.log(response)
+    const afterDelete = debtor.filter((element) => element._id !== item._id)
+    setDebtor(afterDelete)
+    toast.success("Items successfully deleted")
+  })
+  }
 }
 
 ///////////Edit///////////////
@@ -168,8 +181,27 @@ const dropDownHandler = (event) => {
 
   const totalCashHandler = (e) => {
     e.preventDefault()
-    const total = debtorTotal - cash
-    setTotalCash(total)
+    const total = debtorTotal - parseInt(cash)
+    
+    const amount = {
+      paid: cash, 
+      balance: total, 
+      businessId : createdBy, 
+      debtorId : _id, 
+      phoneNumber, 
+      firstName, 
+      lastName, 
+      purchase: debtorTotal 
+    }
+    axios({
+      method: 'post', 
+      url: baseUrl3,
+      data: amount
+     }).then((response) => {
+      console.log(response)
+     }).catch(error => {
+      toast.error(error.response.data.message)
+     })
   }
    
   ////////////////Total ends here///////////////////////
@@ -185,23 +217,15 @@ const debtorTotal = debtor.reduce(reducer, 0)
     /////////////Save to the backend//////
     const saveHandler = () => {
       console.log(debt, "this is debt")
-      const amount = {paid: cash, balance: totalCash, businessId : createdBy, debtorId : _id, phoneNumber, firstName, lastName, purchase: debtorTotal }
       try{
         if(debt.length === 0 ){
           return toast.error("you have not entered any new data")
         }
-        if(amount.paid === undefined){
-          return toast.error("You have not put in amount paid")
-        }
+
         axios({
           method: 'post', 
           url: baseUrl2b,
           data: debt
-         })
-         axios({
-          method: 'post', 
-          url: baseUrl3,
-          data: amount
          })
          toast.success("Input is successfully saved at the database")
          setDebt([])
@@ -209,7 +233,6 @@ const debtorTotal = debtor.reduce(reducer, 0)
         console.log(err.message)
         toast.error("Something went wrong while trying to save, please try again later")
       } 
-
     }
 
  const renderDebtor = debtor.map((value, id) => {
@@ -224,8 +247,8 @@ const debtorTotal = debtor.reduce(reducer, 0)
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
       </tr>
-      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value.id)}>Delete</button>
-      <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
+      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value)}>Delete</button>
+      {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
     </>
   )
  })
@@ -233,7 +256,11 @@ const debtorTotal = debtor.reduce(reducer, 0)
 
   return (
     <div>
-      <NavBar />
+      <NavBar>
+      <Link className='no-underline' to={'transaction'} state={eachDebtor}>
+          <button  className='nav text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
+      </Link>
+      </NavBar>
       <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName}/>
       <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName + " " + lastName}</div>
       <div className='absolute left top-22 '>

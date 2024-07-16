@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Header from '../Utilities/Header'
 import NavBar from '../Utilities/NavBar'
 import CreditorModal from '../Utilities/CreditorModal'
@@ -46,10 +47,10 @@ function Dashboard() {
   // verifyToken(authToken)
   // }, [authToken]);
 // console.log(category)  //send thid to the backend for storage
-console.log(auth)
+// console.log(auth)
 const account_id = auth.user._id
 const {fullName, businessName} = auth.user
-console.log(account_id, auth)
+// console.log(account_id, auth)
 const categoryUrl = "http://localhost:8080/category/"
 const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 
@@ -163,8 +164,8 @@ useEffect(() => {
     <div>
       <NavBar>
         {/* <div onClick={() => setShowCategoryModal(true)}>Category</div> */}
-        <div className='text-xs font-bold ml-3 cursor-pointer'>TOTAL DEBTOR STATEMENT</div>
-        <div className='text-xs font-bold ml-3 mt-3 cursor-pointer'>TOTAL CREDITOR STATEMENT</div>
+        <Link to={`debtorTotal/${account_id}`} className='no-underline'><div className='text-xs font-bold ml-3 cursor-pointer text-white no-underline' >TOTAL DEBTOR STATEMENT</div></Link>
+        <Link to={`creditorTotal/${account_id}`} className='no-underline'><div className='text-xs font-bold ml-3 mt-3 cursor-pointer text-white no-underline'>TOTAL CREDITOR STATEMENT</div></Link>
         {/* <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div> */}
       </NavBar>
       <Header pageTitle={" Dashboard"} name={businessName + " "+ fullName}/>
@@ -179,14 +180,14 @@ useEffect(() => {
       {openCreditor ? 
       <div className='creditor relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
         <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>
-        <NavLink to={`creditor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
+        <NavLink to={`creditor/${account_id}`} className='no-underline'><div className='btn2'>Old Account?</div></NavLink>
       </div> :
       <div></div>
       }
       {openDebtor ? 
       <div className='debtor relative w-48 h-24 bg-white md:flex shadow-2xl rounded hover:shadow md:w-[20rem] md:p-2'>
       <div className='btn2' onClick={() => setShowDebtorModal(true)}>New Account?</div>
-      <NavLink to={`debtor/${account_id}`}><div className='btn2'>Old Account?</div></NavLink>
+      <NavLink to={`debtor/${account_id}`} className=' no-underline'><div className='btn2'>Old Account?</div></NavLink>
     </div> :
       <div></div>
       }

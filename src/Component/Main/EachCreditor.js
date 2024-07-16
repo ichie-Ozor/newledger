@@ -7,6 +7,7 @@ import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
 import { useAuth } from '../../Context/auth';
+import { thousandSeperator } from '../../Utilities/helper';
 
 
 function EachCreditor(props) {
@@ -156,22 +157,31 @@ const onChange = (e) => {
             businessId: createdBy
         }
         ])
-        
-        // setCredit((prev) => [    //this is sent to the backend
-        //   ...prev,
-        //   {
-        //     id: new Date().getMilliseconds(),
-        //     creditorId: _id,
-        //     date: creditorInput.date,
-        //     // description: creditorInput.description,
-        //     description,
-        //     category: category,
-        //     qty: creditorInput.qty,
-        //     rate: Number(creditorInput.rate),
-        //     total: creditorInput.rate * creditorInput.qty,
-        //     businessId: createdBy
-        //   },
-        // ])
+        // const credit = {
+        //   id: new Date().getMilliseconds(),
+        //   creditorId: _id,
+        //   date: creditorInput.date,
+        //   description,
+        //   category: category,
+        //   qty: creditorInput.qty,
+        //   rate: Number(creditorInput.rate),
+        //   total: creditorInput.rate * creditorInput.qty,
+        //   businessId: createdBy
+        // }
+        // axios({
+        //   method: 'post',
+        //   url: baseUrl2b,
+        //   data: credit
+        // }).then((response) => {
+        //   console.log(response, "credit sent")
+        //   toast.success("Credit saved successfully")
+        // }).catch(error => {
+        //   console.log(error)
+        //   const id = error.response.data.credit.id
+        //     const removeIt = creditor.filter((item) => item.id !== id)
+        //     setCreditor(removeIt)
+        //   toast.error(error.response.data.message)
+        // })
    }
   setCreditorInput({
     date: "",
@@ -187,35 +197,42 @@ const onChange = (e) => {
   
  //////////////Delete/////////////
 const deleteHandler = value => {
+  /////////if its not saved at the back, delete it from the front only
   if(value.id !== undefined){
   setCreditor(creditor.filter(stocks => stocks.id !== value.id))
   toast.success("Items successfully deleted")
  } else {
+  //////delete the credit details from the backend
   const deleteUrl = `http://localhost:8080/credit/${value._id}`;
   axios.delete(deleteUrl, value)
   .then((response) => {
      const afterDelete = creditor.filter((item) => item._id !== value._id)
      setCreditor(afterDelete)
+     toast.success("Items successfully deleted")
   })
-  setCreditor(creditor.filter(stocks => stocks._id !== value.id))
-  toast.success("Items successfully deleted")
+  .catch(error => {
+    console.log(error)
+  })
+  ////////delete it from the frontend
+  // setCreditor(creditor.filter(stocks => stocks._id !== value.id))
+  
  }
 }
 
 //////////////Edit//////////////////////
-const editHandler = id => {
-  const editItem = creditor.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
+// const editHandler = id => {
+//   const editItem = creditor.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
   
-  setCreditorInput({
-    ...creditorInput,
-    date: editItem.date,
-    description,
-    category,
-    qty: editItem.qty,
-    rate: editItem.rate,
-  })
-  deleteHandler(id)
-} 
+//   setCreditorInput({
+//     ...creditorInput,
+//     date: editItem.date,
+//     description,
+//     category,
+//     qty: editItem.qty,
+//     rate: editItem.rate,
+//   })
+//   deleteHandler(id)
+// } 
 
 
 ////////////Reducer/////////////
@@ -236,8 +253,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
   setIsClose(false)
   setCategory(value)
  }
-    /////////////Save to the backend//////
-    
+    ///////////Save to the backend//////
     const saveHandler = () => {
         axios({
           method: 'post',
@@ -253,6 +269,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
             setCreditor(removeIt)
           toast.error(error.response.data.message)
         })
+        setCredit([])
     }
 
  const renderCreditor = creditor.map((value, id) => {
@@ -267,7 +284,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
       <td className='table-header'>{total}</td>
       </tr>
       <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value)}>Delete</button>
-      <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button>
+      {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
     </>
   )
  })
@@ -324,13 +341,13 @@ const creditorTotal = creditor.reduce(reducer, 0)
 
       <div className='relative float-right right-[40rem] top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
-        <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{creditorTotal}</div></div>
+        <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(creditorTotal)}</div></div>
           <div className='flex space-x-8'>
             <div className='btn5'>Paid: </div>
                 <input className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment'/>
                 <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
           </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{totalCash}</div>
+        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
       </div>
       <button type='submit' onClick={saveHandler} className='save'>Save</button>
       

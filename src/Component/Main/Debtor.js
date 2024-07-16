@@ -6,6 +6,7 @@ import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../Context/auth'
+import UpdateModal from '../../Utilities/UpdateModal'
 
 function Debtor() {
     const [client, setClient] = useState([])
@@ -13,9 +14,11 @@ function Debtor() {
     const auth = useAuth()
     const {fullName, businessName} = auth.user
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
-    const [deleteId, setDeleteId] = useState()
+    const [deleteId, setDeleteId] = useState("")
+    const [updateId, setUpdateId] = useState("")
     const baseUrl = "http://localhost:8080/debtor"
     
 
@@ -71,15 +74,16 @@ function Debtor() {
 
       ///////This is for the Update button
       const updateCreditor = (id) => {
-
+        setUpdateId(id)
+        setShowUpdateModal(true)
       }
 
     const render = client.map((item, id) => {
         return (<div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
        <div className='flex gap-5'>
-           <div>{item.businessName}</div>
-           <div>{item.email}</div>
-           <div>{item.fullName}</div>
+           <div>{item.firstName}</div>
+           <div>{item.lastName}</div>
+           <div>{item.phoneNumber}</div>
        </div>
        <div className='ml-20 float-right'>
            <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
@@ -113,10 +117,14 @@ function Debtor() {
                   type='password' 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
-                  className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-10 pl-4'/>
-              <button className='deletebtn'>Enter</button>
+                  className='absolute flex left-20 rounded-[10px] w-3/4 border-2 p-1 top-10 pl-7'
+                  />
+              <button className='absolute deletebtn w-[14em] top-[6rem] left-[9em] grid justify-items-center justify-self-center'>Enter</button>
           </form>
           </DeleteModal>
+          <UpdateModal visible={showUpdateModal} close={() => setShowUpdateModal(false)}>
+
+          </UpdateModal>
         </div>
       )
 }

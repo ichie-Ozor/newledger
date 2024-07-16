@@ -6,6 +6,7 @@ import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import { toast } from 'react-toastify';
+import UpdateModal from '../../Utilities/UpdateModal'
 
 function Creditor() {
    const params = useParams()
@@ -14,6 +15,7 @@ function Creditor() {
   const {fullName, businessName} = auth.user
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState()
@@ -38,7 +40,7 @@ function Creditor() {
           })
       }, [])    
 
-     
+     ////////////Delete modal
       const onsubmitDeleteHandler = (e, id) => {
         e.preventDefault()
         //////this is sent to the backend and crossed checkecked if the password match with the profile password before it can delete
@@ -47,8 +49,9 @@ function Creditor() {
           accountId,
           password
         }
-        console.log(deleteData)
        
+        ///////////update modal
+
         ////////////////////////////////////send to the backend where the logic is to be done
         if(deleteData.length !== 0){
           console.log("here, delete")
@@ -75,7 +78,7 @@ function Creditor() {
     
     ///////This is for the Update button
     const updateCreditor = (id) => {
-
+      console.log(id)
     }
 
 
@@ -129,6 +132,9 @@ function Creditor() {
               <button className='deletebtn'>Enter</button>
           </form>
           </DeleteModal>
+          <UpdateModal visible={showUpdateModal} close={() => setShowUpdateModal(false)}>
+
+          </UpdateModal>
         </div>
       )
 }

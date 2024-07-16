@@ -99,7 +99,7 @@ const sale = {
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
     }
-console.log(sale, "to the backend from sale")
+// console.log(sale, "to the backend from sale")
     await axios({
         method: 'post',
         url: salesUrl,

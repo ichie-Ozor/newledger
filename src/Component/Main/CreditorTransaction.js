@@ -4,6 +4,7 @@ import NavBar from '../../Utilities/NavBar'
 import moment from 'moment';
 import axios from 'axios';
 import { useLocation, useParams, useNavigate } from 'react-router-dom'
+import { calculateTotalDebt, thousandSeperator } from '../../Utilities/helper';
 // import { toast } from 'react-toastify';                   
 
 function CreditorTransaction() {
@@ -13,22 +14,22 @@ function CreditorTransaction() {
     // const [bal, setBal] = useState([])
     const params = useParams()
     const { creditorId } = params
+    console.log(params, "creditor")
     
 
     const location = useLocation()
     if(location.state === null){console.log("NOthing is coming from the eachCreditor component")}
     const creditorDetails = location.state
-    const {firstName, lastName, phoneNumber, _id } = creditorDetails
-    const y = Number(_id)
-    // console.log(location.state, typeof _id, typeof creditorId, typeof y, creditorDetails)
+    const {firstName, lastName, phoneNumber} = creditorDetails
 
 
     const CreditorUrl = `http://localhost:8080/creditorBal/${creditorId}`
     const CreditorUrl2 = `http://localhost:8080/credit/${creditorId}`
 
     const getList = useCallback(() => {
-      console.log(creditorId, params);
+      console.log(creditorId, params, "usssssssss");
          axios.get(CreditorUrl2).then((response) => {
+              console.log(response.data.credits, "see")
               const transactionDetail = response.data.credits
               setTransaction(transactionDetail)
           }).catch(error => {
@@ -44,17 +45,18 @@ function CreditorTransaction() {
   }, [CreditorUrl,creditorId, params])
 
   useEffect(()=>{
+    console.log(creditorId, params, "usssssssss")
     getList()
   },[getList])
 
-  //  console.log( transaction)
+   console.log( transaction, paid)
    const renderCreditTransaction = paid?.map((item, id) => {
-    // console.log(item)
+    // console.log(item, "item")
     return (
         <div key={id} className='table'>
           <tr>
             <td>{moment(item.createdAt).format('DD/MM/YYYY')}</td>
-            <td>{item.paid}</td>
+            <td>{thousandSeperator(item.paid)}</td>
           </tr>
         </div>
       )
@@ -64,7 +66,7 @@ function CreditorTransaction() {
       <div key={id} className='table'>
            <tr>
                 <td>{moment(item.date).format('DD/MM/YYYY')}</td>
-                <td>{item.total}</td>
+                <td>{thousandSeperator(item.total)}</td>
               </tr>
          </div>
     )
@@ -74,17 +76,15 @@ function CreditorTransaction() {
     (accumulator, currentValue) => accumulator + currentValue,
     0,
   );
-  const totalPaid = paid?.map(val=> console.log(val.paid)).reduce(
+  const totalPaid = paid?.map(val=> val.paid).reduce(
     (accumulator, currentValue) => accumulator + currentValue,
     0,
   );
-  console.log(transaction,typeof totalPaid, "transaction")
+
   return (
     <div>
       <Header />
-      <NavBar>
-        <div onClick={() => navigate(-1)}  className='nav text-xs font-bold ml-3 mt-3 cursor-pointer'>BACK</div>
-      </NavBar>
+      <NavBar />
       <div>
       <div className='flex align-items-center justify-center mb-3'>
         <div className='relative top-12 font-bold text-3xl text-gray-600'>Transaction detail of {firstName + " " + lastName}</div>
@@ -95,9 +95,7 @@ function CreditorTransaction() {
             <div className='w-[30%]'>
               <tr>
                 <th>Date</th>
-                {/* <th>Purchase</th> */}
                 <th>Credit</th>
-                {/* <th>Balance</th> */}
               </tr>
               {renderTransaction}
             </div>
@@ -111,19 +109,13 @@ function CreditorTransaction() {
               {renderCreditTransaction}
             </div>
       </table>
-      <table className=''>
-        <tr className='flex justify-center ml-24'>
-          <th>credit</th>
-          <th>cash Paid</th>
-          <th className='ml-6'>Balance</th>
-        </tr>
-        <tr className='flex justify-center mb-2'>
-          <td className='text-xl font-bold'>Total</td>
-          <td  className='text-xl font-bold'>{totalPurchase}</td>
-          <td className='text-xl font-bold'>{totalPaid}</td>
-          <td className='text-xl font-bold ml-2'>{totalPurchase - totalPaid}</td>
-        </tr> 
-      </table>
+        <div className='flex justify-center mt-5 space-x-8'>
+          <div className='text-xl font-bold'></div>
+          <div  className='text-xl font-[600]'>Total credit: {thousandSeperator(totalPurchase)}</div>
+          <div className='text-xl font-[600]'>Cash Paid: {thousandSeperator(totalPaid)}</div>
+          <div className='text-xl font-[600] ml-2'>Balance: {thousandSeperator(totalPurchase - totalPaid)}</div>
+        </div> 
+      
       </div>
       </div>
     </div>
