@@ -8,7 +8,7 @@ import { useAuth } from '../Context/auth'
 function Header({name, pageTitle}) {
   const auth = useAuth()
   const id = auth.user._id
-  const adminUrl = `http://localhost:8080/profile/${id}`
+  const adminUrl = "http://localhost:8080/profile"
   const navigate = useNavigate()
   const [admin, setAdmin] = useState(true)
   const [ open, setOpen ] = useState(false)
@@ -16,34 +16,44 @@ function Header({name, pageTitle}) {
     firstName: "",
     lastName: "",
     businessName: "",
-    adminPassword: ""
+    password: ""
   })
 
 
 useEffect(() => {
-  axios.get(adminUrl).then((response) => {
-    setAdmin(() => response.data.getProfile[0])
+  axios.get(adminUrl+ `/${id}`).then((response) => {
+    setAdmin(response.data.getProfile[0])
+    console.log(response.data)
+    // setAdmin(() => response.data.getProfile[0])
   }).catch(error => {
     console.log(error.message)
   })
-}, [adminUrl])
+}, [adminUrl, id])
 
   const onChange = (e) => {
      e.preventDefault()
      const {name, value} = e.target
      setProfile({
-      ...profile, [name] : value
+      ...profile, [name] : value,
+      account: id
      })
   }
 
   const profileHandler = (e) => {
     e.preventDefault()
     console.log(profile)
+    axios.post(adminUrl, profile)
+    .then((response) => {
+      console.log(response)
+    }).catch(err => {
+      console.error('Error has occured at profile, header page', err)
+    })
+
     setProfile({
       firstName: "",
       lastName: "",
       businessName: "",
-      adminPassword: ""
+      password: ""
     })
     setOpen(!open)
   }
@@ -71,7 +81,7 @@ useEffect(() => {
       </div>
       {open ?
          
-          (admin.lenght !== 0 ?
+          (admin ?
            <div 
              className='relative -left-96 top-36 bg-gray-100 p-4 z-10 w-96 h-46 pt-10  grid justify-items-center text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
               The Admin is already registered 😃😃😃
@@ -83,7 +93,7 @@ useEffect(() => {
                     <input type='text' placeholder='Enter First Name' className='header-input' name='firstName' value={profile.firstName} onChange={onChange}/>
                     <input type='text' placeholder='Enter Last Name' className='header-input' name='lastName' value={profile.lastName} onChange={onChange}/>
                     <input type='text' placeholder='Enter Business Name' className='header-input' name='businessName' value={profile.businessName} onChange={onChange}/>
-                    <input type='password' placeholder='Password' className='header-input' name='adminPassword' value={profile.adminPassword} onChange={onChange}/>
+                    <input type='password' placeholder='Password' className='header-input' name='password' value={profile.password} onChange={onChange}/>
                     <button type='submit' className='w-24 h-10 rounded relative left-36 top-1 text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
                   </form>
                 </div>)

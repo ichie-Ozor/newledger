@@ -16,16 +16,25 @@ function Creditor() {
     const [client, setClient] = useState([])
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
+    const [updateId, setUpdateId] = useState('')
     const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState()
-    const baseUrl = `http://localhost:8080/creditor/${accountId}`    //this is not the right endpoint
+    const [deleteItem, setDeleteItem] = useState(false)
+    const [creditorUpdate, setCreditorUpdate] = useState({
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      businessName: "",
+      address: ""
+    })
+    const baseUrl = "http://localhost:8080"    //this is not the right endpoint
     
 
 
     // this loads the creditor once the page loads
     useEffect(()=> {
-          axios.get(baseUrl).then((response) => {
+          axios.get(baseUrl+ `/creditor/${accountId}`).then((response) => {
             console.log(response)
             const creditorsDetail = response.data.creditor
             if(creditorsDetail.length === 0) {
@@ -41,55 +50,91 @@ function Creditor() {
       }, [])    
 
      ////////////Delete modal
-      const onsubmitDeleteHandler = (e, id) => {
-        e.preventDefault()
-        //////this is sent to the backend and crossed checkecked if the password match with the profile password before it can delete
-        const deleteData = {
-          id : deleteId,
-          accountId,
-          password
-        }
-       
-        ///////////update modal
 
-        ////////////////////////////////////send to the backend where the logic is to be done
-        if(deleteData.length !== 0){
-          console.log("here, delete")
-          const deleteUrl = `http://localhost:8080/creditor/${accountId}/${password}/${deleteId}`
-          axios.delete(deleteUrl, deleteData).then((response) => 
-          console.log(response)
-        ).catch(error => {
-          console.log(error)
-          toast.error("You are not authorized to do this")
-        })
-        setShowDeleteModal(false)
-        } else {
-          setShowDeleteModal(false)
-        }   
-        setPassword("")
-      }
-
-      /////////This is to delete client
       const deleteCreditor = (id) => {
         console.log(id)
         setDeleteId(id)
         setShowDeleteModal(true)
       }
-    
-    ///////This is for the Update button
+
+      const onsubmitDeleteHandler = (e, id) => {
+        e.preventDefault()
+        const profileUrl = baseUrl+`/profile/${accountId}`;
+        const deleteData = {
+          id : deleteId,
+          accountId,
+          password
+        };
+        //////this is sent to the backend and crossed checkecked if the password match with the profile password before it can delete
+        axios({
+          method: 'get', 
+          url: profileUrl+ `/${deleteData.password}`,
+         }).then((response) => {
+          console.log(response.data.status)
+          if(response.data.status === "Success"){
+            // setDeleteItem(true)
+            const deleteUrl = `http://localhost:8080/creditor/${accountId}/${password}/${deleteId}`
+            axios.delete(deleteUrl, deleteData).then((response) => 
+            toast.success(response.data.message)
+          )  
+          } else {
+            setDeleteItem(false)
+            toast.error("You are not authorized to do this")
+          }
+         }).catch(error => {
+          console.error('Error occured while trying to get profile', error)
+         })
+         setShowDeleteModal(false)
+         setPassword("")
+      }
+
+    /////////////////////////////////////This is for the Update button
     const updateCreditor = (id) => {
-      console.log(id)
+      setUpdateId(id)
+      setShowUpdateModal(true)
     }
 
+    function onChange(e){
+      e.preventDefault()
+      const {name, value} = e.target
+      setCreditorUpdate({
+        ...creditorUpdate,
+        [name] : value,
+        createdBy: accountId
+      })
+    }
+    const onSubmitCreditorUpdateHandler = (e) => {
+      e.preventDefault()
+        console.log(creditorUpdate)
+        try{
+          axios.put(baseUrl+`/creditor/${updateId}`, creditorUpdate)
+          .then((response) => {
+            console.log(response)
+          })
+        } catch(error){
+          console.error("Error in trying to send updated debtor to the backend", error)
+        }
+
+        setShowUpdateModal(false)
+        setCreditorUpdate({
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          businessName: "",
+          address: ""
+        })
+        setUpdateId("")
+    }
 
 
     const render = client.map((item, id) => {
         return (
         <div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
-            <div className='flex gap-5'>
+            <div className='flex gap-5 space-x-2'>
                 <div>{item.businessName}</div>
                 <div>{item.phoneNumber}</div>
                 <div>{item.firstName}</div>
+                <div>{item.lastName}</div>
             </div>
             <div className='ml-20 float-right'>
                 <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
@@ -127,13 +172,20 @@ function Creditor() {
                   value={password} 
                   name='password'
                   onChange={(e) => setPassword(e.target.value)} 
-                  className='absolute flex left-20 rounded-sm w-3/4 border-2 p-1 top-14 pl-4'
+                  className='absolute flex left-20 rounded-[10px] w-3/4 border-2 p-1 top-10 pl-7'
               />
-              <button className='deletebtn'>Enter</button>
+              <button className='absolute deletebtn w-[14em] top-[6rem] left-[9em] grid justify-items-center justify-self-center'>Enter</button>
           </form>
           </DeleteModal>
           <UpdateModal visible={showUpdateModal} close={() => setShowUpdateModal(false)}>
-
+            <form className='grid justify-center' onSubmit={onSubmitCreditorUpdateHandler}>
+              <input className='btn3' type='text' placeholder='Enter First Name' name='firstName' value={creditorUpdate.firstName} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Last Name' name='lastName' value={creditorUpdate.lastName} onChange={onChange}/>
+              <input className='btn3' type='Number' placeholder='Enter Phone Number' name='phoneNumber' value={creditorUpdate.phoneNumber} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Business Name' name='businessName' value={creditorUpdate.businessName} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Address' name='address' value={creditorUpdate.address} onChange={onChange}/>
+              <button className='w-28 h-11 bg-white relative top-24 left-28 rounded-sm -mt-12 shadow-xl hover:shadow hover:bg-slate-400 hover:text-white hover:font-bold'>Submit</button>
+            </form>
           </UpdateModal>
         </div>
       )

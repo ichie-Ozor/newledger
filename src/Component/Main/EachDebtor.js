@@ -281,7 +281,7 @@ const debtorTotal = debtor.reduce(reducer, 0)
             )}
           </div>
           {/********************************/}
-          <select className='btn4' onChange={dropDownHandler}>
+          <select className='btn4' value={description} onChange={dropDownHandler}>
             <option value=''>Description</option>
                {desc.map((item, index) => (
                  <option  key={index} value={item.goods} >{item.goods}</option>

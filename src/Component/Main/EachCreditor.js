@@ -264,7 +264,7 @@ const creditorTotal = creditor.reduce(reducer, 0)
           toast.success("Credit saved successfully")
         }).catch(error => {
           console.log(error)
-          const id = error.response.data.credit.id
+          const id = error.response.data?.credit.id
             const removeIt = creditor.filter((item) => item.id !== id)
             setCreditor(removeIt)
           toast.error(error.response.data.message)
@@ -316,15 +316,15 @@ const creditorTotal = creditor.reduce(reducer, 0)
                     )}
                 </div>
                 {/*************************/}
-            <select className='btn4' onChange={dropDownHandler}>
-                  <option value=''>Description</option>
+            <select className='btn4' value={description} onChange={dropDownHandler}>
+                  <option value= ''>Description</option>
                   {desc.map((item, index) => (
-                      <option  key={index} value={item.good}  className='dropdown'>{item.goods}</option>
+                      <option  key={index} value={item.goods}  className='dropdown'>{item.goods}</option>
                     ))}
             </select>
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Rate N'className='btn4' name='rate' value={creditorInput.rate} onChange={onChange}/>
-          <button type='submit' className='submit'>Submit</button>
+          <button type='submit' className='submit' >Submit</button>
         </form>
       </div>
       <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-4'>

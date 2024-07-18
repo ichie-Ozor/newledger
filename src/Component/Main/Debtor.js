@@ -19,6 +19,13 @@ function Debtor() {
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState("")
     const [updateId, setUpdateId] = useState("")
+    const [debtorUpdate, setDebtorUpdate ] = useState({
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      businessName: "",
+      address: ""
+    })
     const baseUrl = "http://localhost:8080/debtor"
     
 
@@ -27,7 +34,6 @@ function Debtor() {
             console.log(response)
             const debtorDetails = response.data.debtors
             if(debtorDetails.length === 0) {
-              console.log("there is nothing here")
               setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
             } else {
               setClient(debtorDetails)
@@ -52,8 +58,10 @@ function Debtor() {
         /////////////////////////////////////send to the backend where the logic is to be done
         if(deleteData.length !== 0){
         const deleteUrl = `http://localhost:8080/debtor/${accountId}/${password}/${deleteId}`
-        axios.delete(deleteUrl, deleteData).then((response) => 
-        console.log(response))
+        axios.delete(deleteUrl, deleteData).then((response) => {
+          toast.success(response.data.message)
+          window.location.reload()
+        })
         .catch(error => {
           console.log(error)
           toast.error("You are not authorized to do this")
@@ -72,11 +80,46 @@ function Debtor() {
         setShowDeleteModal(true)
       }
 
-      ///////This is for the Update button
-      const updateCreditor = (id) => {
+      /////////////////////This is for the Update button/////////
+      const updateDebtor = (id) => {
         setUpdateId(id)
         setShowUpdateModal(true)
       }
+
+      const onChange = (e) => {
+        e.preventDefault()
+        const { name, value } = e.target
+        setDebtorUpdate({
+          ...debtorUpdate, 
+          [name] : value,
+          createdBy: accountId
+        })
+      }
+
+      function onSubmitDebtorUpdateHandler(e) {
+        e.preventDefault()
+        console.log(debtorUpdate)
+        try{
+          axios.put(baseUrl+`/${updateId}`, debtorUpdate)
+          .then((response) => {
+            console.log(response)
+          })
+        } catch(error){
+          console.error("Error in trying to send updated debtor to the backend", error)
+        }
+
+        setShowUpdateModal(false)
+        setDebtorUpdate({
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          businessName: "",
+          address: ""
+        })
+        setUpdateId("")
+      }
+
+    ///////////////////////////////////////////////////////////////
 
     const render = client.map((item, id) => {
         return (<div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
@@ -93,7 +136,7 @@ function Debtor() {
             </button>
             <button className='float-right ml-2 h-10 w-36 bg-gray-500 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
-                 onClick={() => updateCreditor(item._id)}>
+                 onClick={() => updateDebtor(item._id)}>
                    Update
                  </button>
             <Link to={`${item._id}`} state={item}><button className='
@@ -123,7 +166,14 @@ function Debtor() {
           </form>
           </DeleteModal>
           <UpdateModal visible={showUpdateModal} close={() => setShowUpdateModal(false)}>
-
+            <form className='grid justify-center' onSubmit={onSubmitDebtorUpdateHandler}>
+              <input className='btn3' type='text' placeholder='Enter First Name' name='firstName' value={debtorUpdate.firstName} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Last Name' name='lastName' value={debtorUpdate.lastName} onChange={onChange}/>
+              <input className='btn3' type='Number' placeholder='Enter Phone Number' name='phoneNumber' value={debtorUpdate.phoneNumber} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Business Name' name='businessName' value={debtorUpdate.businessName} onChange={onChange}/>
+              <input className='btn3' type='text' placeholder='Enter Address' name='address' value={debtorUpdate.address} onChange={onChange}/>
+              <button className='w-28 h-11 bg-white relative top-24 left-28 rounded-sm -mt-12 shadow-xl hover:shadow hover:bg-slate-400 hover:text-white hover:font-bold'>Submit</button>
+            </form>
           </UpdateModal>
         </div>
       )
