@@ -201,22 +201,27 @@ const deleteHandler = value => {
   if(value.id !== undefined){
   setCreditor(creditor.filter(stocks => stocks.id !== value.id))
   toast.success("Items successfully deleted")
- } else {
+  return
+ } 
+
+  let profilePassword = prompt("Are you an admin, enter your password", "")
+
   //////delete the credit details from the backend
-  const deleteUrl = `http://localhost:8080/credit/${value._id}`;
-  axios.delete(deleteUrl, value)
+  const deleteUrl = `http://localhost:8080/credit/${value._id}/${profilePassword}`;
+  axios.delete(deleteUrl)
   .then((response) => {
+    console.log(response)
+    if(response.status === 200){
      const afterDelete = creditor.filter((item) => item._id !== value._id)
      setCreditor(afterDelete)
      toast.success("Items successfully deleted")
+     window.location.reload()
+    }
   })
   .catch(error => {
     console.log(error)
+    toast.error(error.response.data.message)
   })
-  ////////delete it from the frontend
-  // setCreditor(creditor.filter(stocks => stocks._id !== value.id))
-  
- }
 }
 
 //////////////Edit//////////////////////
@@ -255,21 +260,23 @@ const creditorTotal = creditor.reduce(reducer, 0)
  }
     ///////////Save to the backend//////
     const saveHandler = () => {
+      if(credit.length === 0 ){
+        return toast.error("you have not entered any new data")
+      }
         axios({
           method: 'post',
           url: baseUrl2b,
           data: credit
         }).then((response) => {
-          console.log(response, "credit sent")
           toast.success("Credit saved successfully")
         }).catch(error => {
-          console.log(error)
-          const id = error.response.data?.credit.id
+            const id = error.response.data?.credit.id
             const removeIt = creditor.filter((item) => item.id !== id)
             setCreditor(removeIt)
           toast.error(error.response.data.message)
         })
         setCredit([])
+        window.location.reload()
     }
 
  const renderCreditor = creditor.map((value, id) => {

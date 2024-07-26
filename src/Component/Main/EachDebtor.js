@@ -6,6 +6,7 @@ import { useLocation, useParams, Link } from 'react-router-dom';
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import { useAuth } from '../../Context/auth';
+import { thousandSeperator } from '../../Utilities/helper';
 
 function EachDebtor() {
   let initialValue 
@@ -125,38 +126,47 @@ const onChange = (e) => {
 
 
   //////////////Delete/////////////
-const deleteHandler = (item) => {
-  console.log(item)
+  const deleteHandler = (item) => {
   ////////if not saved at the backend, delte it from the front
   if(item.id !== undefined){
     setDebtor(debtor.filter((element) => element.id !== item.id))
-  } else {
-     //////delete the credit details from the backend
-  const deleteUrl = `http://localhost:8080/debt/${item._id}`;
-  axios.delete(deleteUrl, item)
+    toast.success("Item successfully deleted")
+    return
+  } 
+
+  let profilePassword = prompt("Are you an admin, enter your password", "")
+
+  //////delete the credit details from the backend
+  const deleteUrl = `http://localhost:8080/debt/${item._id}/${profilePassword}`;
+  axios.delete(deleteUrl)
   .then((response) => {
     console.log(response)
+    if(response.status === 200){
     const afterDelete = debtor.filter((element) => element._id !== item._id)
     setDebtor(afterDelete)
     toast.success("Items successfully deleted")
+    window.location.reload()
+    }
+  }).catch(error => {
+    console.log(error)
+    toast.error(error.response.data.message)
   })
-  }
 }
 
 ///////////Edit///////////////
-const editHandler = id => {
-  const editItem = debtor.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
-  console.log(editItem)
-  setDebtorInput({
-    ...debtorInput,
-    date: editItem.date,
-    description,
-    category,
-    qty: editItem.qty,
-    rate: editItem.rate,
-  })
-  deleteHandler(id)
-} 
+// const editHandler = id => {
+//   const editItem = debtor.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
+//   console.log(editItem)
+//   setDebtorInput({
+//     ...debtorInput,
+//     date: editItem.date,
+//     description,
+//     category,
+//     qty: editItem.qty,
+//     rate: editItem.rate,
+//   })
+//   deleteHandler(id)
+// } 
 
 
 //////////////////Category and Dropdown
@@ -216,12 +226,10 @@ const debtorTotal = debtor.reduce(reducer, 0)
   
     /////////////Save to the backend//////
     const saveHandler = () => {
-      console.log(debt, "this is debt")
       try{
         if(debt.length === 0 ){
           return toast.error("you have not entered any new data")
         }
-
         axios({
           method: 'post', 
           url: baseUrl2b,
@@ -233,6 +241,7 @@ const debtorTotal = debtor.reduce(reducer, 0)
         console.log(err.message)
         toast.error("Something went wrong while trying to save, please try again later")
       } 
+      window.location.reload()
     }
 
  const renderDebtor = debtor.map((value, id) => {
@@ -322,16 +331,16 @@ const debtorTotal = debtor.reduce(reducer, 0)
       <div>
       {error ? error.message : renderDebtor}
         </div>
-      <div className='relative float-right right-40 top-40 space-y-8 shadow-xl hover:shadow w-3/5 rounded-xl'>
+      <div className='relative float-right right-[40rem] top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
-          <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-center text-xl'>{debtorTotal}</div>
+          <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(debtorTotal)}</div>
         </div>
           <div className='flex space-x-8'>
             <div className='btn5'>Paid: </div>
-                <input className='bg-gray-100 w-72 h-10 rounded pt-2 flex justify-center text-xl text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here'/>
-                <button className='w-20 h-8 bg-gray-400 ml-2 relative left-32 top-1 rounded-md text-white font-bold text-lg shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
+                <input className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here'/>
+                <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
           </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-100 h-10 rounded pt-2 flex justify-center text-xl relative left-32 -top-16 w-72'>{totalCash}</div>
+        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
       </div>
       <button type='submit' onClick={saveHandler} className='save'>Save</button>
     </div>

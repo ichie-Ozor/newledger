@@ -20,7 +20,7 @@ function Creditor() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const [deleteId, setDeleteId] = useState()
-    const [deleteItem, setDeleteItem] = useState(false)
+    // const [deleteItem, setDeleteItem] = useState(false)
     const [creditorUpdate, setCreditorUpdate] = useState({
       firstName: "",
       lastName: "",
@@ -35,10 +35,8 @@ function Creditor() {
     // this loads the creditor once the page loads
     useEffect(()=> {
           axios.get(baseUrl+ `/creditor/${accountId}`).then((response) => {
-            console.log(response)
             const creditorsDetail = response.data.creditor
             if(creditorsDetail.length === 0) {
-              // toast.error("There is no creditor entered")
               setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
             } else{
               setClient(creditorsDetail)
@@ -74,11 +72,12 @@ function Creditor() {
           if(response.data.status === "Success"){
             // setDeleteItem(true)
             const deleteUrl = `http://localhost:8080/creditor/${accountId}/${password}/${deleteId}`
-            axios.delete(deleteUrl, deleteData).then((response) => 
-            toast.success(response.data.message)
+            axios.delete(deleteUrl, deleteData).then((response) =>{ 
+              window.location.reload()
+              toast.success(response.data.message)}
           )  
           } else {
-            setDeleteItem(false)
+            // setDeleteItem(false)
             toast.error("You are not authorized to do this")
           }
          }).catch(error => {
@@ -105,11 +104,11 @@ function Creditor() {
     }
     const onSubmitCreditorUpdateHandler = (e) => {
       e.preventDefault()
-        console.log(creditorUpdate)
         try{
           axios.put(baseUrl+`/creditor/${updateId}`, creditorUpdate)
           .then((response) => {
-            console.log(response)
+            toast.success(response.data.message)
+            window.location.reload()
           })
         } catch(error){
           console.error("Error in trying to send updated debtor to the backend", error)

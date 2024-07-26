@@ -40,8 +40,6 @@ function CreditorModal({visible, onClose}) {
 
   const onSubmitCreditorHandler = async (e) => {
     e.preventDefault()
-    console.log("see me")
-    console.log("creditor", newCreditor)
   // this pushes the creditor to the database
   try {
     axios({
@@ -50,7 +48,9 @@ function CreditorModal({visible, onClose}) {
       data: newCreditor
     }).then((response) => {
       toast.success("creditor posted successfully")
-      console.log("creditor posted successfully", response)
+      // window.location.reload()
+      navigate(`creditor/${account_id}`)
+      console.log(response)
     })
     // const response = await axios.post(creditorUrl, newCreditor)
     // console.log("creditor data posted", response)
@@ -68,7 +68,6 @@ function CreditorModal({visible, onClose}) {
       businessName: "",
       address: ""
     })
-    navigate(`creditor/${account_id}`)
   }
 
 

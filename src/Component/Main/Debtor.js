@@ -102,7 +102,8 @@ function Debtor() {
         try{
           axios.put(baseUrl+`/${updateId}`, debtorUpdate)
           .then((response) => {
-            console.log(response)
+           toast.success(response.data.message)
+           window.location.reload()
           })
         } catch(error){
           console.error("Error in trying to send updated debtor to the backend", error)

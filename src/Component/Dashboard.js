@@ -194,32 +194,7 @@ useEffect(() => {
       <CreditorModal onClose={handleCreditorOnClose} visible={showCreditorModal}/>
       <DebtorModal onClose={handleDebtorOnClose} visible={showDebtorModal} />
       </div>
-      {/***************CategoryModal*******************/}
-      {
-      // showCategoryModal ? 
-      // <DashboardModal visible={showCategoryModal} close={() => setShowCategoryModal(false)}>
-      //    {/* <div className='del relative top-1  h-4/5'> */}
-      //    <div className='relative -top-2 -left-96 overflow-auto'>
-      //       <form onSubmit={CategoryHandler} className='catForm fixed bg-white z-30'>
-      //         <input 
-      //         type='text' 
-      //         placeholder='Enter Category here' 
-      //         name='name' 
-      //         value={categoryTodo.name} 
-      //         // onChange={(e) => setCategoryTodo(e.target.value)}
-      //         onChange={onChange}
-      //         />
-      //         <button className='w-14 h-8 bg-gray-200'>Enter</button>
-      //       </form>
-      //       <div className='mt-10 h-7/7'>{renderCategory}</div> 
-      //       {/* <button className='relative bg-green-400 w-20 h-10  border rounded-sm  mt-2' onClick={sendCategory}>Submit</button> */}
-      //   </div>
-      // </DashboardModal>
-      // :
-      // <div></div>
-      }
-      {/*******************Credit Balance Modal*/}
-      {showCreditBalModal ? 
+      {/* {showCreditBalModal ? 
       <DashboardModal visible={showCreditBalModal} close={() => setShowCreditBalModal(false)}>
          <div>
             Credit Balance Here
@@ -227,7 +202,7 @@ useEffect(() => {
       </DashboardModal>
       :
       <div></div>
-      }
+      } */}
     </div>
   )
 }
