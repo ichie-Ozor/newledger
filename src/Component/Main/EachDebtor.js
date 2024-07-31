@@ -248,15 +248,15 @@ const debtorTotal = debtor.reduce(reducer, 0)
   const { total, date, description, category, qty, rate } = value;
   return (
     <>
-     <tr key={id} className='relative left-2 space-x-2 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4'>
+     <tr key={id} className='relative left-2 space-x-1 md:left-60 top-20 md:top-28 mt-2 flex md:space-x-4 w-[120vw] md:w-[100vw] -mb-7'>
       <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
       <td className='table-header'>{category}</td>
-      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
+      <td className='bg-gray-200 w-40 h-10 rounded pt-2 flex justify-center text-xs md:text-xl md:w-60'>{description}</td>
       <td className='table-header'>{qty}</td>
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
       </tr>
-      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value)}>Delete</button>
+      <button className='btndebtdel' onClick={() => deleteHandler(value)}>Delete</button>
       {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
     </>
   )
@@ -320,7 +320,7 @@ const debtorTotal = debtor.reduce(reducer, 0)
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-4'>
+      <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
         <th className='table-header'>Date</th>
         <th className='table-header'>Category</th>
         <th className='bg-gray-200 w-40 text-xs md:text-lg md:w-60 text-center h-10 rounded pt-2'>Goods Description</th>
@@ -331,7 +331,7 @@ const debtorTotal = debtor.reduce(reducer, 0)
       <div>
       {error ? error.message : renderDebtor}
         </div>
-      <div className='relative float-right right-[40rem] top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
+      <div className='relative float-right right-[40rem] md:top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
           <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(debtorTotal)}</div>
         </div>

@@ -200,16 +200,6 @@ const saveHandler = async() => {
           <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange}/>
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange}/>
 
-           {/* <Typeahead
-          className='btn6'
-          placeholder='Category'
-          onChange={(selected) => {
-            console.log(selected)
-            setCategory(selected[0]);
-          }}
-          options={list}
-        /> */}
-
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange}/>
           <input type='number' placeholder='Cost Price N'className='btn6' name='cost' value={stockInput.cost} onChange={onChange}/>
           <input type='number' placeholder='Selling Price N'className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange}/>

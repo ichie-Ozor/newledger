@@ -23,7 +23,7 @@ const baseUrl = "http://localhost:8080/account/getaccount"
 //this gets data from the database once the page loads. This will be cut out and used at the creditor, debtors page
 useEffect(()=> {
   axios.get(baseUrl).then((response) => {
-    // console.log(response)
+    console.log(response)
     setClient(() => response.data.allAccount)
   }).catch(error => {
     //  setError(error)
@@ -94,6 +94,8 @@ const deleteTimerHandler = (id) => {
         <div>{item.businessName}</div>
         <div>{item.email}</div>
         <div>{item.fullName}</div>
+        <div>{item.phoneNumber}</div>
+        <div>{item.verification ? "true" : "false"}</div>
     </div>
     <div className='ml-20 float-right'>
         <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500 hover:text-black hover:scale-90 duration-300 hover:font-bold' onClick={() => deleteTimerHandler(item.id)}>Delete</button>
@@ -110,11 +112,9 @@ const deleteTimerHandler = (id) => {
         This is Admin Dashboard
       </div>
       <div>
-      {/* {error ? error.message :render} */}
       {render}
       </div>
-      <button className='float-right h-10 w-36 bg-blue-400 text-white rounded-xl hover:bg-gray-500 hover:text-black hover:scale-90 duration-300 hover:font-bold' onClick={() => saveHandle()}>Save</button>
-      {/* <button onClick={renewTimerHandler}>click</button> */}
+      <button className='float-right h-10 w-36 bg-blue-400 text-white rounded-xl hover:bg-gray-500 hover:text-black hover:scale-90 duration-300 hover:font-bold m-5' onClick={() => saveHandle()}>Save</button>
     </div>
   )
 }

@@ -1,9 +1,9 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; 
 
 .input{
-    @apply w-80 h-14 border border-gray-400 rounded-xl p-2 mt-6
+    @apply w-[18rem] md:w-80 md:h-14 border border-gray-400 rounded-xl p-2 mt-6
 }
 .btn{
     @apply w-80 h-10 bg-primary-500 border rounded-xl mt-4 border-none text-gray-400
@@ -29,23 +29,26 @@
 .btn7{
     @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative top-10 md:top-20 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white 
 }
+.btndebtdel{
+    @apply w-20 h-8 text-sm bg-gray-400 ml-2 relative top-20 md:top-20 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white left-[29rem] md:left-[77.5rem]
+}
 .submit{
-    @apply -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
+    @apply -left-48 top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2
 }
 .save{
-    @apply absolute -left-48 top-40 text-xs h-8 text-black font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:-top-10 md:ml-2
+    @apply relative left-[22.5rem] top-24 w-24 text-xs h-8 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-36 md:ml-2 md:left-[67rem]
 }
 .header-input{
     @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600
 }
 .table-header{
-    @apply flex text-center justify-center bg-gray-200 w-[8.5rem] h-10 rounded pt-2 text-xs md:text-lg
+    @apply flex text-center justify-center bg-gray-200 w-[6rem] md:w-[8.5rem] h-10 rounded pt-2 text-xs md:text-lg
 }
 .table-data{
-    @apply relative bg-gray-100 text-xs rounded pt-2 flex justify-center md:w-36 md:text-xl
+    @apply relative bg-gray-200 text-xs rounded pt-2 flex justify-center w-16 md:w-36 md:text-xl
 }
 .dropdown{
-    @apply z-10 flex flex-col left-12 top-3 text-center justify-center mt-1 w-40 h-8 bg-slate-100 hover:bg-slate-200 cursor-pointer
+    @apply z-10 absolute flex flex-col -left-60 md:left-12 top-3 text-center justify-center mt-1 w-40 h-8 bg-slate-100 hover:bg-slate-200 cursor-pointer
 }
 .btnz,.btny{
   position: relative;
@@ -79,7 +82,7 @@
     color: #333;
     box-shadow: #5b19b2 2px 1px;
 }
-.save{
+.save1{
    position: relative;
    color: #fff;
    top: 7rem;
@@ -92,7 +95,7 @@
    font-size: 20px;
    font-weight: 700;
 }
-.save:hover{
+.save1:hover{
   color: #000;
   background: #1606f5;
   scale: 0.9;
@@ -161,24 +164,30 @@ table {
     }
     .header-name{
         /* position: relative; */
-        left: -250px;
-        top: 95px;
+        /* left: -250px;
+        top: 95px; */
     }
     .creditor{
         position: absolute;
-        top: 580px;
-        left: 35rem
+        top: 640px;
+        left: 23rem
     }
     .debtor{
         position: absolute;
-        top: 690px;
-        left: 35rem
+        top: 735px;
+        left: 23rem
     }
     .btn7a{
         position: relative;
-        top: 45px;
-        left: 390px;
+        top: 35px;
+        left: 460px;
     }
+    .deletebtn{
+        
+        background-color: rgba(250, 9, 9, 0.7);
+        border-radius: 4px;
+        color: #fff;
+    } 
 }
 
 /****************For big screen********************/

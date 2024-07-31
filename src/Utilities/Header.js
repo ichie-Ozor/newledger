@@ -68,9 +68,9 @@ useEffect(() => {
 
 
   return (
-    <div className='bg-primary-200 h-36 w-[100vw] flex'>
+    <div className='bg-primary-200 h-36 w-[157vw] md:w-[100vw] flex'>
       <NavLink to='dashboard' className='no-underline'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
-      <div className='header-profile flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
+      <div className='header-profile hidden md:flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
         <div className='header-img bg-gray-400  left-10 relative'>
           <img src='' alt='' />
         </div>

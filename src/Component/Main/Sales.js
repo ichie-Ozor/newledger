@@ -230,10 +230,10 @@ const salesTotal = sales.reduce(reducer, 0)
     const { total, date, description, category, qty, rate } = value;
     return (
       <>
-       <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-4'>
+       <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-1 md:space-x-4  w-[110vw]'>
         <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
         <td className='table-header'>{category}</td>
-        <td className='bg-gray-200 md:w-60 h-10 rounded pt-2 flex justify-center text-xl'>{description}</td>
+        <td className='bg-gray-200 w-40 md:w-60 h-10 rounded pt-2 flex justify-center text-xs md:text-xl'>{description}</td>
         <td className='table-header'>{qty}</td>
         <td className='table-header'>{rate}</td>
         <td className='table-header'>{total}</td>
@@ -280,10 +280,10 @@ const salesTotal = sales.reduce(reducer, 0)
           <button type='submit' className='submit'>Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-20 space-x-2 md:left-60 md:top-28 flex md:space-x-4'>
-        <th className='table-header'>Date</th>
+      <table className='relative left-2 top-20 space-x-1 md:left-60 md:top-28 flex md:space-x-4  w-[110vw]'>
+        <th className='flex text-center justify-center bg-gray-200 w-[6rem] md:w-[8.5rem] h-10 rounded pl-6 pr-6 pt-2 text-xs md:text-lg'>Date</th>
         <th className='table-header'>Category</th>
-        <th className='text-xs bg-gray-200 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
+        <th className='text-xs bg-gray-200 w-28 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>

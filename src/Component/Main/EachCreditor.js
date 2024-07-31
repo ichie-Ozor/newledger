@@ -207,7 +207,7 @@ const deleteHandler = value => {
   let profilePassword = prompt("Are you an admin, enter your password", "")
 
   //////delete the credit details from the backend
-  const deleteUrl = `http://localhost:8080/credit/${value._id}/${profilePassword}`;
+  const deleteUrl = `http://localhost:8080/credit/${value._id}/${profilePassword}`; 
   axios.delete(deleteUrl)
   .then((response) => {
     console.log(response)
@@ -282,15 +282,15 @@ const creditorTotal = creditor.reduce(reducer, 0)
  const renderCreditor = creditor.map((value, id) => {
   const { date, total, description, category, qty, rate,  } = value;
   return (
-    <>   <tr key={id} className='relative space-x-2 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4'>
+    <>   <tr key={id} className='relative space-x-1 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4 w-[120vw] md:w-[100vw] -mb-7'>
       <td className='table-data'>{moment(date).format('DD/MM/YYYY')}</td>
       <td className='table-header'>{category}</td>
-      <td className='bg-gray-200 w-26 h-10 rounded pt-2 flex justify-center text-xl md:w-60'>{description}</td>
+      <td className='bg-gray-200 w-32 h-10 rounded pt-2 flex justify-center text-xs md:text-xl md:w-60'>{description}</td>
       <td className='table-header'>{qty}</td>
       <td className='table-header'>{rate}</td>
       <td className='table-header'>{total}</td>
       </tr>
-      <button className='btn7a btn7 left-3' onClick={() => deleteHandler(value)}>Delete</button>
+      <button className='btn7a btn7 left-3 md:left-[77.5rem]' onClick={() => deleteHandler(value)}>Delete</button>
       {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
     </>
   )
@@ -334,19 +334,19 @@ const creditorTotal = creditor.reduce(reducer, 0)
           <button type='submit' className='submit' >Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-4'>
+      <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
         <th className='table-header'>Date</th>
         <th className='table-header'>Category</th>
-        <th className='bg-gray-200 w-26 text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
+        <th className='bg-gray-200 w-[8rem] text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
         <th className='table-header'>Quantity</th>
         <th className='table-header'>Rate</th>
         <th className='table-header'>Total</th>
       </table>
-      <div>
+      <div className='relative top-10 md:top-0'>
         {error ? error.message : renderCreditor}
       </div>
 
-      <div className='relative float-right right-[40rem] top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
+      <div className='relative float-right right-[40rem] top-[10rem] md:top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl bg-red-700'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
         <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(creditorTotal)}</div></div>
           <div className='flex space-x-8'>

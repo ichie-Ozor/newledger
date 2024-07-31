@@ -128,26 +128,26 @@ function Creditor() {
 
     const render = client.map((item, id) => {
         return (
-        <div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
-            <div className='flex gap-5 space-x-2'>
+        <div key={item.id} className='flex w-screen h-14  mt-4 md:mt-0 m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
+            <div className='flex gap-1 md:gap-5 space-x-2'>
                 <div>{item.businessName}</div>
                 <div>{item.phoneNumber}</div>
                 <div>{item.firstName}</div>
                 <div>{item.lastName}</div>
             </div>
             <div className='ml-20 float-right'>
-                <button className='float-right ml-2 h-10 w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
+                <button className='float-right ml-2 md:h-10 w-14 md:w-36 bg-red-600 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
                  onClick={() => deleteCreditor(item._id)}>
                    Delete
                  </button>
-                 <button className='float-right ml-2 h-10 w-36 bg-gray-500 text-white rounded-xl hover:bg-gray-500
+                 <button className='float-right ml-2 md:h-10  w-14 md:w-36 bg-gray-500 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
                  onClick={() => updateCreditor(item._id)}>
                    Update
                  </button>
                  <Link to={`${item._id}`} state={item}><button className='
-                float-right h-10 w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
+                float-right md:h-10  w-14 md:w-36 bg-yellow-400 text-white rounded-xl hover:bg-gray-500
                  hover:text-black hover:scale-90 duration-300 hover:font-bold' 
                >Open</button></Link>
             </div>
@@ -171,9 +171,9 @@ function Creditor() {
                   value={password} 
                   name='password'
                   onChange={(e) => setPassword(e.target.value)} 
-                  className='absolute flex left-20 rounded-[10px] w-3/4 border-2 p-1 top-10 pl-7'
+                  className='absolute flex left-10 md:left-20 rounded-[10px] w-64 md:w-3/4 border-2 p-1 top-10 pl-7'
               />
-              <button className='absolute deletebtn w-[14em] top-[6rem] left-[9em] grid justify-items-center justify-self-center'>Enter</button>
+              <button className='absolute deletebtn w-[7em] md:w-[14em] top-[6rem] left-[6em] md:left-[9em] grid justify-items-center justify-self-center'>Enter</button>
           </form>
           </DeleteModal>
           <UpdateModal visible={showUpdateModal} close={() => setShowUpdateModal(false)}>
