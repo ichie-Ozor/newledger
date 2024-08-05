@@ -234,18 +234,6 @@ function LandingPage() {
             <span className='absolute text-sm text-primary-200 cursor-pointer' onClick={() => setClicked('1')}>Sign in</span>
           </div>
         </div> :
-
-          // <div className='flex justify-center items-center row'>
-          //   <form className='relative flex row' onSubmit={forgetHandler}>
-          //       <input type='email' placeholder='email' className='relative md:h-14 border border-gray-400 rounded-xl p-2 mt-6 w-[10rem]' name='email' value={forget.email} onChange={onForget}/>
-          //       <input type='password' placeholder='new password' className='input mt-3' name='password' value={forget.password} onChange={onForget} />
-          //       <button type='submit' className='btnq'>Submit</button>
-          //   </form>
-          //   <div className='flex flex-col justify-center items-center'>
-          //       <div className='relative text-sm'>Don't have an Account? <span onClick={() => setClicked('2')} className='cursor-pointer text-blue md:text-primary-200'>Register</span></div>
-          //       <div className='relative text-sm'>Already have an Account? <span onClick={() => setClicked('1')} className='cursor-pointer text-blue md:text-primary-200'>Sign in</span></div>
-          //   </div>
-          // </div>:
          <></>}
       </div>
 
