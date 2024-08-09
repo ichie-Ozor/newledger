@@ -53,6 +53,15 @@
 .dropdown {
   @apply z-10 absolute flex flex-col -left-60 md:left-12 top-3 text-center justify-center mt-1 w-40 h-8 bg-slate-100 hover:bg-slate-200 cursor-pointer;
 }
+.signIn {
+  @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
+}
+.register {
+  @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.6rem] md:left-[14rem];
+}
+.forgetP {
+  @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
+}
 .btnz,
 .btny {
   position: relative;
