@@ -27,7 +27,7 @@ function Home() {
             console.log(error);
         }
     }
-
+    let token = localStorage.getItem("myToken")
     useEffect(() => {
         const verifyAuthentication = async () => {
             if (auth?.user) {
@@ -36,7 +36,7 @@ function Home() {
             } else {
                 // User not authenticated, verify token
                 try {
-                    let data = await verifyToken("Bearer " + localStorage.getItem("myToken"));
+                    let data = await verifyToken("Bearer " + token);
                     if (data) {
                         auth.login(data.userDetail[0]);
                     } else {
@@ -52,14 +52,17 @@ function Home() {
                 }
             }
         };
+        if (token) {
+            verifyAuthentication();
+        }
 
-        verifyAuthentication();
     }, [auth]);
+
 
     // Show loading indicator while loading
     if (loading && location.pathname !== '/index') {
         return <div>Loading...</div>; // Replace with your spinner component
-    } 
+    }
 
     return (
         <div>
