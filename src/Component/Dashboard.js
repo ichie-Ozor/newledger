@@ -26,60 +26,7 @@ function Dashboard() {
 
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
-  // const categoryUrl = "http://localhost:8080/category/"
-  // const categoryUrl2 = `http://localhost:8080/category/${account_id}`
 
-  //////////Category Todo //////////////////////
-  // const onChange = (e) => {
-  //   e.preventDefault()
-  //   const { name, value } = e.target
-  //   setCategoryTodo({
-  //     ...categoryTodo, [name] : value
-  //   })
-  // }
-  // console.log(auth.user)
-
-  // const CategoryHandler = async (e) => {
-  //   e.preventDefault()
-  //   console.log(categoryTodo)
-  //   let data = {
-  //     account: account_id,
-  //     name: categoryTodo.name
-  //   }
-  //   console.log(data)
-  //   try{
-  //     axios({
-  //       method: 'post',
-  //       url: categoryUrl,
-  //       data: data
-  //     }).then((response) => {
-  //       console.log("category data posted", response)
-  //     })
-  //   } catch (err) {console.log(err.message)}
-  //   // const account_id = auth.user.response.data.userDetail._id
-  //   // console.log(categoryTodo)
-  //   setCategoryList((prev) => [...prev, categoryTodo])
-  //   // setCategory({account_id, categoryList})
-  //   // setCategory((prev) => [
-  //   //   ...prev,
-  //   //   {
-  //   //   account: account_id,
-  //   //   name: categoryTodo.name
-  //   // }])
-  //   setCategoryTodo({name: ""})
-  //   // console.log(categoryTodo)
-  // }
-
-
-
-  useEffect(() => {
-    // try{
-    //   axios.get(categoryUrl2).then((response) => {
-    //     // console.log(response)
-    //      setCategoryList(response.data.category)
-    //   })
-    // }catch(err) {console.log(err.message)}
-  })
 
   //credit handle here
   const creditorHandler = (e) => {

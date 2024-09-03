@@ -7,6 +7,7 @@ import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { baseUrl } from '../../Utilities/helper';
 
 function Sales() {
   // const location = useLocation()
@@ -32,8 +33,8 @@ function Sales() {
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
   // console.log(account_id)
-  const salesUrl = "http://localhost:8080/sales"
-  const baseUrl5 = `http://localhost:8080/stock/${account_id}`
+  const salesUrl = baseUrl + "/sales"
+  const baseUrl5 = baseUrl + `/stock/${account_id}`
   useEffect(() => {
     try {
       axios.get(salesUrl).then((response) => {
@@ -186,7 +187,7 @@ function Sales() {
       const id = item._id
       const deleteItem = sales.filter(sale => sale._id === id)
       setSales(sales.filter(sale => sale._id !== id))
-      const salesDeleteUrl = `http://localhost:8080/sales/${id}`
+      const salesDeleteUrl = baseUrl + `/sales/${id}`
       try {
         axios({
           method: 'delete',

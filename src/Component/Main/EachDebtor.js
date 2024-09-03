@@ -6,7 +6,7 @@ import { useLocation, useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useAuth } from '../../Context/auth';
-import { thousandSeperator } from '../../Utilities/helper';
+import { baseUrl, thousandSeperator } from '../../Utilities/helper';
 
 function EachDebtor() {
   let initialValue
@@ -15,9 +15,9 @@ function EachDebtor() {
   const { fullName, businessName } = auth.user
   const { accountId, debtorId } = params
 
-  const baseUrl = `http://localhost:8080/debt/${debtorId}`;
-  const baseUrl2b = 'http://localhost:8080/debt';
-  const baseUrl3 = "http://localhost:8080/debtorBal";
+  const baseUrlxx = baseUrl + `/debt/${debtorId}`;
+  const baseUrl2b = baseUrl + '/debt';
+  const baseUrl3 = baseUrl + "/debtorBal";
   const location = useLocation()
   const eachDebtor = (location.state)
 
@@ -45,10 +45,10 @@ function EachDebtor() {
   useEffect(() => {
     if (location.state === null) return
     const { createdBy } = eachDebtor
-    const baseUrl2 = `http://localhost:8080/stock/${createdBy}`
+    const baseUrl2 = baseUrl + `/stock/${createdBy}`
     //////////this will fetch the data of the individual client from the DB
     try {
-      axios.get(baseUrl).then((response) => {
+      axios.get(baseUrlxx).then((response) => {
         console.log(response.data)
         setDebtor(() => response.data.debts)
       }).catch(error => {
@@ -138,7 +138,7 @@ function EachDebtor() {
     let profilePassword = prompt("Are you an admin, enter your password", "")
 
     //////delete the credit details from the backend
-    const deleteUrl = `http://localhost:8080/debt/${item._id}/${profilePassword}`;
+    const deleteUrl = baseUrl + `/debt/${item._id}/${profilePassword}`;
     axios.delete(deleteUrl)
       .then((response) => {
         console.log(response)

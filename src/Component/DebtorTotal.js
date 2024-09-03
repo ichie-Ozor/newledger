@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
-import { calculateTotalDebt, thousandSeperator } from '../Utilities/helper'
+import { baseUrl, calculateTotalDebt, thousandSeperator } from '../Utilities/helper'
 import Header from '../Utilities/Header'
 import NavBar from '../Utilities/NavBar'
 import axios from 'axios'
@@ -12,8 +12,8 @@ function DebtorTotal() {
 
   useEffect(() => {
     const fetchDebtor = async () => {
-      const baseUrl = `http://localhost:8080/debtorBal/debtorTotal/${accountId}`
-      await axios.get(baseUrl).then((response) => {
+      const baseUrlxx = baseUrl + `/debtorBal/debtorTotal/${accountId}`
+      await axios.get(baseUrlxx).then((response) => {
         console.log(response.data.debtorBal)
         const v = response.data.debtorBal
         const items = filterArray(v)

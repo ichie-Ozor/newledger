@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from './Context/auth';
+import { baseUrl } from './Utilities/helper';
 
 
 function Home() {
@@ -10,7 +11,7 @@ function Home() {
     const [loading, setLoading] = useState(true); // State to manage loading indicator
     const location = useLocation()
 
-    const verifyUrl = 'http://localhost:8080/auth/verifyToken';
+    const verifyUrl = baseUrl + '/auth/verifyToken';
 
     async function verifyToken(token) {
         try {

@@ -7,7 +7,7 @@ import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
 import { useAuth } from '../../Context/auth';
-import { thousandSeperator } from '../../Utilities/helper';
+import { baseUrl, thousandSeperator } from '../../Utilities/helper';
 
 
 function EachCreditor(props) {
@@ -43,10 +43,10 @@ function EachCreditor(props) {
   // console.log(eachCreditor)
 
 
-  // const baseUrl = `http://localhost:8080/credit/${_id}`;
+  // const baseUrlxx = `baseUrl+/credit/${_id}`;
 
-  const baseUrl2b = 'http://localhost:8080/credit';
-  const baseUrl3 = "http://localhost:8080/creditorBal";
+  const baseUrl2b = baseUrl + '/credit';
+  const baseUrl3 = baseUrl + "/creditorBal";
 
 
   // const { category, setCategory } = useContext(AuthContext)
@@ -58,8 +58,8 @@ function EachCreditor(props) {
     const { firstName, lastName, _id, createdBy } = eachCreditor
     // console.log(firstName,lastName, _id, createdBy, creditorId, "oga here")
 
-    const baseUrl2 = `http://localhost:8080/credit/${creditorId}`;
-    const baseUrl5 = `http://localhost:8080/stock/${createdBy}`
+    const baseUrl2 = baseUrl + `/credit/${creditorId}`;
+    const baseUrl5 = baseUrl + `/stock/${createdBy}`
 
     try {
       if (creditorId === 'dashboard') return
@@ -157,31 +157,6 @@ function EachCreditor(props) {
           businessId: createdBy
         }
       ])
-      // const credit = {
-      //   id: new Date().getMilliseconds(),
-      //   creditorId: _id,
-      //   date: creditorInput.date,
-      //   description,
-      //   category: category,
-      //   qty: creditorInput.qty,
-      //   rate: Number(creditorInput.rate),
-      //   total: creditorInput.rate * creditorInput.qty,
-      //   businessId: createdBy
-      // }
-      // axios({
-      //   method: 'post',
-      //   url: baseUrl2b,
-      //   data: credit
-      // }).then((response) => {
-      //   console.log(response, "credit sent")
-      //   toast.success("Credit saved successfully")
-      // }).catch(error => {
-      //   console.log(error)
-      //   const id = error.response.data.credit.id
-      //     const removeIt = creditor.filter((item) => item.id !== id)
-      //     setCreditor(removeIt)
-      //   toast.error(error.response.data.message)
-      // })
     }
     setCreditorInput({
       date: "",
@@ -207,7 +182,7 @@ function EachCreditor(props) {
     let profilePassword = prompt("Are you an admin, enter your password", "")
 
     //////delete the credit details from the backend
-    const deleteUrl = `http://localhost:8080/credit/${value._id}/${profilePassword}`;
+    const deleteUrl = baseUrl + `/credit/${value._id}/${profilePassword}`;
     axios.delete(deleteUrl)
       .then((response) => {
         console.log(response)

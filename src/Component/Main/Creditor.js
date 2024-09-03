@@ -5,6 +5,7 @@ import DeleteModal from '../../Utilities/DeleteModal'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
+import { baseUrl } from '../../Utilities/helper'
 import { toast } from 'react-toastify';
 import UpdateModal from '../../Utilities/UpdateModal'
 
@@ -28,7 +29,6 @@ function Creditor() {
     businessName: "",
     address: ""
   })
-  const baseUrl = "http://localhost:8080"    //this is not the right endpoint
 
 
 
@@ -71,7 +71,7 @@ function Creditor() {
       console.log(response.data.status)
       if (response.data.status === "Success") {
         // setDeleteItem(true)
-        const deleteUrl = `http://localhost:8080/creditor/${accountId}/${password}/${deleteId}`
+        const deleteUrl = baseUrl + `/creditor/${accountId}/${password}/${deleteId}`
         axios.delete(deleteUrl, deleteData).then((response) => {
           window.location.reload()
           toast.success(response.data.message)

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/auth";
+import { baseUrl } from "../Utilities/helper";
 import axios from "axios";
 
 function LandingPage() {
@@ -51,7 +52,7 @@ function LandingPage() {
         password: isRegister.password,
       });
       console.log(isRegister); //send this to the backend
-      const baseUrl3 = "http://localhost:8080/account/signup";
+      const baseUrl3 = baseUrl + "/account/signup"
       axios
         .post(baseUrl3, isRegister)
         .then((response) => {
@@ -95,8 +96,8 @@ function LandingPage() {
       [name]: value,
     });
   };
-  // const baseUrl = `http://localhost:8080/auth/getaccount/${isSigneIn.email}$${isSigneIn.password}`   //the detail ofthe client with that email//this url is used to get
-  const baseUrl = "http://localhost:8080/auth/signin";
+  // const baseUrly = baseUrl+`/auth/getaccount/${isSigneIn.email}$${isSigneIn.password}`   //the detail ofthe client with that email//this url is used to get
+  const baseUrlxx = baseUrl + "/auth/signin";
 
   const isSignInHandler = (e) => {
     e.preventDefault();
@@ -108,7 +109,7 @@ function LandingPage() {
     /////////////////this sends data to the back for signin
     axios({
       method: "post",
-      url: baseUrl,
+      url: baseUrlxx,
       data: { email, password },
     })
       .then((response) => {
@@ -189,7 +190,7 @@ function LandingPage() {
     if (forget.email === "" && forget.password === "") {
       return setErrorText("Please register Now, Or 😡😡😠😡😡");
     }
-    const forgetUrl = `http://localhost:8080/account/${forget.email}`;
+    const forgetUrl = baseUrl + `/account/${forget.email}`;
     axios({
       method: "POST",
       url: forgetUrl,

@@ -2,13 +2,14 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Context/auth'
+import { baseUrl } from './helper'
 
 
 
 function Header({ name, pageTitle }) {
   const auth = useAuth()
   const id = auth.user._id
-  const adminUrl = "http://localhost:8080/profile/"
+  const adminUrl = baseUrl + "/profile/"
   const navigate = useNavigate()
   const [admin, setAdmin] = useState(true)
   const [open, setOpen] = useState(false)

@@ -8,6 +8,7 @@ import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import { toast } from 'react-toastify';
 import axios from 'axios'
+import { baseUrl } from '../../Utilities/helper';
 
 function Stock() {
   const location = useLocation()
@@ -40,9 +41,9 @@ function Stock() {
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
   // console.log(account_id)
-  const stockUrl = `http://localhost:8080/stock/${account_id}`
-  const stockUrl2 = "http://localhost:8080/stock/"
-  // const categoryUrl = "http://localhost:8080/category"
+  const stockUrl = baseUrl + `/stock/${account_id}`
+  const stockUrl2 = baseUrl + "/stock/"
+  // const categoryUrl = baseUrl+"/category"
   useEffect(() => {
     try {
       axios.get(stockUrl).then((response) => {
@@ -54,7 +55,7 @@ function Stock() {
       //   console.log(response)
       // })
     } catch (err) { console.log(err.message) }
-  }, [])
+  }, [stockUrl])
 
   // useEffect(() => {
   //   try{
@@ -137,7 +138,7 @@ function Stock() {
       console.log(item._id, "stock")
       const deleteItem = stock.filter(stock => stock._id === item._id)
       setStock(stock.filter(stock => stock._id !== item._id))
-      const stockDeleteUrl = `http://localhost:8080/stock/${item._id}`
+      const stockDeleteUrl = baseUrl + `/stock/${item._id}`
       try {
         axios({
           method: 'delete',

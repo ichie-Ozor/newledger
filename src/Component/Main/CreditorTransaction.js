@@ -3,6 +3,7 @@ import Header from "../../Utilities/Header";
 import NavBar from "../../Utilities/NavBar";
 import moment from "moment";
 import axios from "axios";
+import { baseUrl } from "../../Utilities/helper";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { calculateTotalDebt, thousandSeperator } from "../../Utilities/helper";
 // import { toast } from 'react-toastify';
@@ -23,8 +24,8 @@ function CreditorTransaction() {
   const creditorDetails = location.state;
   const { firstName, lastName, phoneNumber } = creditorDetails;
 
-  const CreditorUrl = `http://localhost:8080/creditorBal/${creditorId}`;
-  const CreditorUrl2 = `http://localhost:8080/credit/${creditorId}`;
+  const CreditorUrl = baseUrl + `/creditorBal/${creditorId}`;
+  const CreditorUrl2 = baseUrl + `/credit/${creditorId}`;
 
   const getList = useCallback(() => {
     axios

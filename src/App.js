@@ -18,36 +18,37 @@ import CreditorTransaction from './Component/Main/CreditorTransaction';
 import DebtorTransaction from './Component/Main/DebtorTransaction';
 import CreditorTotal from './Component/CreditorTotal';
 import DebtorTotal from './Component/DebtorTotal';
+// import { baseUrl } from './Utilities/helper';
 // import { useAuth } from './Context/auth';
 // import axios from 'axios';
 
 function App() {
-    // const verifyUrl = 'http://localhost:8080/auth/verifyToken'
-    // const auth = useAuth()
+  // const verifyUrl = baseUrl+'/auth/verifyToken'
+  // const auth = useAuth()
 
-    // async function verifyToken(token) {
-    //     try {
-    //         let response = await fetch(verifyUrl, {
-    //             method: 'GET',
-    //             headers: {
-    //                 Authorization: "Bearer " + token
-    //             },
-    //         })
-    //         let data = await response.json()
-    //         console.log(data, "xxxx")
-    //         return data
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // } 
-    // useEffect(()=>{
-    //     const getToken = localStorage.getItem("myToken")
-    //     console.log(getToken, "app")
-    //     verifyToken(getToken).then((response) => {
-    //         console.log(response, "app effect")
-    //         auth.setUser(response.userDetail[0])
-    //     })
-    // },[])
+  // async function verifyToken(token) {
+  //     try {
+  //         let response = await fetch(verifyUrl, {
+  //             method: 'GET',
+  //             headers: {
+  //                 Authorization: "Bearer " + token
+  //             },
+  //         })
+  //         let data = await response.json()
+  //         console.log(data, "xxxx")
+  //         return data
+  //     } catch (error) {
+  //         console.log(error)
+  //     }
+  // } 
+  // useEffect(()=>{
+  //     const getToken = localStorage.getItem("myToken")
+  //     console.log(getToken, "app")
+  //     verifyToken(getToken).then((response) => {
+  //         console.log(response, "app effect")
+  //         auth.setUser(response.userDetail[0])
+  //     })
+  // },[])
 
 
   return (
