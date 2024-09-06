@@ -31,7 +31,6 @@ function CreditorTransaction() {
     axios
       .get(CreditorUrl2)
       .then((response) => {
-        console.log(response.data.credits, "see");
         const transactionDetail = response.data.credits;
         setTransaction(transactionDetail);
       })
@@ -40,17 +39,14 @@ function CreditorTransaction() {
       });
 
     axios.get(CreditorUrl).then((response) => {
-      console.log(response.data.creditBal, "credit here");
       setPaid(response.data.creditBal);
     });
   }, [CreditorUrl, creditorId, params]);
 
   useEffect(() => {
-    console.log(creditorId, params, "usssssssss");
     getList();
   }, [getList]);
 
-  console.log(transaction, paid);
   const renderCreditTransaction = paid?.map((item, id) => {
     // console.log(item, "item")
     return (

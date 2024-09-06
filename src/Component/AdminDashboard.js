@@ -25,7 +25,6 @@ function AdminDashboard() {
   //this gets data from the database once the page loads. This will be cut out and used at the creditor, debtors page
   useEffect(() => {
     axios.get(baseUrlxx).then((response) => {
-      console.log(response)
       setClient(() => response.data.allAccount)
     }).catch(error => {
       //  setError(error)
@@ -43,24 +42,19 @@ function AdminDashboard() {
     //      console.log(error)
     //   })
     // }
-  }, [timer, time])
+  }, [baseUrlxx])
 
 
 
   //this reloads the time once it is clicked, the time is then kept in redux or context so that it will help control the fetching of data from DB
   const renewTimerHandler = (id) => {
-    console.log(id)
     const baseUrlxx2 = baseUrl + `/account/${id}`
     const f = client.filter((example) => example._id === id)[0]
-    console.log(f, "see me")
     let updateDetail = { ...f }    //this copies the object
     updateDetail.verification = !f.verification   //this toggles the verification status
     updateDetail.approval = approvedTime
-    console.log(updateDetail, typeof updateDetail.approval)
-
     try {
       axios.put(baseUrlxx2, updateDetail).then((response) => {
-        console.log(response)
         toast.success("Successfully saved")
       })
     } catch (err) {
@@ -89,7 +83,6 @@ function AdminDashboard() {
     // }
   }
 
-  // console.log(error)
   const render = client.map((item, id) => {
     return (<div key={item.id} className='flex w-screen h-14  m-2 rounded-md shadow-xl hover:shadow flex-wrap justify-center content-center'>
       <div className='flex gap-5'>

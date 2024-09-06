@@ -24,7 +24,6 @@ function Header({ name, pageTitle }) {
   useEffect(() => {
     axios.get(adminUrl + `/${id}`).then((response) => {
       setAdmin(response.data.getProfile[0])
-      console.log(response.data, "profile here")
       // setAdmin(() => response.data.getProfile[0])
     }).catch(error => {
       console.log(error.message)
@@ -42,7 +41,6 @@ function Header({ name, pageTitle }) {
 
   const profileHandler = (e) => {
     e.preventDefault()
-    console.log(profile)
     axios.post(adminUrl, profile)
       .then((response) => {
         console.log(response)
@@ -59,7 +57,6 @@ function Header({ name, pageTitle }) {
     setOpen(!open)
   }
   //const profileName = profile.fName + " " + profile.lName
-  //console.log(profileName, profile.bName)
 
   const openProfile = () => {
     if (open === false) {

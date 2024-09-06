@@ -51,12 +51,10 @@ function LandingPage() {
         email: isRegister.email,
         password: isRegister.password,
       });
-      console.log(isRegister); //send this to the backend
       const baseUrl3 = baseUrl + "/account/signup"
       axios
         .post(baseUrl3, isRegister)
         .then((response) => {
-          console.log(response, "xxxxxx");
           if (response.data.status === "Failed") {
             // setVerifyEmail(response.data.message);
             setErrorText(response.data.message)
@@ -109,7 +107,6 @@ function LandingPage() {
   const isSignInHandler = (e) => {
     e.preventDefault();
     const { email, password } = isSigneIn;
-    console.log(email, password, "signin")
     if (email === "" && password === "") {
       return setErrorText("Please register Now, Or 😡😡😠😡😡");
     }
@@ -123,7 +120,6 @@ function LandingPage() {
       .then((response) => {
         const status = response.data.status;
         const code = response.data.code;
-        console.log(response, "signin");
         const { assessToken, userDetail } = response.data;
         // const userDetails = {email, response, assessToken, refreshToken, userDetail}
 

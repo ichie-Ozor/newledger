@@ -48,7 +48,6 @@ function Stock() {
     try {
       axios.get(stockUrl).then((response) => {
         const data = response.data.Stock
-        console.log(response, data)
         setStock(data)
       })
       //  axios.get(categoryUrl).then((response) => {
@@ -78,7 +77,6 @@ function Stock() {
     e.preventDefault()
     // console.log("see am here", creditorInput)
     const account_id = auth.user._id
-    console.log(account_id)
     if (
       stockInput.date === "" &&
       stockInput.goods === "" &&
@@ -135,7 +133,6 @@ function Stock() {
       setStock(stock.filter(stocks => stocks.id !== item.id))
     }
     if (item._id) {
-      console.log(item._id, "stock")
       const deleteItem = stock.filter(stock => stock._id === item._id)
       setStock(stock.filter(stock => stock._id !== item._id))
       const stockDeleteUrl = baseUrl + `/stock/${item._id}`
@@ -153,7 +150,6 @@ function Stock() {
   }
 
   const editHandler = value => {
-    console.log(value, "stock id")
     if (value.id !== undefined) {
       const editItem = stock.find(item => item._id === value.id)  //this serches the array to see if the object has the id and returns the object
 

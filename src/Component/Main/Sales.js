@@ -32,7 +32,6 @@ function Sales() {
 
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
-  // console.log(account_id)
   const salesUrl = baseUrl + "/sales"
   const baseUrl5 = baseUrl + `/stock/${account_id}`
   useEffect(() => {
@@ -101,13 +100,11 @@ function Sales() {
       rate: salesInput.rate,
       total: salesInput.rate * salesInput.qty
     }
-    // console.log(sale, "to the backend from sale")
     await axios({
       method: 'post',
       url: salesUrl,
       data: sale
     }).then((response) => {
-      console.log(response)
       toast.success(response.data.message)
     }).catch((error) => {
       console.log(error)
@@ -158,7 +155,6 @@ function Sales() {
   // }
   /////////////Dropdown///////////
   const dropDownDescHandler = (value) => {
-    // console.log(value)
     // if(!isOpen){
     //   setIsOpen(false)
     // }
@@ -167,7 +163,6 @@ function Sales() {
   }
   const dropDownHandler = (value) => {
     // e.preventDefault()
-    // console.log(value)
     // if(!isClose){
     //   setIsClose(false)
     // }
@@ -178,7 +173,6 @@ function Sales() {
   const deleteHandler = item => {
     if (item.id !== undefined) {  //this is to check if it is stored in the backend or not by checking if it has an _id
       //this is the items displayed at the frontend
-      console.log(item.id)
       const id = item.id
       setSales(sales.filter(sale => sale.id !== id))
     }

@@ -51,10 +51,8 @@ function CreditorModal({ visible, onClose }) {
         toast.success("creditor posted successfully")
         // window.location.reload()
         navigate(`creditor/${account_id}`)
-        console.log(response)
       })
       // const response = await axios.post(creditorUrl, newCreditor)
-      // console.log("creditor data posted", response)
     } catch (err) {
       console.log(err.message)
       toast.error("An error occured while trying to post the creditor")
@@ -71,11 +69,6 @@ function CreditorModal({ visible, onClose }) {
     })
   }
 
-
-
-
-
-  //  console.log("creditor", newCreditor)
 
   // this closes the modal when you click outside the input form
   const handleCreditorOnClose = (e) => {

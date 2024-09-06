@@ -15,7 +15,6 @@ function CreditorTotal() {
     const fetchCreditor = async () => {
       const baseUrlxx = baseUrl + `/creditorBal/creditorTotal/${accountId}`
       await axios.get(baseUrlxx).then((response) => {
-        console.log(response.data)
         const v = response.data.creditorBal
         const items = filterArray(v)
         setCreditor(items)
@@ -52,7 +51,6 @@ function CreditorTotal() {
     return conbinedTransactions
   }
 
-  console.log(creditor)
   /////////////////////Reducers////////////////////////////
 
   const totalCredit = calculateTotalDebt(creditor, 'purchase')

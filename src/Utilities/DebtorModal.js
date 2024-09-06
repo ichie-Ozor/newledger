@@ -37,16 +37,13 @@ function DebtorModal({ visible, onClose }) {
   // this collects the  data when you click the sibmit button
   const onSubmitDebtorHandler = (e) => {
     e.preventDefault()
-    console.log(newDebtor, "see am here")
-
     try {
       axios({
         method: 'post',
         url: debtorUrl,
         data: newDebtor
-      }).then((response) => {
+      }).then(() => {
         toast.success("debtor posted successfully")
-        console.log("debtor posted successfully", response)
       })
     } catch (err) {
       console.log(err.message)

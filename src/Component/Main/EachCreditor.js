@@ -64,7 +64,6 @@ function EachCreditor(props) {
     try {
       if (creditorId === 'dashboard') return
       axios.get(baseUrl2).then((response) => {
-        console.log(response)
         const creditorData = response.data.credits
         setCreditor(creditorData)
       })
@@ -114,7 +113,7 @@ function EachCreditor(props) {
       url: baseUrl3,
       data: amount
     }).then((response) => {
-      console.log(response)
+      console.log(response.data.message)
       toast.success("Input is successfully saved at the database")
     }).catch(error => {
       console.log(error)
@@ -126,7 +125,6 @@ function EachCreditor(props) {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    // console.log("see us")
     if (creditorInput.date === "" && creditorInput.category === "" && creditorInput.description === "" && creditorInput.qty === "" && creditorInput.rate === "") {
       return toast.error("Please put in the date or category")
     } else {
@@ -185,7 +183,6 @@ function EachCreditor(props) {
     const deleteUrl = baseUrl + `/credit/${value._id}/${profilePassword}`;
     axios.delete(deleteUrl)
       .then((response) => {
-        console.log(response)
         if (response.status === 200) {
           const afterDelete = creditor.filter((item) => item._id !== value._id)
           setCreditor(afterDelete)
@@ -229,7 +226,6 @@ function EachCreditor(props) {
     setIsOpen(false)
   }
   const dropDownCategoryHandler = (value) => {
-    console.log(value, "category")
     setIsClose(false)
     setCategory(value)
   }

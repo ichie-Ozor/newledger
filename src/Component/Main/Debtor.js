@@ -32,7 +32,6 @@ function Debtor() {
 
   useEffect(() => {
     axios.get(baseUrlxx).then((response) => {
-      console.log(response)
       const debtorDetails = response.data.debtors
       if (debtorDetails.length === 0) {
         setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
@@ -55,7 +54,6 @@ function Debtor() {
       password,
       accountId
     }
-    console.log(deleteData)
     /////////////////////////////////////send to the backend where the logic is to be done
     if (deleteData.length !== 0) {
       const deleteUrl = baseUrl + `/debtor/${accountId}/${password}/${deleteId}`
@@ -76,7 +74,6 @@ function Debtor() {
 
   ///////////////This is to delete the debtor by only the owner
   const deleteDebtorHandler = (id) => {
-    console.log(id)
     setDeleteId(id)
     setShowDeleteModal(true)
   }
@@ -99,7 +96,6 @@ function Debtor() {
 
   function onSubmitDebtorUpdateHandler(e) {
     e.preventDefault()
-    console.log(debtorUpdate)
     try {
       axios.put(baseUrl + `/${updateId}`, debtorUpdate)
         .then((response) => {

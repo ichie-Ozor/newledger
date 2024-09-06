@@ -49,7 +49,6 @@ function EachDebtor() {
     //////////this will fetch the data of the individual client from the DB
     try {
       axios.get(baseUrlxx).then((response) => {
-        console.log(response.data)
         setDebtor(() => response.data.debts)
       }).catch(error => {
         console.log(error, "see the error")
@@ -60,7 +59,7 @@ function EachDebtor() {
         setDesc(response.data.Stock)
       })
     } catch (err) { console.log(err.message) }
-  }, [])
+  }, [baseUrlxx, location.state, eachDebtor])
 
 
   // if(eachDebtor == null) return
@@ -79,7 +78,6 @@ function EachDebtor() {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    // console.log("see am here", creditorInput)
     if (debtorInput.date === "" && debtorInput.category === "" && debtorInput.description === 0 && debtorInput.qty === 0 && debtorInput.rate === 0) {
       toast.error("Please input is empty, make sure you have put in all the data")
       return
@@ -107,9 +105,7 @@ function EachDebtor() {
           category,
           qty: debtorInput.qty,
           rate: Number(debtorInput.rate),
-          // paid: cash,
           total: debtorInput.rate * debtorInput.qty,
-          // balance: totalCash,
           businessId: createdBy
         },
       ])
@@ -141,7 +137,6 @@ function EachDebtor() {
     const deleteUrl = baseUrl + `/debt/${item._id}/${profilePassword}`;
     axios.delete(deleteUrl)
       .then((response) => {
-        console.log(response)
         if (response.status === 200) {
           const afterDelete = debtor.filter((element) => element._id !== item._id)
           setDebtor(afterDelete)

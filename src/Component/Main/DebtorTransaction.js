@@ -13,7 +13,6 @@ function DebtorTransaction() {
   // const [bal, setBal] = useState([])
   const params = useParams()
   const { debtorId } = params
-  console.log(params, "debtor")
 
 
   const location = useLocation()
@@ -26,9 +25,7 @@ function DebtorTransaction() {
   const DebtorUrl2 = baseUrl + `/debt/${debtorId}`
 
   const getList = useCallback(() => {
-    console.log(debtorId, params);
     axios.get(DebtorUrl2).then((response) => {
-      console.log(typeof response.data.debts)
       const transactionDetail = response.data.debts
       setTransaction(transactionDetail)
     }).catch(error => {
@@ -37,7 +34,6 @@ function DebtorTransaction() {
 
     axios.get(DebtorUrl)
       .then((response) => {
-        console.log(response, "credit here")
         setPaid(response.data.debtorBal)
       })
 
@@ -47,9 +43,7 @@ function DebtorTransaction() {
     getList()
   }, [getList])
 
-  //  console.log( transaction, paid)
   const renderDebtTransaction = paid?.map((item, id) => {
-    // console.log(item, "item")
     return (
       <div key={id} className='table'>
         <tr>

@@ -14,7 +14,6 @@ function DebtorTotal() {
     const fetchDebtor = async () => {
       const baseUrlxx = baseUrl + `/debtorBal/debtorTotal/${accountId}`
       await axios.get(baseUrlxx).then((response) => {
-        console.log(response.data.debtorBal)
         const v = response.data.debtorBal
         const items = filterArray(v)
         setDebtor(items)
@@ -51,7 +50,6 @@ function DebtorTotal() {
     return conbinedTransactions
   }
 
-  console.log(debtor)
   /////////////////////Reducers////////////////////////////
 
   const totalDebt = calculateTotalDebt(debtor, 'purchase')

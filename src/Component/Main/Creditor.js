@@ -45,7 +45,7 @@ function Creditor() {
       console.log(error)
       setError(error)
     })
-  }, [])
+  }, [accountId])
 
   ////////////Delete modal
 
