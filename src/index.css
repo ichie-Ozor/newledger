@@ -56,11 +56,18 @@
 .signIn {
   @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
 }
-.register {
-  @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.6rem] md:left-[14rem];
-}
+/* .register {
+  @apply absolute top-[32rem] w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.6rem] md:left-[14rem];
+} */
 .forgetP {
   @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
+}
+.register {
+  position: absolute;
+  top: 20rem;
+  font-size: 20px;
+  font-weight: 700;
+  color: red;
 }
 .btnz,
 .btny {
@@ -208,10 +215,10 @@ table {
   body {
     overflow-x: hidden;
   }
-  /* .btn7a{
-        position: relative;
-        left: 77.4rem;
-    } */
+  /* .register {
+    top: 5rem;
+  } */
+
   .deletebtn {
     background-color: rgba(250, 9, 9, 0.7);
     border-radius: 4px;

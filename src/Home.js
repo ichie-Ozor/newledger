@@ -22,7 +22,6 @@ function Home() {
                 },
             });
             let data = await response.json();
-            console.log(data, "xxxx home");
             return data;
         } catch (error) {
             console.log(error);

@@ -36,7 +36,7 @@ function LandingPage() {
     });
   };
 
-  const isRegiterHandler = (e) => {
+  const isRegisterHandler = (e) => {
     e.preventDefault();
     if (
       isRegister.fullName !== "" &&
@@ -56,13 +56,20 @@ function LandingPage() {
       axios
         .post(baseUrl3, isRegister)
         .then((response) => {
-          console.log(response);
+          console.log(response, "xxxxxx");
           if (response.data.status === "Failed") {
-            setVerifyEmail(response.data.message);
+            // setVerifyEmail(response.data.message);
+            setErrorText(response.data.message)
           }
           if (response.data.status === "Success") {
             // setVerifyEmail("Please verify your email to continue")
             ////////this should take you to the payment page
+            const user = {
+              token: response.data.assessToken,
+              userDetail: response.data.userDetail,
+            };
+            // auth.login(response.data.userDetail); //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+            localStorage.setItem("myToken", user.token);
             navigate("/payment");
           }
         })
@@ -76,7 +83,7 @@ function LandingPage() {
         password: "",
       });
     } else {
-      setErrorText("Please register Now, Or 😡😡😠😡😡");
+      setErrorText("Please register Now 😡😡😠😡😡");
       setIsRegister({
         fullName: "",
         businessName: "",
@@ -102,6 +109,7 @@ function LandingPage() {
   const isSignInHandler = (e) => {
     e.preventDefault();
     const { email, password } = isSigneIn;
+    console.log(email, password, "signin")
     if (email === "" && password === "") {
       return setErrorText("Please register Now, Or 😡😡😠😡😡");
     }
@@ -190,7 +198,7 @@ function LandingPage() {
     if (forget.email === "" && forget.password === "") {
       return setErrorText("Please register Now, Or 😡😡😠😡😡");
     }
-    const forgetUrl = baseUrl + `/account/${forget.email}`;
+    const forgetUrl = baseUrl + `/account/forgotPassword/${forget.email}`;
     axios({
       method: "POST",
       url: forgetUrl,
@@ -218,7 +226,7 @@ function LandingPage() {
         >
           {errorText}
         </div>
-        <div>{verifyEmail}</div>
+        {/* <div className="">{verifyEmail}</div> */}
         {clicked === "1" ? (
           <div className="flex flex-col justify-center items-center">
             <div className="relative top-20 left-20 md:-top-24 md:-left-5 font-bold text-3xl md:text-lg">
@@ -273,7 +281,7 @@ function LandingPage() {
             </div>
             <form
               className="absolute md:relative top-42 md:top-0 p-2  w-[50%]"
-              onSubmit={isRegiterHandler}
+              onSubmit={isRegisterHandler}
             >
               <input
                 type="text"
@@ -319,7 +327,7 @@ function LandingPage() {
                 Register
               </button>
             </form>
-            <div className="relative flex flex-col justify-center items-center md:top-2 left-28 md:-left-6">
+            <div className="relative flex flex-col justify-center items-center md:top-2 left-[10rem] md:-left-6">
               <div className="relative top-56 md:top-0 text-sm  font-bold md:font-normal w-[15rem]">
                 Already have an Account?{" "}
                 <span
