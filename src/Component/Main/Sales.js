@@ -242,8 +242,8 @@ function Sales() {
 
   return (
     <div>
-      <NavBar />
-      <Header pageTitle={" Sales Page"} name={businessName + " " + fullName} />
+      <NavBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
+      <Header pageTitle={" Sales Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[146vw] md:w-[100vw] flex' />
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={salesInput.date} onChange={onChange} />
@@ -260,7 +260,7 @@ function Sales() {
             )}
           </div>
           <div>
-            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+            <button type='button' className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15.5rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' onClick={() => setIsClose(!isClose)}>
               {description.length > 0 ? description : "Description"}
             </button>
             {isClose && (
@@ -277,7 +277,7 @@ function Sales() {
         </form>
       </div>
       <table className='relative left-2 top-20 space-x-1 md:left-60 md:top-28 flex md:space-x-4  w-[110vw]'>
-        <th className='flex text-center justify-center bg-gray-200 w-[6rem] md:w-[8.5rem] h-10 rounded pl-6 pr-6 pt-2 text-xs md:text-lg'>Date</th>
+        <th className='flex text-center justify-center bg-gray-200 w-[6rem] md:w-[9.7rem] h-10 rounded pl-6 pr-6 pt-2 text-xs md:text-lg'>Date</th>
         <th className='table-header'>Category</th>
         <th className='text-xs bg-gray-200 w-28 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
         <th className='table-header'>Quantity</th>
@@ -286,7 +286,7 @@ function Sales() {
       </table>
       {error}
       <div>{renderSales}</div>
-      <div className='relative float-right right-40 top-40 space-y-8 shadow-xl hover:shadow w-3/5 rounded-xl'>
+      <div className='relative w-[26rem] md:float-right md:right-40 left-[2rem] top-28 md:top-40 space-y-8 shadow-xl hover:shadow md:w-[25%] rounded-xl'>
         <div className='flex space-x-8  mb-6'><div className='btn5'>Total : </div>
           <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
         </div>

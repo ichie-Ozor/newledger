@@ -75,7 +75,7 @@ function CreditorTotal() {
 
   return (
     <div>
-      <Header pageTitle={" Total Credit"} />
+      <Header pageTitle={" Total Credit"} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
       <NavBar />
       <div className=' grid justify-items-center mt-3'>
         {renderCreditors}

@@ -261,7 +261,7 @@ function EachCreditor(props) {
         <td className='table-header'>{rate}</td>
         <td className='table-header'>{total}</td>
       </tr>
-        <button className='btn7  relative top-8 md:top-24 left-[121%] md:left-[85.2%]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-8 md:top-24 left-[121%] md:left-[83%]' onClick={() => deleteHandler(value)}>Delete</button>
         {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
@@ -270,14 +270,14 @@ function EachCreditor(props) {
 
   return (
     <div >
-      <NavBar>
+      <NavBar classStyle='fixed grid w-[153vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
         <Link className='no-underline' to={'transaction'} state={eachCreditor}>
           <button className='nav text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
         </Link>
       </NavBar>
-      <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} />
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName + " " + lastName}</div>
-      <div className='absolute md:-left-4 top-22 '>
+      <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
+      <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
+      <div className='absolute md:-left-3 top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={creditorInput.date} onChange={onChange} />
           {/*************************/}
@@ -294,7 +294,7 @@ function EachCreditor(props) {
             )}
           </div>
           {/*************************/}
-          <select className='btn4' value={description} onChange={dropDownHandler}>
+          <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
             <option value=''>Description</option>
             {desc.map((item, index) => (
               <option key={index} value={item.goods} className='dropdown'>{item.goods}</option>
@@ -317,15 +317,15 @@ function EachCreditor(props) {
         {error ? error.message : renderCreditor}
       </div>
 
-      <div className='relative float-right right-[40rem] top-[10rem] md:top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
+      <div className='relative md:left-[20rem] w-[100%] md:w-[25%] top-[6.5rem] md:top-40 space-y-4 shadow-xl hover:shadow rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
-          <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(creditorTotal)}</div></div>
+          <div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 text-center text-[14px] md:text-base'>{thousandSeperator(creditorTotal)}</div></div>
         <div className='flex space-x-8'>
           <div className='btn5'>Paid: </div>
-          <input className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment' />
+          <input className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment' />
           <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
         </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
+        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
       </div>
       <button type='submit' onClick={saveHandler} className={credit.length === 0 ? 'unsave' : 'save'} disabled={credit.length}>Save</button>
 

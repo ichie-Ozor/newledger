@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/auth";
 import { baseUrl } from "../Utilities/helper";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -201,7 +202,14 @@ function LandingPage() {
       data: { password: forget.password },
     }).then((response) => {
       console.log(response);
-    });
+    }).catch((error) => {
+      console.log(error)
+      toast.error(error.response.data.message)
+      setForget({
+        email: "",
+        password: ""
+      })
+    })
   };
 
   return (

@@ -252,7 +252,7 @@ function EachDebtor() {
           <td className='table-header'>{rate}</td>
           <td className='table-header'>{total}</td>
         </tr>
-        <button className='btndebtdel' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='w-20 h-8 text-sm bg-gray-400 ml-2 relative top-20 md:top-[6.7rem] rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white left-[29rem] md:left-[83.6rem]' onClick={() => deleteHandler(value)}>Delete</button>
         {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
@@ -260,14 +260,14 @@ function EachDebtor() {
 
 
   return (
-    <div>
-      <NavBar>
+    <div className=' w-[163vw]'>
+      <NavBar classStyle='fixed grid w-[163vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
         <Link className='no-underline' to={'transaction'} state={eachDebtor}>
           <button className='nav text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
         </Link>
       </NavBar>
-      <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} />
-      <div className='relative left-80 -top-12 font-bold text-3xl text-gray-600'>{firstName + " " + lastName}</div>
+      <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
+      <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold text-sm md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={debtorInput.date} onChange={onChange} />
@@ -286,31 +286,12 @@ function EachDebtor() {
             )}
           </div>
           {/********************************/}
-          <select className='btn4' value={description} onChange={dropDownHandler}>
+          <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
             <option value=''>Description</option>
             {desc.map((item, index) => (
               <option key={index} value={item.goods} >{item.goods}</option>
             ))}
           </select>
-          {/* <div>
-            <button className='btn4' onClick={() => setIsOpen(!isOpen)}>
-              {description.length > 0 ? description : "Description"}
-            </button>
-            {isOpen && (
-              <div className='dropContainer'>
-                {desc.map((item, index) => (
-                  <div key={index}  
-                  className='dropdown' 
-                  onClick={() => dropDownHandler(item.goods)}
-                  >
-                    {item.goods}
-                  </div>
-                ))}
-              </div>
-            )}
-         </div>  */}
-
-          {/* <input type='text' placeholder='Goods Description' className='btn4' name='description' value={debtorInput.description} onChange={onChange}/> */}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={debtorInput.rate} onChange={onChange} />
           <button type='submit' className='submit'>Submit</button>
@@ -327,16 +308,16 @@ function EachDebtor() {
       <div>
         {error ? error.message : renderDebtor}
       </div>
-      <div className='relative float-right right-[40rem] md:top-40 space-y-4 shadow-xl hover:shadow w-2/5 rounded-xl'>
+      <div className='relative w-[60%] md:w-[20%] md:left-[20rem] top-[6.5rem] md:top-40 space-y-4 shadow-xl hover:shadow rounded-xl'>
         <div className='flex space-x-8'><div className='btn5'>Total: </div>
-          <div className='bg-gray-200 w-40 h-8 rounded pt-1 text-center text-base'>{thousandSeperator(debtorTotal)}</div>
+          <div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 text-center text-[14px] md:text-base'>{thousandSeperator(debtorTotal)}</div>
         </div>
         <div className='flex space-x-8'>
           <div className='btn5'>Paid: </div>
-          <input className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here' />
-          <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
+          <input className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here' />
+          <button className='w-20 h-7 bg-gray-400 ml-2 relative -left-3 md:left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
         </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-40 h-8 rounded pt-1 flex justify-center text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
+        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
       </div>
       <button type='submit' onClick={saveHandler} className={debt.length === 0 ? 'unsave' : 'save'} disabled={debt.length === 0}>Save</button>
     </div>

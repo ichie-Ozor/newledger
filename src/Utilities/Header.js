@@ -6,7 +6,7 @@ import { baseUrl } from './helper'
 
 
 
-function Header({ name, pageTitle }) {
+function Header({ name, pageTitle, classStyle }) {
   const auth = useAuth()
   const id = auth.user._id
   const adminUrl = baseUrl + "/profile/"
@@ -66,14 +66,15 @@ function Header({ name, pageTitle }) {
 
 
   return (
-    <div className='bg-primary-200 h-36 w-[157vw] md:w-[100vw] flex'>
+    <div className={classStyle}>
       <NavLink to='dashboard' className='no-underline'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
-      <div className='header-profile hidden md:flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
+      {/* <div className='absolute text-white top-28 ml-5 block md:none' onClick={() => navigate(-1)}>BACK</div> */}
+      <div className='header-profile md:flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
         <div className='header-img bg-gray-400  left-10 relative'>
           <img src='' alt='' />
         </div>
         <div className='header-name relative -left-80 text-lg font-bold text-black top-16 md:text-white md:text-xl md:w-40 md:left-14 md:top-5'>{name}</div>
-        <svg onClick={openProfile} className='-left-40 top-1 text-white w-10 h-10 relative font-bold  cursor-pointer md:left-32 md:top-8' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <svg onClick={openProfile} className='left-[8.2rem] -top-20 text-white w-10 h-10 relative font-bold  cursor-pointer md:left-32 md:top-8' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
       </div>
@@ -81,7 +82,7 @@ function Header({ name, pageTitle }) {
 
         (admin ?
           <div
-            className='relative -left-96 top-36 bg-gray-100 p-4 z-10 w-96 h-46 pt-10  grid justify-items-center text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
+            className='relative -left-40 top-20 bg-gray-100 p-1 md:p-4 z-10 w-[20rem] md:w-96 h-[5rem] md:h-46 grid justify-items-center text-xl md:text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
             The Admin is already registered 😃😃😃
           </div>
           :

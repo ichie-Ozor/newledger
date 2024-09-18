@@ -73,7 +73,7 @@ function DebtorTotal() {
 
   return (
     <div>
-      <Header pageTitle={" Total Debt"} />
+      <Header pageTitle={" Total Debt"} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
       <NavBar />
       <div className=' grid justify-items-center mt-3'>
         {renderDebtors}

@@ -208,15 +208,15 @@ function Stock() {
           <div className='table-header'>{cost}</div>
           <div className='table-header'>{sellingPrice}</div>
         </div>
-        <button className='btn7  relative top-20 left-[102%] md:left-[86.5%]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-20 w-40 left-[102%] md:left-[86.5%]' onClick={() => editHandler(value)}>Edit</button>
+        <button className='btn7  relative top-20 left-[106%] md:left-[85.5%]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-20 w-40 left-[106%] md:left-[85.5%]' onClick={() => editHandler(value)}>Edit</button>
       </>
     )
   })
   return (
     <div>
-      <NavBar />
-      <Header pageTitle={" Stocks Page"} name={businessName + " " + fullName} />
+      <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
+      <Header pageTitle={" Stocks Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn6' name='date' value={stockInput.date} onChange={onChange} />
