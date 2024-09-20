@@ -33,7 +33,7 @@ function Home() {
     const verifyAuthentication = useCallback(async () => {
         if (!token) {
             setLoading(false)
-            navigate('/index');
+            navigate('/');
             return;
         }
 
@@ -49,12 +49,12 @@ function Home() {
                 } else {
                     // Handle case where verification fails
                     console.log('Token verification failed');
-                    navigate("/index")
+                    navigate("/")
                 }
             } catch (error) {
                 console.error('Error verifying token:', error);
                 setLoading(false)
-                navigate('/index')
+                navigate('/')
             } finally {
                 setLoading(false); // Set loading to false when finished
             }
