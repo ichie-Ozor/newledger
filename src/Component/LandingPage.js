@@ -122,7 +122,6 @@ function LandingPage() {
         const status = response.data.status;
         const code = response.data.code;
         const { assessToken, userDetail } = response.data;
-        // const userDetails = {email, response, assessToken, refreshToken, userDetail}
 
         // if verification is false and approval > 30 redirect to payment page
         if (code === 900 || code === 901) {
@@ -201,6 +200,7 @@ function LandingPage() {
       url: forgetUrl,
       data: { password: forget.password },
     }).then((response) => {
+      toast.success(response.data.message || "YOu have successfully Changed your password, Congratulations!😍😍")
       console.log(response);
     }).catch((error) => {
       console.log(error)

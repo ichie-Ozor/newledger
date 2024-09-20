@@ -73,10 +73,11 @@ function Creditor() {
         // setDeleteItem(true)
         const deleteUrl = baseUrl + `/creditor/${accountId}/${password}/${deleteId}`
         axios.delete(deleteUrl, deleteData).then((response) => {
-          window.location.reload()
+          // window.location.reload()
           toast.success(response.data.message)
         }
-        )
+        ).catch(error => toast.error(error.response.data.message || "Something went wrong while fetching your data"))
+
       } else {
         // setDeleteItem(false)
         toast.error("You are not authorized to do this")
@@ -110,6 +111,8 @@ function Creditor() {
         .then((response) => {
           toast.success(response.data.message)
           window.location.reload()
+        }).catch((error) => {
+          toast.error(error.response.data.message || "Something went wrong while fetching the Creditor data!")
         })
     } catch (error) {
       console.error("Error in trying to send updated debtor to the backend", error)

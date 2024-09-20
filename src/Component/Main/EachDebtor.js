@@ -57,6 +57,8 @@ function EachDebtor() {
       axios.get(baseUrl2).then((response) => {
         // console.log(response.data.Stock, "debtor stock")
         setDesc(response.data.Stock)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
     } catch (err) { console.log(err.message) }
   }, [baseUrlxx, location.state, eachDebtor])
@@ -230,9 +232,12 @@ function EachDebtor() {
         method: 'post',
         url: baseUrl2b,
         data: debt
+      }).then(() => {
+        toast.success("Input is successfully saved at the database")
+        setDebt([])
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
-      toast.success("Input is successfully saved at the database")
-      setDebt([])
     } catch (err) {
       console.log(err.message)
       toast.error("Something went wrong while trying to save, please try again later")

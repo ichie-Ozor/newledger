@@ -56,7 +56,7 @@ function AdminDashboard() {
     try {
       axios.put(baseUrlxx2, updateDetail).then((response) => {
         toast.success("Successfully saved")
-      })
+      }).catch((err) => toast.error(err.response.data.message || "Something went wrong!"))
     } catch (err) {
       console.log(err.message)
     }

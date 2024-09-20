@@ -44,6 +44,8 @@ function DebtorModal({ visible, onClose }) {
         data: newDebtor
       }).then(() => {
         toast.success("debtor posted successfully")
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
     } catch (err) {
       console.log(err.message)

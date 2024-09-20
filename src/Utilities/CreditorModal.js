@@ -51,6 +51,8 @@ function CreditorModal({ visible, onClose }) {
         toast.success("creditor posted successfully")
         // window.location.reload()
         navigate(`creditor/${account_id}`)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
       // const response = await axios.post(creditorUrl, newCreditor)
     } catch (err) {

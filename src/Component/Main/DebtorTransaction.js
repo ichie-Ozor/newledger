@@ -5,6 +5,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { baseUrl, thousandSeperator } from '../../Utilities/helper'
 import { useLocation, useParams, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 function DebtorTransaction() {
   const navigate = useNavigate()
@@ -35,9 +36,11 @@ function DebtorTransaction() {
     axios.get(DebtorUrl)
       .then((response) => {
         setPaid(response.data.debtorBal)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
 
-  }, [DebtorUrl, debtorId, params])
+  }, [DebtorUrl, DebtorUrl2])
 
   useEffect(() => {
     getList()

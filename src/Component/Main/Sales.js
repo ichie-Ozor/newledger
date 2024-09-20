@@ -39,13 +39,17 @@ function Sales() {
       axios.get(salesUrl).then((response) => {
         const data = response.data.sales
         setSales(data)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went worng, try again later!")
       })
       axios.get(baseUrl5).then((response) => {
         const data = response.data.Stock
         setLists(data)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
     } catch (err) { console.log(err.message) }
-  }, [])
+  }, [salesUrl, baseUrl5])
 
 
   const onChange = (e) => {
@@ -76,43 +80,31 @@ function Sales() {
         total: salesInput.rate * salesInput.qty
       },
     ])
-    //this is saved in the backend
-    //   setSale((prev) => [
-    //     ...prev, 
-    //     {
-    //       id: new Date().getMilliseconds(),
-    //       account: account_id,
-    //       date: salesInput.date,
-    //       description: description,
-    //       category: category,
-    //       qty: salesInput.qty,
-    //       rate: salesInput.rate,
-    //       total: salesInput.rate * salesInput.qty
-    //   }
-    // ])
-    const sale = {
-      id: new Date().getMilliseconds(),
-      account: account_id,
-      date: salesInput.date,
-      description: description,
-      category: category,
-      qty: salesInput.qty,
-      rate: salesInput.rate,
-      total: salesInput.rate * salesInput.qty
-    }
-    await axios({
-      method: 'post',
-      url: salesUrl,
-      data: sale
-    }).then((response) => {
-      toast.success(response.data.message)
-    }).catch((error) => {
-      console.log(error)
-      toast.error(error.response.data.message)
-      const id = error.response.data.sale.id
-      const removeIt = sales.filter((item) => item.id !== id)
-      setSales(removeIt)
-    })
+    // const sale = {
+    //   id: new Date().getMilliseconds(),
+    //   account: account_id,
+    //   date: salesInput.date,
+    //   description: description,
+    //   category: category,
+    //   qty: salesInput.qty,
+    //   rate: salesInput.rate,
+    //   total: salesInput.rate * salesInput.qty
+    // }
+
+    // await axios({
+    //   method: 'post',
+    //   url: salesUrl,
+    //   data: sale
+    // }).then((response) => {
+    //   console.log(response)
+    //   toast.success(response.data.message)
+    // }).catch((error) => {
+    //   console.log(error)
+    //   toast.error(error.response.data.message)
+    //   const id = sale.id
+    //   const removeIt = sales.filter((item) => item.id !== id)
+    //   setSales(removeIt)
+    // })
 
 
     setSalesInput({
@@ -130,14 +122,17 @@ function Sales() {
   ///////// it should also send data to the backend from here and display it on the page at the same time
   // const saveHandler = async() => {
   async function saveHandler() {
+    console.log(sales, "save")
     try {
-      // const response = await axios({
-      //       method: 'post',
-      //       url: salesUrl,
-      //       data: sale
-      //     })
-      //       console.log("sales data posted", response)
-      //       toast.success("Sales Posted Successfully")
+      await axios({
+        method: 'post',
+        url: salesUrl,
+        data: sales
+      }).then(() => {
+        toast.success("Sales Posted Successfully")
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
+      })
     } catch (err) {
       console.log(err, "error")
       toast.error(err.response.data.message)
@@ -171,17 +166,25 @@ function Sales() {
   }
   //////////////Delete/////////////
   const deleteHandler = item => {
-    if (item.id !== undefined) {  //this is to check if it is stored in the backend or not by checking if it has an _id
-      //this is the items displayed at the frontend
+    if (item.id !== undefined) {
       const id = item.id
       setSales(sales.filter(sale => sale.id !== id))
     }
+
+    let profilePassword = prompt("Are you an admin, enter your password", "")
+
+    if (profilePassword === null && profilePassword === "") {
+      toast.info("Deletion cacelled as admin password is needed")
+      return
+    }
+
     //this is the singular item that i want deleted being sent to the backend
-    if (item._id) {
+    if (item._id && profilePassword !== null) {
       const id = item._id
       const deleteItem = sales.filter(sale => sale._id === id)
       setSales(sales.filter(sale => sale._id !== id))
-      const salesDeleteUrl = baseUrl + `/sales/${id}`
+      const salesDeleteUrl = baseUrl + `/sales/${id}/${profilePassword}`
+
       try {
         axios({
           method: 'delete',
@@ -189,28 +192,31 @@ function Sales() {
           data: deleteItem
         }).then((response) => {
           toast.error(response.message)
-          // setError(<div className='absolute flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>{response.data.message}</div>)
-          // console.log('bring the error here', response)
+        }).catch((error) => {
+          toast.error(error.response.data.message || "Something went wrong, try again later")
         })
-      } catch (err) { console.log(err.message) }
+      } catch (err) {
+        console.log(err.message)
+        toast.error("you are not allowed to do this" || err.message)
+      }
     }
   }
 
   /////////////Edit////////////////
-  const editHandler = id => {
-    const editItem = sales.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
+  // const editHandler = id => {
+  //   const editItem = sales.find(item => item.id = id)  //this serches the array to see if the object has the id and returns the object
 
-    setSalesInput({
-      ...salesInput,
-      date: moment(editItem.date).format('DD/MM/YYYY'),
-      availGoods: editItem.availGoods,
-      category: editItem.category,
-      qty: editItem.qty,
-      cPrice: editItem.cPrice,
-      sPrice: editItem.sPrice
-    })
-    deleteHandler(id)
-  }
+  //   setSalesInput({
+  //     ...salesInput,
+  //     date: moment(editItem.date).format('DD/MM/YYYY'),
+  //     availGoods: editItem.availGoods,
+  //     category: editItem.category,
+  //     qty: editItem.qty,
+  //     cPrice: editItem.cPrice,
+  //     sPrice: editItem.sPrice
+  //   })
+  //   deleteHandler(id)
+  // }
 
 
 
@@ -235,7 +241,7 @@ function Sales() {
           <td className='table-header'>{total}</td>
         </tr>
         <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => editHandler(value.id)}>Edit</button>
+        {/* <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
   })
@@ -286,12 +292,12 @@ function Sales() {
       </table>
       {error}
       <div>{renderSales}</div>
-      <div className='relative w-[26rem] md:float-right md:right-40 left-[2rem] top-28 md:top-40 space-y-8 shadow-xl hover:shadow md:w-[25%] rounded-xl'>
+      <div className='relative w-[20.5rem] h-28 items-center justify-center pt-10 md:left-[25rem] left-[1.5rem] top-28 md:top-40 space-y-8 shadow-xl hover:shadow md:w-[27rem] rounded-xl'>
         <div className='flex space-x-8  mb-6'><div className='btn5'>Total : </div>
-          <div className='bg-gray-200 w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
+          <div className='bg-gray-200 w-[12rem] md:w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
         </div>
       </div>
-      {/* <button className='save' onClick={saveHandler}>Save</button> */}
+      <button className={sales.length === 0 ? 'unsave' : 'save'} onClick={saveHandler} disabled={sales.length === 0}>Save</button>
     </div>
   )
 }

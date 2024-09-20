@@ -6,6 +6,7 @@ import axios from "axios";
 import { baseUrl } from "../../Utilities/helper";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { calculateTotalDebt, thousandSeperator } from "../../Utilities/helper";
+import { toast } from "react-toastify";
 // import { toast } from 'react-toastify';
 
 function CreditorTransaction() {
@@ -40,8 +41,10 @@ function CreditorTransaction() {
 
     axios.get(CreditorUrl).then((response) => {
       setPaid(response.data.creditBal);
+    }).catch((error) => {
+      toast.error(error.response.data.message || "There is an error while trying to fetch the info!")
     });
-  }, [CreditorUrl, creditorId, params]);
+  }, [CreditorUrl, CreditorUrl2]);
 
   useEffect(() => {
     getList();

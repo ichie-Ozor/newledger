@@ -28,41 +28,28 @@ function Stock() {
     sellingPrice: ""
   })
 
-  // console.log(category)
-  // const categoryData = [
-  //   {name: 'Animal'},
-  //   {name: 'Cotton'},
-  //   {name: 'Tool'},
-  //   {name: 'food'},
-  //   {name: 'Drugs'}
-  // ]
-
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
   // console.log(account_id)
   const stockUrl = baseUrl + `/stock/${account_id}`
   const stockUrl2 = baseUrl + "/stock/"
+  // const profileUrl = baseUrl + `/profile/${account_id}`
   // const categoryUrl = baseUrl+"/category"
   useEffect(() => {
     try {
       axios.get(stockUrl).then((response) => {
         const data = response.data.Stock
         setStock(data)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
-      //  axios.get(categoryUrl).then((response) => {
-      //   console.log(response)
+      // axios.get(profileUrl).then((response) => {
+      //   console.log(response, "profile")
       // })
     } catch (err) { console.log(err.message) }
   }, [stockUrl])
 
-  // useEffect(() => {
-  //   try{
-  //     //   axios.get(categoryUrl).then((response) => {
-  //     //   console.log(response)
-  //     // })
-  //   }catch(err) {console.log(err.message)}
-  // })
   ///////////////////////////////////
   const onChange = (e) => {
     e.preventDefault()
@@ -75,7 +62,6 @@ function Stock() {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    // console.log("see am here", creditorInput)
     const account_id = auth.user._id
     if (
       stockInput.date === "" &&
@@ -132,10 +118,18 @@ function Stock() {
     if (item.id !== undefined) {
       setStock(stock.filter(stocks => stocks.id !== item.id))
     }
-    if (item._id) {
+
+    let profilePassword = prompt("Are you an admin, enter your password", "")
+
+    if (profilePassword === null && profilePassword === "") {
+      toast.info("Deletion cacelled as admin password is needed")
+      return
+    }
+
+    if (item._id && profilePassword !== null) {
       const deleteItem = stock.filter(stock => stock._id === item._id)
       setStock(stock.filter(stock => stock._id !== item._id))
-      const stockDeleteUrl = baseUrl + `/stock/${item._id}`
+      const stockDeleteUrl = baseUrl + `/stock/${item.account}/${profilePassword}`
       try {
         axios({
           method: 'delete',
@@ -144,6 +138,8 @@ function Stock() {
         }).then((response) => {
           console.log(response)
           toast.error(response.message)
+        }).catch((error) => {
+          toast.error(error.response.data.message || "Something went wrong, try again later!")
         })
       } catch (err) { console.log(err.message) }
     }
@@ -152,7 +148,7 @@ function Stock() {
   const editHandler = value => {
     if (value.id !== undefined) {
       const editItem = stock.find(item => item._id === value.id)  //this serches the array to see if the object has the id and returns the object
-
+      console.log(editItem, "edit item")
       setStockInput({
         ...stockInput,
         date: moment(editItem.date).format('DD/MM/YYYY'),
@@ -190,6 +186,9 @@ function Stock() {
         console.log("stock data posted", response)
         toast.success("Stocks Posted Successfully")
         // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
+      }).catch((err) => {
+        toast.error("something went wrong, please try again later!")
+        console.log(err)
       })
     } catch (err) { console.log(err.message) }
     setStocks([])

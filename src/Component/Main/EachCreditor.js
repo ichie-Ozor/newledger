@@ -66,10 +66,14 @@ function EachCreditor(props) {
       axios.get(baseUrl2).then((response) => {
         const creditorData = response.data.credits
         setCreditor(creditorData)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
       axios.get(baseUrl5).then((response) => {
         // console.log(response.data.Stock, "see 71")
         setDesc(response.data.Stock)
+      }).catch((error) => {
+        toast.error(error.response.data.message || "Something went wrong, try aain later!")
       })
     } catch (err) { console.log(err.message) }
   }, [creditorId, eachCreditor])
@@ -170,6 +174,7 @@ function EachCreditor(props) {
 
   //////////////Delete/////////////
   const deleteHandler = value => {
+
     /////////if its not saved at the back, delete it from the front only
     if (value.id !== undefined) {
       setCreditor(creditor.filter(stocks => stocks.id !== value.id))
@@ -179,21 +184,27 @@ function EachCreditor(props) {
 
     let profilePassword = prompt("Are you an admin, enter your password", "")
 
+    if (profilePassword === null && profilePassword === "") {
+      toast.info("Deletion cacelled as admin password is needed")
+      return
+    }
     //////delete the credit details from the backend
-    const deleteUrl = baseUrl + `/credit/${value._id}/${profilePassword}`;
-    axios.delete(deleteUrl)
-      .then((response) => {
-        if (response.status === 200) {
-          const afterDelete = creditor.filter((item) => item._id !== value._id)
-          setCreditor(afterDelete)
-          toast.success("Items successfully deleted")
-          window.location.reload()
-        }
-      })
-      .catch(error => {
-        console.log(error)
-        toast.error(error.response.data.message)
-      })
+    if (profilePassword !== null) {
+      const deleteUrl = baseUrl + `/credit/${value._id}/${profilePassword}`;
+      axios.delete(deleteUrl)
+        .then((response) => {
+          if (response.status === 200) {
+            const afterDelete = creditor.filter((item) => item._id !== value._id)
+            setCreditor(afterDelete)
+            toast.success("Items successfully deleted")
+            // window.location.reload()
+          }
+        })
+        .catch(error => {
+          console.log(error, "error")
+          toast.error(error.response.data.message || "An error occurred while deleting the item")
+        })
+    }
   }
 
   //////////////Edit//////////////////////
@@ -247,7 +258,7 @@ function EachCreditor(props) {
       toast.error(error.response.data.message)
     })
     setCredit([])
-    window.location.reload()
+    // window.location.reload()
   }
 
   const renderCreditor = creditor.map((value, id) => {
@@ -327,7 +338,7 @@ function EachCreditor(props) {
         </div>
         <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
       </div>
-      <button type='submit' onClick={saveHandler} className={credit.length === 0 ? 'unsave' : 'save'} disabled={credit.length}>Save</button>
+      <button type='submit' onClick={saveHandler} className={credit.length === 0 ? 'unsave' : 'save'} disabled={credit.length === 0}>Save</button>
 
     </div>
   )

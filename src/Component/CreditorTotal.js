@@ -5,6 +5,7 @@ import { baseUrl } from '../Utilities/helper'
 import Header from '../Utilities/Header'
 import NavBar from '../Utilities/NavBar'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 function CreditorTotal() {
   const params = useParams()
@@ -19,6 +20,7 @@ function CreditorTotal() {
         const items = filterArray(v)
         setCreditor(items)
       }).catch(error => {
+        toast.error(error.response.data.message || "Something went wrong while loading the page!")
         console.log(error, "error debit bal total")
       })
     }

@@ -101,6 +101,8 @@ function Debtor() {
         .then((response) => {
           toast.success(response.data.message)
           window.location.reload()
+        }).catch((error) => {
+          toast.error(error.response.data.message || "Something went wrong, try again later")
         })
     } catch (error) {
       console.error("Error in trying to send updated debtor to the backend", error)

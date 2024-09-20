@@ -7,7 +7,6 @@ import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
 import DashboardModal from '../Utilities/DashboardModal'
 import { useAuth } from '../Context/auth'
-import axios from 'axios'
 
 
 function Dashboard() {
