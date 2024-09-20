@@ -7,7 +7,7 @@ function NavBar({ children, classStyle }) {
   const auth = useAuth()
   const signOutHandler = () => {
     auth.logout("myToken")
-    navigate('/index')
+    navigate('/')
   }
   return (
     <div className={classStyle}>

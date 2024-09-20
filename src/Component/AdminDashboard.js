@@ -66,13 +66,13 @@ function AdminDashboard() {
     // return (setTime(Date.now() + 2592000000))
   }
 
-  const saveHandle = () => {
-    setClientDetail(...clientDetail, clientDetail.verification = renew)
-  }
-  // console.log(renew[0]._id)   //this gives you only the id of the clicked client
+  // const saveHandle = () => {
+  //   setClientDetail(...clientDetail, clientDetail.verification = !renew)
+  // }
 
   //this deletes the subscription time
   const deleteTimerHandler = (id) => {
+
     // console.log("renew clicked", timer)
     // if(timer > 1703873420789){
     //   setTime(true)
@@ -109,7 +109,7 @@ function AdminDashboard() {
       <div>
         {render}
       </div>
-      <button className='float-right h-10 w-36 bg-blue-400 text-white rounded-xl hover:bg-gray-500 hover:text-black hover:scale-90 duration-300 hover:font-bold m-5' onClick={() => saveHandle()}>Save</button>
+      {/* <button className='float-right h-10 w-36 bg-blue-400 text-white rounded-xl hover:bg-gray-500 hover:text-black hover:scale-90 duration-300 hover:font-bold m-5' onClick={() => saveHandle()}>Save</button> */}
     </div>
   )
 }

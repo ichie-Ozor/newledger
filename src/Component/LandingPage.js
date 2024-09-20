@@ -120,6 +120,7 @@ function LandingPage() {
     })
       .then((response) => {
         const status = response.data.status;
+        const role = response.data.userDetail.role
         const code = response.data.code;
         const { assessToken, userDetail } = response.data;
 
@@ -145,11 +146,16 @@ function LandingPage() {
             password: "",
           });
         }
-        if (response.data.role === "admin") {
+        if (status === "Success" && role === "admin") {
+          const user = {
+            token: response.data.assessToken,
+            userDetail: response.data.userDetail,
+          };
+          auth.login(response.data.userDetail); //this is supposed to update the state in the context so that it can be available to all the components that needs to extract the details of the user from the backend
+          localStorage.setItem("myToken", user.token);
           navigate("/admin");
-          // window.location.reload()
         }
-        if (status === "Success" || code === 200) {
+        if (status === "Success" && role === "user") {
           const user = {
             token: response.data.assessToken,
             userDetail: response.data.userDetail,
