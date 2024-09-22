@@ -69,7 +69,7 @@ function Header({ name, pageTitle, classStyle }) {
     <div className={classStyle}>
       <NavLink to='dashboard' className='no-underline'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
       {/* <div className='absolute text-white top-28 ml-5 block md:none' onClick={() => navigate(-1)}>BACK</div> */}
-      <div className='header-profile md:flex absolute md:bg-primary-500 w-96 h-28 top-4 rounded-l-ksm'>
+      <div className='md:left-[72.8%] left-[12rem] md:w-[30rem] md:flex absolute md:bg-primary-500 h-28 top-4 rounded-l-ksm'>
         <div className='header-img bg-gray-400  left-10 relative'>
           <img src='' alt='' />
         </div>
@@ -86,7 +86,7 @@ function Header({ name, pageTitle, classStyle }) {
             The Admin is already registered 😃😃😃
           </div>
           :
-          <div className='relative -left-96 top-36 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
+          <div className='relative -left-[11rem] top-20 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
             <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
             <form onSubmit={profileHandler}>
               <input type='text' placeholder='Enter First Name' className='header-input' name='firstName' value={profile.firstName} onChange={onChange} />

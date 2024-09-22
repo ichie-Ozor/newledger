@@ -207,8 +207,8 @@ function Stock() {
           <div className='table-header'>{cost}</div>
           <div className='table-header'>{sellingPrice}</div>
         </div>
-        <button className='btn7  relative top-20 left-[106%] md:left-[85.5%]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-20 w-40 left-[106%] md:left-[85.5%]' onClick={() => editHandler(value)}>Edit</button>
+        <button className='btn7  relative top-20 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-20 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
       </>
     )
   })

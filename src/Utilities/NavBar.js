@@ -19,7 +19,7 @@ function NavBar({ children, classStyle }) {
           {children}
         </div>
 
-        <div onClick={() => navigate(-1)} className='nav text-xs font-bold ml-3 mt-3 cursor-pointer'>BACK</div>
+        <div onClick={() => navigate(-1)} className='text-xs font-bold ml-3 mt-3 cursor-pointer'>BACK</div>
         <div className='text-xs font-bold ml-3 md:mt-7 mt-3 cursor-pointer' onClick={signOutHandler}>
           Sign Out
         </div>

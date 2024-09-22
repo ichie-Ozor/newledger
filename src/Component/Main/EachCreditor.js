@@ -283,7 +283,7 @@ function EachCreditor(props) {
     <div >
       <NavBar classStyle='fixed grid w-[153vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
         <Link className='no-underline' to={'transaction'} state={eachCreditor}>
-          <button className='nav text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
+          <button className='text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
         </Link>
       </NavBar>
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../Utilities/Header'
 import NavBar from '../Utilities/NavBar'
 import CreditorModal from '../Utilities/CreditorModal'
 import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
-import DashboardModal from '../Utilities/DashboardModal'
+// import DashboardModal from '../Utilities/DashboardModal'
 import { useAuth } from '../Context/auth'
 
 
@@ -14,14 +14,14 @@ function Dashboard() {
   const [openDebtor, setOpenDebtor] = useState(false)
   const [showCreditorModal, setShowCreditorModal] = useState(false)
   const [showDebtorModal, setShowDebtorModal] = useState(false)
-  const [showCategoryModal, setShowCategoryModal] = useState(false)
-  const [showCreditBalModal, setShowCreditBalModal] = useState(false)
-  const [user, setUser] = useState()
+  // const [showCategoryModal, setShowCategoryModal] = useState(false)
+  // const [showCreditBalModal, setShowCreditBalModal] = useState(false)
+  // const [user, setUser] = useState()
   const auth = useAuth()
-  const [categoryTodo, setCategoryTodo] = useState({
-    name: ""
-  })
-  const [categoryList, setCategoryList] = useState([])
+  // const [categoryTodo, setCategoryTodo] = useState({
+  //   name: ""
+  // })
+  // const [categoryList, setCategoryList] = useState([])
 
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
