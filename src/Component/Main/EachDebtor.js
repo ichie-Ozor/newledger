@@ -80,6 +80,9 @@ function EachDebtor() {
 
   const submitHandler = (e) => {
     e.preventDefault()
+    if (desc.length === 0) {
+      return toast.error("please enter the goods inthe stock first, Thank you")
+    }
     if (debtorInput.date === "" && debtorInput.category === "" && debtorInput.description === 0 && debtorInput.qty === 0 && debtorInput.rate === 0) {
       toast.error("Please input is empty, make sure you have put in all the data")
       return

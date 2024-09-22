@@ -74,6 +74,9 @@ function Stock() {
       toast.error("Please enter the items")
       return
     }
+    if (stock.length === 0) {
+      return toast.error("please enter the goods inthe stock first, Thank you")
+    }
     setStock((prev) => [
       ...prev,
       {

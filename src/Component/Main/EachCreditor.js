@@ -129,6 +129,9 @@ function EachCreditor(props) {
 
   const submitHandler = (e) => {
     e.preventDefault()
+    if (desc.length === 0) {
+      return toast.error("please enter the goods inthe stock first, Thank you")
+    }
     if (creditorInput.date === "" && creditorInput.category === "" && creditorInput.description === "" && creditorInput.qty === "" && creditorInput.rate === "") {
       return toast.error("Please put in the date or category")
     } else {
