@@ -137,8 +137,8 @@ function Stock() {
           url: stockDeleteUrl,
           data: deleteItem
         }).then((response) => {
-          console.log(response)
-          toast.error(response.message)
+          console.log(response, "delete")
+          toast.success(response.data.message)
         }).catch((error) => {
           toast.error(error.response.data.message || "Something went wrong, try again later!")
         })
@@ -178,21 +178,26 @@ function Stock() {
 
   ///////// it should also send data to the backend from here and display it on the page at the same time
   const saveHandler = async () => {
-    try {
-      axios({
-        method: 'post',
-        url: stockUrl2,
-        data: stocks
-      }).then((response) => {
-        console.log("stock data posted", response)
-        toast.success("Stocks Posted Successfully")
-        // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
-      }).catch((err) => {
-        toast.error("something went wrong, please try again later!")
-        console.log(err)
-      })
-    } catch (err) { console.log(err.message) }
-    setStocks([])
+    let finished = window.confirm("Have you entered all the stocks?")
+    if (finished) {
+      try {
+        axios({
+          method: 'post',
+          url: stockUrl2,
+          data: stocks
+        }).then((response) => {
+          console.log("stock data posted", response)
+          toast.success("Stocks Posted Successfully")
+          // setError(<div className='relative flex bg-[#087c63] font-bold rounded-[30px] left-[40%] text-2xl text-white opacity-40 w-[350px] h-[50px] items-center justify-center'>Sales Posted Successfully</div>)
+        }).catch((err) => {
+          toast.error("something went wrong, please try again later!")
+          console.log(err)
+        })
+      } catch (err) { console.log(err.message) }
+      setStocks([])
+    } else {
+      toast.error("Only click SAVE if you have finished entering your data")
+    }
   }
 
 

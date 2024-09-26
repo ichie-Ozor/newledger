@@ -60,14 +60,10 @@
   @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
 }
 .register {
-  position: absolute;
-  top: 20rem;
-  font-size: 20px;
-  font-weight: 700;
-  color: red;
+  @apply absolute top-[7rem] md:top-[10rem] left-2 md:left-[13rem] w-[18rem] md:w-[25rem] text-[13px] md:text-[20px] font-bold text-red-700;
 }
-.btnz,
-.btny {
+
+.btnz {
   position: relative;
   top: 15px;
   left: 100px;

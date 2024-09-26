@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Context/auth'
 import { baseUrl } from './helper'
+import { toast } from 'react-toastify'
 
 
 
@@ -55,6 +56,8 @@ function Header({ name, pageTitle, classStyle }) {
       password: ""
     })
     setOpen(!open)
+    window.location.reload()
+    toast.success("Your Profile has being created successfully!")
   }
   //const profileName = profile.fName + " " + profile.lName
 
@@ -74,7 +77,7 @@ function Header({ name, pageTitle, classStyle }) {
           <img src='' alt='' />
         </div>
         <div className='header-name relative -left-80 text-lg font-bold text-black top-16 md:text-white md:text-xl md:w-40 md:left-14 md:top-5'>{name}</div>
-        <svg onClick={openProfile} className='left-[8.2rem] -top-20 text-white w-10 h-10 relative font-bold  cursor-pointer md:left-32 md:top-8' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <svg onClick={openProfile} className='left-[8.2rem] -top-[6.3rem] text-white w-10 h-10 relative font-bold  cursor-pointer md:left-32 md:top-8' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
       </div>

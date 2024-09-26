@@ -100,7 +100,7 @@ function EachCreditor(props) {
   const totalCashHandler = (e) => {
     e.preventDefault()
     const total = creditorTotal - parseInt(cash)
-
+    setTotalCash(total)
     const amount = {
       paid: cash,
       balance: total,

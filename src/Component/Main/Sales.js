@@ -15,7 +15,7 @@ function Sales() {
   // const location = useLocation()
   // const list = location.state
   const [sales, setSales] = useState([])
-  // const [sale, setSale] = useState([])
+  const [sale, setSale] = useState([])
   const [error, setError] = useState("")
   const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
   const [isClose, setIsClose] = useState(false)  /// goods description
@@ -85,6 +85,19 @@ function Sales() {
         total: salesInput.rate * salesInput.qty
       },
     ])
+    setSale((prev) => [
+      ...prev,
+      {
+        id: new Date().getMilliseconds(),
+        account: account_id,
+        date: salesInput.date,
+        description: description,
+        category: category,
+        qty: salesInput.qty,
+        rate: salesInput.rate,
+        total: salesInput.rate * salesInput.qty
+      },
+    ])
     // const sale = {
     //   id: new Date().getMilliseconds(),
     //   account: account_id,
@@ -127,26 +140,29 @@ function Sales() {
   ///////// it should also send data to the backend from here and display it on the page at the same time
   // const saveHandler = async() => {
   async function saveHandler() {
-    console.log(sales, "save")
-    try {
-      await axios({
-        method: 'post',
-        url: salesUrl,
-        data: sales
-      }).then(() => {
-        toast.success("Sales Posted Successfully")
-      }).catch((error) => {
-        toast.error(error.response.data.message || "Something went wrong, try again later!")
-      })
-    } catch (err) {
-      console.log(err, "error")
-      toast.error(err.response.data.message)
-      const id = await err.response.data?.sale.id
-      const removeIt = sales.filter((item) => item.id !== id)
-      setSales(removeIt)
+    let finished = window.confirm("Have you entered all the sales?")
+    if (finished) {
+      try {
+        await axios({
+          method: 'post',
+          url: salesUrl,
+          data: sale
+        }).then(() => {
+          toast.success("Sales Posted Successfully")
+        }).catch((error) => {
+          toast.error(error.response.data.message || "Something went wrong, try again later!")
+        })
+      } catch (err) {
+        console.log(err, "error")
+        toast.error(err.response.data.message)
+        const id = await err.response.data?.sale.id
+        const removeIt = sales.filter((item) => item.id !== id)
+        setSales(removeIt)
+      }
+      setSale([])
+    } else {
+      toast.error("Only click SAVE if you have finished entering your data")
     }
-    //  setSale([])
-    //  console.log(save)
   }
 
   // if(save){
