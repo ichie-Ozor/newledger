@@ -294,7 +294,7 @@ function EachCreditor(props) {
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
       <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
       {invoice ?
-        <Invoice closeInvoice={()=> setInvoice(false)}/> :
+        <Invoice closeInvoice={() => setInvoice(false)} /> :
         (<>
           <div className='absolute md:-left-3 top-22 '>
             <form className='relative flex  left-56' onSubmit={submitHandler}>
@@ -323,7 +323,7 @@ function EachCreditor(props) {
               <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
               <button type='submit' className='submit' >Submit</button>
             </form>
-            <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[84rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button>
+            {/* <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[84rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button> */}
           </div>
           <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
             <th className='table-header'>Date</th>
