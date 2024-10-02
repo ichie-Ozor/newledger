@@ -16,5 +16,5 @@ export function thousandSeperator(num) {
   numStr = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return numStr
 }
-// export const baseUrl = "https://newledger-f7b180e5a9de.herokuapp.com"
-export const baseUrl = "http://localhost:8080"  //this is for local
+export const baseUrl = "https://newledger-f7b180e5a9de.herokuapp.com"
+// export const baseUrl = "http://localhost:8080"  //this is for local

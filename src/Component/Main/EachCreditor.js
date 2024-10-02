@@ -3,6 +3,7 @@ import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
 import NavBar from '../../Utilities/NavBar'
 import Header from '../../Utilities/Header'
+import Invoice from '../Invoice';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios'
@@ -17,6 +18,7 @@ function EachCreditor(props) {
   const auth = useAuth()
   const { fullName, businessName } = auth.user
   const { accountId, creditorId } = params
+  const [invoice, setInvoice] = useState(false)
   const [creditor, setCreditor] = useState([])
   const [isOpen, setIsOpen] = useState(false) //// goods description dropdown
   const [isClose, setIsClose] = useState(false)
@@ -275,7 +277,7 @@ function EachCreditor(props) {
         <td className='table-header'>{rate}</td>
         <td className='table-header'>{total}</td>
       </tr>
-        <button className='btn7  relative top-8 md:top-24 left-[121%] md:left-[83%]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-8 md:top-[6.5rem] left-[121%] md:left-[83rem]' onClick={() => deleteHandler(value)}>Delete</button>
         {/* <button className='btn7a btn7 left-3' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
@@ -291,58 +293,63 @@ function EachCreditor(props) {
       </NavBar>
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
       <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
-      <div className='absolute md:-left-3 top-22 '>
-        <form className='relative flex  left-56' onSubmit={submitHandler}>
-          <input type='date' placeholder='date' className='btn4' name='date' value={creditorInput.date} onChange={onChange} />
-          {/*************************/}
-          <div>
-            <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
-              {category.length > 0 ? category : "Category"}
-            </button>
-            {isClose && (
-              <div className='dropContainer'>
-                {desc.map((item, index) => (
-                  <div key={index} className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
-                ))}
+      {invoice ?
+        <Invoice closeInvoice={()=> setInvoice(false)}/> :
+        (<>
+          <div className='absolute md:-left-3 top-22 '>
+            <form className='relative flex  left-56' onSubmit={submitHandler}>
+              <input type='date' placeholder='date' className='btn4' name='date' value={creditorInput.date} onChange={onChange} />
+              {/*************************/}
+              <div>
+                <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
+                  {category.length > 0 ? category : "Category"}
+                </button>
+                {isClose && (
+                  <div className='dropContainer'>
+                    {desc.map((item, index) => (
+                      <div key={index} className='dropdown' onClick={() => dropDownCategoryHandler(item.category)}>{item.category}</div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+              {/*************************/}
+              <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
+                <option value=''>Description</option>
+                {desc.map((item, index) => (
+                  <option key={index} value={item.goods} className='dropdown'>{item.goods}</option>
+                ))}
+              </select>
+              <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange} />
+              <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
+              <button type='submit' className='submit' >Submit</button>
+            </form>
+            <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[84rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button>
           </div>
-          {/*************************/}
-          <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
-            <option value=''>Description</option>
-            {desc.map((item, index) => (
-              <option key={index} value={item.goods} className='dropdown'>{item.goods}</option>
-            ))}
-          </select>
-          <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange} />
-          <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
-          <button type='submit' className='submit' >Submit</button>
-        </form>
-      </div>
-      <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
-        <th className='table-header'>Date</th>
-        <th className='table-header'>Category</th>
-        <th className='bg-gray-200 w-[8rem] text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
-        <th className='table-header'>Quantity</th>
-        <th className='table-header'>Rate</th>
-        <th className='table-header'>Total</th>
-      </table>
-      <div className='relative top-10 md:top-0'>
-        {error ? error.message : renderCreditor}
-      </div>
+          <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
+            <th className='table-header'>Date</th>
+            <th className='table-header'>Category</th>
+            <th className='bg-gray-200 w-[8rem] text-xs md:w-60 h-10 rounded pt-2 md:text-lg'>Goods Description</th>
+            <th className='table-header'>Quantity</th>
+            <th className='table-header'>Rate</th>
+            <th className='table-header'>Total</th>
+          </table>
+          <div className='relative top-10 md:top-0'>
+            {error ? error.message : renderCreditor}
+          </div>
 
-      <div className='relative md:left-[20rem] w-[100%] md:w-[25%] top-[6.5rem] md:top-40 space-y-4 shadow-xl hover:shadow rounded-xl'>
-        <div className='flex space-x-8'><div className='btn5'>Total: </div>
-          <div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 text-center text-[14px] md:text-base'>{thousandSeperator(creditorTotal)}</div></div>
-        <div className='flex space-x-8'>
-          <div className='btn5'>Paid: </div>
-          <input className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment' />
-          <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
-        </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
-      </div>
-      <button type='submit' onClick={saveHandler} className={credit.length === 0 ? 'unsave' : 'save'} disabled={credit.length === 0}>Save</button>
-
+          <div className='relative md:left-[20rem] w-[100%] md:w-[25%] top-[6.5rem] md:top-40 space-y-4 shadow-xl hover:shadow rounded-xl'>
+            <div className='flex space-x-8'><div className='btn5'>Total: </div>
+              <div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 text-center text-[14px] md:text-base'>{thousandSeperator(creditorTotal)}</div></div>
+            <div className='flex space-x-8'>
+              <div className='btn5'>Paid: </div>
+              <input className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment' />
+              <button className='w-20 h-7 bg-gray-400 ml-2 relative left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
+            </div>
+            <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
+          </div>
+          <button type='submit' onClick={saveHandler} className={credit.length === 0 ? 'unsave' : 'save'} disabled={credit.length === 0}>Save</button>
+        </>
+        )}
     </div>
   )
 }

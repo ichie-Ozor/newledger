@@ -18,6 +18,7 @@ import CreditorTransaction from './Component/Main/CreditorTransaction';
 import DebtorTransaction from './Component/Main/DebtorTransaction';
 import CreditorTotal from './Component/CreditorTotal';
 import DebtorTotal from './Component/DebtorTotal';
+import PageNotFound from './Utilities/PageNotFound';
 // import { baseUrl } from './Utilities/helper';
 // import { useAuth } from './Context/auth';
 // import axios from 'axios';
@@ -72,6 +73,7 @@ function App() {
             <Route path="dashboard/stock/:accountId" element={<Stock />} />
             <Route path="dashboard/creditor/:accountId/:creditorId/transaction" element={<CreditorTransaction />} />
             <Route path="dashboard/debtor/:accountId/:debtorId/transaction" element={<DebtorTransaction />} />
+            <Route component={PageNotFound} />
           </Route>
         </Routes>
       </Router>
