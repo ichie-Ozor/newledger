@@ -13,12 +13,16 @@ import { baseUrl } from '../../Utilities/helper';
 function Stock() {
   const location = useLocation()
   const list = location.state
-  const [disabled, setDisabled] = useState(false)
+  const [open, setOpen] = useState(false)
   const [stock, setStock] = useState([])
   const [stocks, setStocks] = useState([])
   const auth = useAuth()
   const [error, setError] = useState("")
   // const [category, setCategory] = useState('')
+  const [filterInput, setFilterInput] = useState({
+    from: "",
+    to: ""
+  })
   const [stockInput, setStockInput] = useState({
     date: "",
     goods: "",
@@ -59,6 +63,14 @@ function Stock() {
     })
   }
 
+  const onFilterChange = (e) => {
+    e.preventDefault()
+    const { name, value } = e.target
+    setFilterInput({
+      ...filterInput, [name]: value
+    })
+  }
+  console.log(filterInput, "filter input")
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -112,6 +124,11 @@ function Stock() {
       sellingPrice: ""
     })
     // it should also send data to the backend from here and display it on the page at the same time
+  }
+
+  const filterHandler = (e) => {
+    e.preventDefault()
+    console.log(filterInput, "filter")
   }
   console.log(stock)
   //////////////Delete/////////////
@@ -221,7 +238,7 @@ function Stock() {
   return (
     <div>
       <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <Header pageTitle={" Stocks Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
+      <Header pageTitle={" Stocks Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[176vw] md:w-[100vw] flex' />
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn6' name='date' value={stockInput.date} onChange={onChange} />
@@ -234,6 +251,16 @@ function Stock() {
           <button type='submit' className='submit' >Submit</button>
         </form>
       </div>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[90rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
+      {open ?
+        <div className='absolute  bg-red-500' onSubmit={filterHandler}>
+          <input type='date' name='from' value={filterInput.from} onChange={onFilterChange} />
+          <input type='date' name='to' value={filterInput.to} onChange={onFilterChange} />
+          <button type='submit' className='submit'>Enter</button>
+        </div> :
+        <></>
+      }
+
       <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
         <div className='table-header'>Date</div>
         <div className='table-header'>Category</div>

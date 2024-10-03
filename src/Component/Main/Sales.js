@@ -34,7 +34,7 @@ function Sales() {
 
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
-  const salesUrl = baseUrl + "/sales"
+  const salesUrl = baseUrl + `/sales/${account_id}`
   const baseUrl5 = baseUrl + `/stock/${account_id}`
   useEffect(() => {
     try {

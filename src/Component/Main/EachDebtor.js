@@ -146,7 +146,7 @@ function EachDebtor() {
           const afterDelete = debtor.filter((element) => element._id !== item._id)
           setDebtor(afterDelete)
           toast.success("Items successfully deleted")
-          window.location.reload()
+          // window.location.reload()
         }
       }).catch(error => {
         console.log(error)
@@ -245,7 +245,7 @@ function EachDebtor() {
       console.log(err.message)
       toast.error("Something went wrong while trying to save, please try again later")
     }
-    window.location.reload()
+    // window.location.reload()
   }
 
   const renderDebtor = debtor.map((value, id) => {
@@ -317,15 +317,15 @@ function EachDebtor() {
         {error ? error.message : renderDebtor}
       </div>
       <div className='relative w-[60%] md:w-[20%] md:left-[20rem] top-[6.5rem] md:top-40 space-y-4 shadow-xl hover:shadow rounded-xl'>
-        <div className='flex space-x-8'><div className='btn5'>Total: </div>
+        {/* <div className='flex space-x-8'><div className='btn5'>Total: </div>
           <div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 text-center text-[14px] md:text-base'>{thousandSeperator(debtorTotal)}</div>
-        </div>
-        <div className='flex space-x-8'>
+        </div> */}
+        <div className='flex space-x-8 pt-5 pb-5'>
           <div className='btn5'>Paid: </div>
-          <input className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here' />
+          <input className='bg-gray-200 w-[8rem] md:w-[12rem] h-8 rounded pt-1 flex justify-center text-[14px] md:text-base text-center' value={cash} name='cash' onChange={cashHandler} placeholder='Enter cash payment here' />
           <button className='w-20 h-7 bg-gray-400 ml-2 relative -left-3 md:left-3 top-1 rounded-md text-white font-bold text-base shadow-xl hover:shadow hover:text-black hover:bg-white' onClick={totalCashHandler}>Click</button>
         </div>
-        <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div>
+        {/* <div className='btn5'>Bal:</div><div className='bg-gray-200 w-[8rem] md:w-40 h-8 rounded pt-1 flex justify-center text-[14px] md:text-xl relative left-[7.25rem] -top-10'>{thousandSeperator(totalCash)}</div> */}
       </div>
       <button type='submit' onClick={saveHandler} className={debt.length === 0 ? 'unsave' : 'save'} disabled={debt.length === 0}>Save</button>
     </div>
