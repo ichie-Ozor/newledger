@@ -27,7 +27,7 @@ function Debtor() {
     businessName: "",
     address: ""
   })
-  const baseUrlxx = baseUrl + "/debtor"
+  const baseUrlxx = baseUrl + `/debtor/${accountId}`
 
 
   useEffect(() => {
