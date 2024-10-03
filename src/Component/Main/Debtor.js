@@ -32,15 +32,15 @@ function Debtor() {
 
   useEffect(() => {
     axios.get(baseUrlxx).then((response) => {
-      const debtorDetails = response.data.debtors
+      const debtorDetails = response.data.debtor
       if (debtorDetails.length === 0) {
-        setError(<div className='relative top-60 left-80 text-3xl font-bold'>There is no creditor record here</div>)
+        setError("There is no debtor record here")
       } else {
         setClient(debtorDetails)
       }
       // setClient(() => response.data.allAccount)
     }).catch(error => {
-      setError(error)
+      setError(error.message)
     })
   }, [baseUrlxx])
 
@@ -151,7 +151,7 @@ function Debtor() {
       <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
       <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[103vw] md:w-[100vw] flex' />
       <div>
-        {error ? error : render}
+        {error ? <div className='relative top-60 left-80 text-3xl font-bold'>{error}</div> : render}
       </div>
       <DeleteModal visible={showDeleteModal} close={() => setShowDeleteModal(false)}>
         <form onSubmit={submitHandler}>

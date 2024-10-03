@@ -78,8 +78,8 @@ function DebtorTransaction() {
 
   return (
     <div>
-      <Header classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <NavBar pageTitle={" Creditor Page"} name={firstName + " " + lastName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
+      <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
+      <Header pageTitle={` to ${firstName} ${lastName} Creditor Page`} name={firstName + " " + lastName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
       <div>
         <div className='flex align-items-center justify-center mb-3'>
           <div className='relative top-12 font-bold text-3xl text-gray-600'>Transaction detail of {firstName + " " + lastName}</div>

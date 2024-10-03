@@ -121,7 +121,6 @@ function LandingPage() {
       data: { email, password },
     })
       .then((response) => {
-        console.log(response, "response")
         const status = response.data.status;
         const role = response.data.userDetail?.role
         const code = response.data.code;
