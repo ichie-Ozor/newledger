@@ -92,8 +92,8 @@ function EachDebtor() {
         {
           id: new Date().getMilliseconds(),
           date: debtorInput.date,
-          description,
-          category,
+          description: debtorInput.description,
+          category: debtorInput.category,
           qty: debtorInput.qty,
           rate: debtorInput.rate,
           total: debtorInput.rate * debtorInput.qty
@@ -106,8 +106,8 @@ function EachDebtor() {
           id: new Date().getMilliseconds(),
           debtorId,
           date: debtorInput.date,
-          description,
-          category,
+          description: debtorInput.description,
+          category: debtorInput.category,
           qty: debtorInput.qty,
           rate: Number(debtorInput.rate),
           total: debtorInput.rate * debtorInput.qty,
@@ -171,15 +171,15 @@ function EachDebtor() {
 
 
   //////////////////Category and Dropdown
-  const dropDownCategoryHandler = (value) => {
-    setIsClose(false)
-    setCategory(value)
-  }
+  // const dropDownCategoryHandler = (value) => {
+  //   setIsClose(false)
+  //   setCategory(value)
+  // }
 
-  const dropDownHandler = (event) => {
-    setDescription(event.target.value)
-    setIsOpen(false)
-  }
+  // const dropDownHandler = (event) => {
+  //   setDescription(event.target.value)
+  //   setIsOpen(false)
+  // }
 
 
   ////////Total calculations are here////////////////////////////////
@@ -210,6 +210,7 @@ function EachDebtor() {
       data: amount
     }).then((response) => {
       console.log(response)
+      toast.success("Cash paid recorded successfully")
     }).catch(error => {
       toast.error(error.response.data.message)
     })
@@ -281,7 +282,7 @@ function EachDebtor() {
           <input type='date' placeholder='date' className='btn4' name='date' value={debtorInput.date} onChange={onChange} />
           {/* <input type='text' placeholder='Category' className='btn4' name='category' value={debtorInput.category} onChange={onChange}/> */}
           {/********************************/}
-          <div>
+          {/* <div>
             <button type='button' className='btn4' onClick={() => setIsClose(!isClose)}>
               {category.length > 0 ? category : "Category"}
             </button>
@@ -292,14 +293,17 @@ function EachDebtor() {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
+          <input type='text' placeholder='Category' className='btn6' name='category' value={debtorInput.category} onChange={onChange} />
           {/********************************/}
-          <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
+          {/* <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[15rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' value={description} onChange={dropDownHandler}>
             <option value=''>Description</option>
             {desc.map((item, index) => (
               <option key={index} value={item.goods} >{item.goods}</option>
-            ))}
-          </select>
+              ))}
+              </select> */}
+          <input type='text' placeholder='Description' className='btn6' name='description' value={debtorInput.description} onChange={onChange} />
+          {/*************************************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={debtorInput.rate} onChange={onChange} />
           <button type='submit' className='submit'>Submit</button>

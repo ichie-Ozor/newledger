@@ -34,11 +34,13 @@ function Sales() {
 
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
+  const salesUrlxx = baseUrl + "/sales/"
   const salesUrl = baseUrl + `/sales/${account_id}`
   const baseUrl5 = baseUrl + `/stock/${account_id}`
   useEffect(() => {
     try {
       axios.get(salesUrl).then((response) => {
+        console.log(response, "sales response")
         const data = response.data.sales
         setSales(data)
       }).catch((error) => {
@@ -145,7 +147,7 @@ function Sales() {
       try {
         await axios({
           method: 'post',
-          url: salesUrl,
+          url: salesUrlxx,
           data: sale
         }).then(() => {
           toast.success("Sales Posted Successfully")
