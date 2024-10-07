@@ -17,4 +17,4 @@ export function thousandSeperator(num) {
   return numStr
 }
 export const baseUrl = "https://newledger-f7b180e5a9de.herokuapp.com"
-// export const baseUrl = "http://localhost:8080"  //this is for local
+// export const baseUrl = "http://localhost:8080"  ////this is for local

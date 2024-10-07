@@ -23,6 +23,7 @@ function Stock() {
     from: "",
     to: ""
   })
+  const [nameFilter, setNameFilter] = useState("")
   const [stockInput, setStockInput] = useState({
     date: "",
     goods: "",
@@ -37,6 +38,7 @@ function Stock() {
   const { fullName, businessName } = auth.user
   // console.log(account_id)
   const stockUrl = baseUrl + `/stock/${account_id}`
+  const stockFilter = baseUrl + `/stock/filter/${account_id}`
   const stockUrl2 = baseUrl + "/stock/"
   // const profileUrl = baseUrl + `/profile/${account_id}`
   // const categoryUrl = baseUrl+"/category"
@@ -44,6 +46,7 @@ function Stock() {
     try {
       axios.get(stockUrl).then((response) => {
         const data = response.data.Stock
+        console.log(data, "stock")
         setStock(data)
       }).catch((error) => {
         toast.error(error.response.data.message || "Something went wrong, try again later!")
@@ -63,6 +66,11 @@ function Stock() {
     })
   }
 
+  const nameFilterChange = (e) => {
+    e.preventDefault()
+    console.log(e.target.value)
+    setNameFilter(e.target.value)
+  }
   const onFilterChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -70,7 +78,6 @@ function Stock() {
       ...filterInput, [name]: value
     })
   }
-  console.log(filterInput, "filter input")
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -128,9 +135,35 @@ function Stock() {
 
   const filterHandler = (e) => {
     e.preventDefault()
-    console.log(filterInput, "filter")
+    try {
+      axios({
+        method: 'post',
+        url: stockFilter,
+        data: filterInput
+      }).then((response) => {
+        console.log("filter posted", response.data.filter)
+        const filter = response.data.filter
+        if (filter.length === 0) {
+          toast.error("There is no stock between these date")
+        } else {
+          setStock(filter)
+        }
+      }).catch((err) => {
+        toast.error("Something went wrong with this search")
+      })
+    } catch (err) { console.log(err.message) }
+    setFilterInput({
+      from: "",
+      to: ""
+    })
+    setOpen(false)
   }
-  console.log(stock)
+
+  const nameFilterHandler = (searchTerm) => {
+    console.log("search by name", searchTerm)
+    setNameFilter(searchTerm)
+  }
+
   //////////////Delete/////////////
   const deleteHandler = item => {
     if (item.id !== undefined) {
@@ -222,29 +255,28 @@ function Stock() {
     const { sellingPrice, date, goods, category, qty, cost } = value;
     return (
       <>
-        <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:left-60 md:mt-2 md:space-x-4'>
-          <div className='table-header'>{moment(date).format('DD/MM/YYYY')}</div>
-          <div className='table-header'>{category}</div>
-          <div className='bg-gray-200 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
-          <div className='table-header'>{qty}</div>
-          <div className='table-header'>{cost}</div>
-          <div className='table-header'>{sellingPrice}</div>
+        <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:top-[2rem] md:left-60 md:mt-2 md:space-x-4'>
+          <div className='table-header -mb-8'>{moment(date).format('DD/MM/YYYY')}</div>
+          <div className='table-header -mb-8'>{category}</div>
+          <div className='bg-gray-200 -mb-8 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
+          <div className='table-header -mb-8'>{qty}</div>
+          <div className='table-header -mb-8'>{cost}</div>
+          <div className='table-header -mb-8'>{sellingPrice}</div>
         </div>
-        <button className='btn7  relative top-20 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-20 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
+        <button className='btn7  relative top-8 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-8 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
       </>
     )
   })
   return (
     <div>
       <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <Header pageTitle={" Stocks Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[176vw] md:w-[100vw] flex' />
+      <Header pageTitle={" Stocks Page"} name={businessName} classStyle='bg-primary-200 h-36 w-[200vw] md:w-[100vw] flex' />
       <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn6' name='date' value={stockInput.date} onChange={onChange} />
           <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange} />
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange} />
-
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange} />
           <input type='number' placeholder='Cost Price N' className='btn6' name='cost' value={stockInput.cost} onChange={onChange} />
           <input type='number' placeholder='Selling Price N' className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange} />
@@ -253,15 +285,35 @@ function Stock() {
       </div>
       <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[90rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
       {open ?
-        <div className='absolute  bg-red-500' onSubmit={filterHandler}>
-          <input type='date' name='from' value={filterInput.from} onChange={onFilterChange} />
-          <input type='date' name='to' value={filterInput.to} onChange={onFilterChange} />
-          <button type='submit' className='submit'>Enter</button>
-        </div> :
+        <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
+          <form onSubmit={filterHandler} className='flex'>
+            <div className='mr-1 text-xl'>From</div>
+            <input type='date' name='from' className='w-[7rem] h-8 rounded-md mr-2 border-slate-400 border-2' value={filterInput.from} onChange={onFilterChange} />
+            <div className='mr-1 text-xl'>to</div>
+            <input type='date' name='to' className='w-[7rem] h-8 rounded-md border-slate-400 border-2' value={filterInput.to} onChange={onFilterChange} />
+            <button type='submit' className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white w-[3.3rem] md:w-[4rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-1 ml-2'>Enter</button>
+          </form>
+          <div className='mt-2'>
+            <div>
+              <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by Availbale goods' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
+              <button type='submit' onClick={() => nameFilterHandler(nameFilter)} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
+            </div>
+            <div>
+              {stock.filter(item => {
+                const searchItem = nameFilter.toLowerCase();
+                const good = item.goods.toLowerCase();
+                return searchItem && good.startsWith(searchItem) && good !== searchItem
+              }).map((item) =>
+                <div onClick={() => nameFilterHandler(item.goods)}>{item.goods}</div>
+              )}
+            </div>
+          </div>
+        </div>
+        :
         <></>
       }
 
-      <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-28 md:flex md:space-x-4'>
+      <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-[2rem] md:flex md:space-x-4'>
         <div className='table-header'>Date</div>
         <div className='table-header'>Category</div>
         <div className='bg-gray-200 md:w-60 text-center h-10 rounded pt-2 text-xs md:text-lg'>Available Goods</div>

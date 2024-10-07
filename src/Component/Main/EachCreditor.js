@@ -255,8 +255,10 @@ function EachCreditor(props) {
       url: baseUrl2b,
       data: credit
     }).then((response) => {
+      console.log(response, "credit response")
       toast.success("Credit saved successfully")
     }).catch(error => {
+      console.log(error, "credit error")
       const id = error.response.data?.credit.id
       const removeIt = creditor.filter((item) => item.id !== id)
       setCreditor(removeIt)

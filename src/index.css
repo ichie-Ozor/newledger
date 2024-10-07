@@ -33,10 +33,10 @@
   @apply -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2;
 }
 .save {
-  @apply relative left-[22.5rem] top-24 w-24 text-xs h-8 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-32 md:ml-2 md:left-[67rem];
+  @apply relative left-[22.5rem] top-24 w-24 text-xs h-8 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-16 md:ml-2 md:left-[67rem];
 }
 .unsave {
-  @apply relative left-[17rem] top-24 w-24 text-xs h-8 font-bold bg-gray-200 rounded-md shadow-xl  md:text-black md:w-40 md:h-12 md:text-lg md:font-bold md:top-32 md:ml-2 md:left-[67rem] md:mb-5 mt-5;
+  @apply relative left-[17rem] top-24 w-24 text-xs h-8 font-bold bg-gray-200 rounded-md shadow-xl  md:text-black md:w-40 md:h-12 md:text-lg md:font-bold md:top-16 md:ml-2 md:left-[67rem] md:mb-5 mt-5;
 }
 .header-input {
   @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600;
@@ -53,9 +53,6 @@
 .signIn {
   @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
 }
-/* .register {
-  @apply absolute top-[32rem] w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.6rem] md:left-[14rem];
-} */
 .forgetP {
   @apply absolute top-48 w-80 left-20 -mb-2 text-red-700 font-bold text-xs md:top-[8.9rem] md:left-[14rem];
 }
@@ -81,7 +78,6 @@
   border-radius: 5px;
   color: #fff;
   background-color: #1606f5;
-  /* width: 10%; */
   width: 90px;
   height: 30px;
   transition: 0.5s;
@@ -152,7 +148,6 @@ th {
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  /* border: 1px solid #000; */
   width: 80%;
 }
 .nav:hover {
@@ -163,7 +158,6 @@ table {
 @media (max-width: 768px) {
   .header-profile {
     left: 10.7rem;
-    /* width: 30rem; */
   }
   .header-img {
     border-radius: 50%;

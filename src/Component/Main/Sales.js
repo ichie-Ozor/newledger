@@ -263,7 +263,7 @@ function Sales() {
           <td className='table-header'>{rate}</td>
           <td className='table-header'>{total}</td>
         </tr>
-        <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-12 md:top-20 left-[26.5rem] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
         {/* <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
