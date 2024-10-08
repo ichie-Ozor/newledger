@@ -159,9 +159,12 @@ function Stock() {
     setOpen(false)
   }
 
-  const nameFilterHandler = (searchTerm) => {
-    console.log("search by name", searchTerm)
-    setNameFilter(searchTerm)
+  const nameFilterHandler = () => {
+    console.log("search itme", nameFilter)
+    const filtered = stock.filter((item) => item.goods === nameFilter || item.category === nameFilter)
+    setStock(filtered)
+    setNameFilter("")
+    setOpen(false)
   }
 
   //////////////Delete/////////////
@@ -263,8 +266,8 @@ function Stock() {
           <div className='table-header -mb-8'>{cost}</div>
           <div className='table-header -mb-8'>{sellingPrice}</div>
         </div>
-        <button className='btn7  relative top-8 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-8 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
+        <button className='btn7  relative top-[6.8rem] md:top-8 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-[6.8rem] md:top-8 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
       </>
     )
   })
@@ -296,15 +299,16 @@ function Stock() {
           <div className='mt-2'>
             <div>
               <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by Availbale goods' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
-              <button type='submit' onClick={() => nameFilterHandler(nameFilter)} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
+              <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
             </div>
             <div>
               {stock.filter(item => {
                 const searchItem = nameFilter.toLowerCase();
                 const good = item.goods.toLowerCase();
-                return searchItem && good.startsWith(searchItem) && good !== searchItem
-              }).map((item) =>
-                <div onClick={() => nameFilterHandler(item.goods)}>{item.goods}</div>
+                const cat = item.category.toLowerCase();
+                return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
+              }).slice(0, 10).map((item) =>
+                <div onClick={() => setNameFilter(item.goods)}>{item.goods || item.category}</div>
               )}
             </div>
           </div>
