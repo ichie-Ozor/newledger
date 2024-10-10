@@ -30,7 +30,7 @@
   @apply w-20 h-8 text-sm bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white;
 }
 .submit {
-  @apply -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2;
+  @apply top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-4 md:ml-2;
 }
 .save {
   @apply relative left-[22.5rem] top-24 w-24 text-xs h-8 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-16 md:ml-2 md:left-[67rem];

@@ -306,7 +306,7 @@ function EachDebtor() {
           {/*************************************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={debtorInput.rate} onChange={onChange} />
-          <button type='submit' className='submit'>Submit</button>
+          <button type='submit' className='submit -left-[11rem] md:left-1'>Submit</button>
         </form>
       </div>
       <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>

@@ -283,7 +283,7 @@ function Stock() {
           <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange} />
           <input type='number' placeholder='Cost Price N' className='btn6' name='cost' value={stockInput.cost} onChange={onChange} />
           <input type='number' placeholder='Selling Price N' className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange} />
-          <button type='submit' className='submit' >Submit</button>
+          <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
         </form>
       </div>
       <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[90rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>

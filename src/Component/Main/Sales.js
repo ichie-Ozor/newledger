@@ -16,6 +16,7 @@ function Sales() {
   // const list = location.state
   const [sales, setSales] = useState([])
   const [sale, setSale] = useState([])
+  const [open, setOpen] = useState(false)
   const [error, setError] = useState("")
   const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
   const [isClose, setIsClose] = useState(false)  /// goods description
@@ -24,6 +25,11 @@ function Sales() {
   const [description, setDescription] = useState([])
   const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
+  const [filterInput, setFilterInput] = useState({
+    from: "",
+    to: ""
+  })
+  const [nameFilter, setNameFilter] = useState("")
   const [salesInput, setSalesInput] = useState({
     date: "",
     description: "",
@@ -36,6 +42,7 @@ function Sales() {
   const account_id = auth.user._id
   const salesUrlxx = baseUrl + "/sales/"
   const salesUrl = baseUrl + `/sales/${account_id}`
+  const salesFilterUrl = baseUrl + `/sales/filter/${account_id}`
   const baseUrl5 = baseUrl + `/stock/${account_id}`
   useEffect(() => {
     try {
@@ -167,23 +174,12 @@ function Sales() {
     }
   }
 
-  // if(save){
-  //   saveHandler()
-  //   setSave(false)
-  // }
   /////////////Dropdown///////////
   const dropDownDescHandler = (value) => {
-    // if(!isOpen){
-    //   setIsOpen(false)
-    // }
     setIsClose(false)
     setDescription(value)
   }
   const dropDownHandler = (value) => {
-    // e.preventDefault()
-    // if(!isClose){
-    //   setIsClose(false)
-    // }
     setIsOpen(false)
     setCategory(value)
   }
@@ -249,13 +245,56 @@ function Sales() {
     return returns
   }
   const salesTotal = sales.reduce(reducer, 0)
+  ////////////////sales filter///////////////
+  const nameFilterChange = (e) => {
+    e.preventDefault()
+    console.log(e.target.value)
+    setNameFilter(e.target.value)
+  }
 
+  const onDateFilterChange = (e) => {
+    e.preventDefault()
+    const { name, value } = e.target
+    setFilterInput({
+      ...filterInput, [name]: value
+    })
+  }
 
+  const dateFilterHandler = (e) => {
+    e.preventDefault()
+    try {
+      axios({
+        method: 'post',
+        url: salesFilterUrl,
+        data: filterInput
+      }).then((response) => {
+        const filtered = response.data.filter
+        setSales(filtered)
+      })
+    } catch (err) { console.log(err.message) }
+    setFilterInput({
+      from: "",
+      to: ""
+    })
+    setOpen(false)
+  }
+
+  const nameFilterHandler = () => {
+    console.log("name filter handler clikec", nameFilter)
+    const filtered = sales.filter((item) => item.category === nameFilter || item.description === nameFilter)
+    setSales(filtered)
+    setFilterInput({
+      from: "",
+      to: ""
+    })
+    setOpen(false)
+  }
+  /////////////////////////////////////////
   const renderSales = sales.map((value, id) => {
     const { total, date, description, category, qty, rate } = value;
     return (
       <>
-        <tr key={id} className='relative top-20 left-2 md:left-60 md:top-28 mt-2 flex space-x-1 md:space-x-4  w-[110vw]'>
+        <tr key={id} className='relative top-20 left-2 md:left-60 md:top-14 mt-1 -mb-8 flex space-x-1 md:space-x-4  w-[110vw]'>
           <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
           <td className='table-header'>{category}</td>
           <td className='bg-gray-200 w-40 md:w-60 h-10 rounded pt-2 flex justify-center text-xs md:text-xl'>{description}</td>
@@ -263,7 +302,7 @@ function Sales() {
           <td className='table-header'>{rate}</td>
           <td className='table-header'>{total}</td>
         </tr>
-        <button className='btn7  relative top-12 md:top-20 left-[26.5rem] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-[5rem] md:top-12 left-[26.1rem] md:left-[83.5rem]' onClick={() => deleteHandler(value)}>Delete</button>
         {/* <button className='btn7  relative top-12 md:top-20 left-[111%] md:left-[85.2%]' onClick={() => editHandler(value.id)}>Edit</button> */}
       </>
     )
@@ -304,10 +343,40 @@ function Sales() {
           </div>
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={salesInput.rate} onChange={onChange} />
-          <button type='submit' className='submit'>Submit</button>
+          <button type='submit' className='submit -left-[13.5rem] md:left-1'>Submit</button>
         </form>
       </div>
-      <table className='relative left-2 top-20 space-x-1 md:left-60 md:top-28 flex md:space-x-4  w-[110vw]'>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83.5rem] left-[31rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Sales</button>
+      {open ?
+        <div className='absolute z-10 md:left-[75rem] left-[11rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
+          <form onSubmit={dateFilterHandler} className='flex'>
+            <div className='mr-1 text-xl'>From</div>
+            <input type='date' name='from' className='w-[7rem] h-8 rounded-md mr-2 border-slate-400 border-2' value={filterInput.from} onChange={onDateFilterChange} />
+            <div className='mr-1 text-xl'>to</div>
+            <input type='date' name='to' className='w-[7rem] h-8 rounded-md border-slate-400 border-2' value={filterInput.to} onChange={onDateFilterChange} />
+            <button type='submit' className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white w-[3.3rem] md:w-[4rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-1 ml-2'>Enter</button>
+          </form>
+          <div className='mt-2'>
+            <div>
+              <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by goods sold' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
+              <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
+            </div>
+            <div>
+              {sales.filter(item => {
+                const searchItem = nameFilter.toLowerCase();
+                const good = item.description.toLowerCase();
+                const cat = item.category.toLowerCase();
+                return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
+              }).slice(0, 10).map((item) =>
+                <div onClick={() => setNameFilter(item.description)}>{item.description || item.category}</div>
+              )}
+            </div>
+          </div>
+        </div>
+        :
+        <></>
+      }
+      <table className='relative left-2 top-20 space-x-1 md:left-60 md:top-12 flex md:space-x-4  w-[110vw]'>
         <th className='flex text-center justify-center bg-gray-200 w-[6rem] md:w-[9.7rem] h-10 rounded pl-6 pr-6 pt-2 text-xs md:text-lg'>Date</th>
         <th className='table-header'>Category</th>
         <th className='text-xs bg-gray-200 w-28 md:w-60 text-center h-10 rounded pt-2 md:text-lg'>Sales Description</th>
@@ -317,7 +386,7 @@ function Sales() {
       </table>
       {error}
       <div>{renderSales}</div>
-      <div className='relative w-[20.5rem] h-28 items-center justify-center pt-10 md:left-[25rem] left-[1.5rem] top-28 md:top-40 space-y-8 shadow-xl hover:shadow md:w-[27rem] rounded-xl'>
+      <div className='relative w-[20.5rem] h-28 items-center justify-center pt-10 md:left-[25rem] left-[1.5rem] top-28 md:top-20 space-y-8 shadow-xl hover:shadow md:w-[27rem] rounded-xl'>
         <div className='flex space-x-8  mb-6'><div className='btn5'>Total : </div>
           <div className='bg-gray-200 w-[12rem] md:w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
         </div>

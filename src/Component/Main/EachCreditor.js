@@ -323,7 +323,7 @@ function EachCreditor(props) {
               </select>
               <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange} />
               <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
-              <button type='submit' className='submit' >Submit</button>
+              <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
             </form>
             {/* <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[84rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button> */}
           </div>
