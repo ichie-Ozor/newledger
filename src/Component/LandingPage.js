@@ -358,7 +358,7 @@ function LandingPage() {
                   value={isRegister.password}
                   onChange={onRegister}
                 />
-                <button type="submit" className="btny relative top-[3rem] md:top-[7rem] left-[5rem] md:-left-[13rem] text-white bg-blue-800 w-[90px] h-[30px] shadow-xl shadow-[#948989] rounded-md">
+                <button type="submit" className="btny relative top-[3rem] md:top-[7rem] left-[5rem] md:-left-[13rem] lg:left-[6rem] text-white bg-blue-800 w-[90px] h-[30px] shadow-xl shadow-[#948989] rounded-md">
                   Register
                 </button>
               </form>
