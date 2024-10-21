@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .input {
-  @apply w-[18rem] md:w-80 md:h-14 border border-gray-400 rounded-xl p-2 mt-6;
+  @apply w-[16rem] md:w-80 md:h-14 h-10 border border-gray-400 rounded-xl p-2 mt-6 ml-40 md:ml-0;
 }
 .btn {
   @apply w-80 h-10 bg-primary-500 border rounded-xl mt-4 border-none text-gray-400;

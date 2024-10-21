@@ -229,18 +229,6 @@ function LandingPage() {
           <span className="text-xl md:text-4xl font-bold">Welcome Back</span>
           <p className="relative md:left-8">Enter Your Details Below</p>
         </div>
-        {/* <div
-              className={
-                clicked === "1"
-                  ? "signIn"
-                  : clicked === "2"
-                    ? "register"
-                    : "forgetP"
-              }
-            >
-              {errorText}
-            </div> */}
-        {/* <div className="">{verifyEmail}</div> */}
         {clicked === "1" ? (
           <>
             <div
@@ -252,18 +240,19 @@ function LandingPage() {
             >
               {errorText}
             </div>
-            <div className="flex flex-col justify-center items-center">
-              <div className="relative top-20 left-20 md:-top-24 md:-left-5 font-bold text-3xl md:text-lg">
+            <div className="flex flex-col justify-center items-center min-h-screen">
+              <div className="relative top-10 md:top-6 lg:top-4 left-10 md:left-0 font-bold text-3xl md:text-2xl lg:text-3xl">
                 Sign In
               </div>
               <form
-                className="relative p-20 md:p-2 w-96 top-5 md:-top-28"
+                className="relative p-8 md:p-4 lg:p-8 w-[90%] max-w-md space-y-6 flex flex-col items-center justify-center"
                 onSubmit={isSignInHandler}
+                style={{ marginLeft: '0', marginRight: 'auto' }}
               >
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="input relative left-12 md:left-0"
+                  className="input w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="email"
                   value={isSigneIn.email}
                   onChange={onChange}
@@ -271,30 +260,33 @@ function LandingPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="input relative left-12 md:left-0"
+                  className="input w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="password"
                   value={isSigneIn.password}
                   onChange={onChange}
                 />
-                <button type="submit" className="btnz">
+                <button
+                  type="submit"
+                  className="bg-blue-700 text-white w-[100px] h-[40px] rounded-md shadow-lg hover:bg-blue-600 relative left-10"
+                >
                   Sign In
                 </button>
               </form>
-              <div className="relative flex flex-col justify-center items-center left-12 md:-top-20 md:-left-6">
-                <div className="relative -top-5  text-sm flex  font-bold md:font-normal">
-                  Don't have an A<p className="text-black">ccount? </p>
+              <div className="relative flex flex-col justify-center items-center mt-4 space-y-4">
+                <div className="text-sm flex font-semibold">
+                  Don't have an Account?
                   <span
-                    onClick={() => setClicked("2")}
-                    className="cursor-pointer text-blue-700 md:text-primary-200"
+                    onClick={() => setClicked('2')}
+                    className="cursor-pointer text-blue-700 ml-1 hover:text-blue-900"
                   >
                     Register
                   </span>
                 </div>
                 <span
-                  className="absolute text-sm text-primary-200 cursor-pointer font-bold md:font-normal"
-                  onClick={() => setClicked("3")}
+                  className="text-sm text-blue-700 cursor-pointer hover:text-blue-900 font-semibold"
+                  onClick={() => setClicked('3')}
                 >
-                  forgot Password?
+                  Forgot Password?
                 </span>
               </div>
             </div>
@@ -310,18 +302,19 @@ function LandingPage() {
             >
               {registerError}
             </div>
-            <div className="flex flex-col justify-center items-center">
-              <div className="relative top-[-10rem] md:top-5 left-32 md:-left-5 font-bold text-xl md:text-lg">
+            <div className="flex flex-col justify-center items-center min-h-screen">
+              <div className="relative top-[-5rem] md:top-0 lg:top-0 font-bold text-2xl md:text-xl lg:text-2xl">
                 Registration
               </div>
+
               <form
-                className="absolute md:relative top-42 md:top-0 p-2  w-[50%]"
+                className="p-4 w-full max-w-[90%] md:max-w-[70%] lg:max-w-[40%] space-y-4 flex flex-col items-center justify-center"
                 onSubmit={isRegisterHandler}
               >
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className="input"
+                  className="input w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="fullName"
                   value={isRegister.fullName}
                   onChange={onRegister}
@@ -329,7 +322,7 @@ function LandingPage() {
                 <input
                   type="text"
                   placeholder="Business Name"
-                  className="input"
+                  className="input w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="businessName"
                   value={isRegister.businessName}
                   onChange={onRegister}
@@ -337,7 +330,7 @@ function LandingPage() {
                 <input
                   type="text"
                   placeholder="Phone Number"
-                  className="input"
+                  className="input w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="phoneNumber"
                   value={isRegister.phoneNumber}
                   onChange={onRegister}
@@ -345,7 +338,7 @@ function LandingPage() {
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="input"
+                  className="input w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="email"
                   value={isRegister.email}
                   onChange={onRegister}
@@ -353,30 +346,35 @@ function LandingPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="input"
+                  className="input w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="password"
                   value={isRegister.password}
                   onChange={onRegister}
                 />
-                <button type="submit" className="btny relative top-[3rem] md:top-[7rem] left-[5rem] md:-left-[13rem] lg:left-[6rem] text-white bg-blue-800 w-[90px] h-[30px] shadow-xl shadow-[#948989] rounded-md">
+
+                <button
+                  type="submit"
+                  className="btny bg-blue-800 text-white w-[90px] h-[40px] shadow-lg hover:bg-blue-700 rounded-md"
+                >
                   Register
                 </button>
               </form>
-              <div className="relative flex flex-col justify-center items-center -top-16 md:top-2 left-[7rem] md:-left-6">
-                <div className="relative top-56 md:top-0 text-sm  font-bold md:font-normal w-[15rem]">
+
+              <div className="flex flex-col justify-center items-center mt-10">
+                <div className="text-center text-sm font-semibold">
                   Already have an Account?{" "}
                   <span
                     onClick={() => setClicked("1")}
-                    className="cursor-pointer text-blue-600 md:text-primary-200"
+                    className="cursor-pointer text-blue-600 hover:text-blue-800"
                   >
                     Sign In
                   </span>
                 </div>
                 <span
                   onClick={() => setClicked("3")}
-                  className="relative cursor-pointer text-sm text-blue top-[13.8rem] left-2 md:left-0 md:text-primary-200 md:top-0 font-bold md:font-normal"
+                  className="text-center text-sm text-blue-600 hover:text-blue-800 font-semibold mt-4 cursor-pointer"
                 >
-                  forgot Password?
+                  Forgot Password?
                 </span>
               </div>
             </div>
@@ -392,18 +390,18 @@ function LandingPage() {
             >
               {forgetError}
             </div>
-            <div className="flex flex-col justify-center items-center">
-              <div className="relative top-20 md:-top-24 left-16 md:-left-5 font-bold text-2xl md:text-lg">
+            <div className="flex flex-col justify-center items-center min-h-screen">
+              <div className="relative top-6 md:top-0 lg:top-0 font-bold text-2xl md:text-xl lg:text-2xl">
                 Forget Password
               </div>
               <form
-                className="relative p-20 md:p-2 w-96 top-5 md:-top-28"
+                className="p-4 md:p-8 lg:p-12 w-full max-w-[90%] md:max-w-[60%] lg:max-w-[40%] space-y-6 flex flex-col items-center justify-center"
                 onSubmit={forgetHandler}
               >
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="input relative left-12 md:left-0"
+                  className="input w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="email"
                   value={forget.email}
                   onChange={onForget}
@@ -411,27 +409,32 @@ function LandingPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="input relative left-12 md:left-0"
+                  className="input w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   name="password"
                   value={forget.password}
                   onChange={onForget}
                 />
-                <button type="submit" className="btnz">
-                  Submit
-                </button>
+                <div className="flex justify-center items-center w-full">
+                  <button
+                    type="submit"
+                    className="bg-blue-700 text-white w-[100px] h-[40px] rounded-md shadow-lg hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                </div>
               </form>
-              <div className="relative flex flex-col justify-center items-center left-12 md:-top-20 md:-left-6">
-                <div className="relative -top-5  text-sm flex font-bold md:font-normal">
-                  Don't have an A<p className="text-black">ccount? </p>
+              <div className="relative flex flex-col justify-center items-center space-y-4 mt-6">
+                <div className="text-sm flex font-semibold">
+                  Don't have an Account?
                   <span
                     onClick={() => setClicked("2")}
-                    className="cursor-pointer text-blue-700 md:text-primary-200"
+                    className="cursor-pointer text-blue-700 ml-1 hover:text-blue-900"
                   >
                     Register
                   </span>
                 </div>
                 <span
-                  className="absolute text-sm text-primary-200 cursor-pointer  font-bold md:font-normal"
+                  className="text-sm text-blue-700 cursor-pointer hover:text-blue-900 font-semibold"
                   onClick={() => setClicked("1")}
                 >
                   Sign in

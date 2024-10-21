@@ -46,7 +46,6 @@ function Stock() {
     try {
       axios.get(stockUrl).then((response) => {
         const data = response.data.Stock
-        console.log(data, "stock")
         setStock(data)
       }).catch((error) => {
         toast.error(error.response.data.message || "Something went wrong, try again later!")

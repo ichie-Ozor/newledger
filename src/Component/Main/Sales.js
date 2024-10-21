@@ -29,6 +29,8 @@ function Sales() {
     from: "",
     to: ""
   })
+  const [item, setItem] = useState()
+  const [itemName, setItemName] = useState("")
   const [nameFilter, setNameFilter] = useState("")
   const [salesInput, setSalesInput] = useState({
     date: "",
@@ -75,7 +77,8 @@ function Sales() {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    if (salesInput.date === "" && salesInput.category === "" && salesInput.description === "" && salesInput.qty === "" && salesInput.rate === "") return toast.error("please enter the items")
+    console.log(item, "item submit")
+    if (salesInput.date === "" && (itemName !== item.goods || itemName !== item.category) && salesInput.qty === "" && salesInput.rate === "") return toast.error("please enter the items")
     if (lists.length === 0) {
       return toast.error("please enter the goods inthe stock first, Thank you")
     }
@@ -87,8 +90,10 @@ function Sales() {
         id: new Date().getMilliseconds(),
         account: account_id,
         date: salesInput.date,
-        description: description,
-        category: category,
+        description: item.goods,
+        category: item.category,
+        // description: description,
+        // category: category,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -100,8 +105,10 @@ function Sales() {
         id: new Date().getMilliseconds(),
         account: account_id,
         date: salesInput.date,
-        description: description,
-        category: category,
+        description: item.goods,
+        category: item.category,
+        // description: description,
+        // category: category,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -143,6 +150,7 @@ function Sales() {
     })
     setCategory('')
     setDescription('')
+    setItemName("")
   }
 
 
@@ -289,6 +297,11 @@ function Sales() {
     })
     setOpen(false)
   }
+
+  const itemNameHandler = (value) => {
+    setItemName(value.goods || value.category)
+    setItem(value)
+  }
   /////////////////////////////////////////
   const renderSales = sales.map((value, id) => {
     const { total, date, description, category, qty, rate } = value;
@@ -307,7 +320,7 @@ function Sales() {
       </>
     )
   })
-
+  console.log(itemName, "item name", item)
   return (
     <div>
       <NavBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
@@ -317,7 +330,19 @@ function Sales() {
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={salesInput.date} onChange={onChange} />
-          <div>
+          {/****************************/}
+          <input type='text' placeholder='search for goods' value={itemName} onChange={(e) => setItemName(e.target.value)} className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[26rem] md:h-14 md:p-4 md:pl-8 md:ml-3 md:text-lg md:left-1 md:top-4' />
+          <div className='absolute top-[73px] left-[11.5rem] z-10 w-[26rem] bg-white shadow-md rounded-lg'>
+            {lists.filter(item => {
+              console.log(item, itemName, "listtttt")
+              const searchItem = itemName.toLowerCase();
+              const cat = item.category.toLowerCase();
+              const good = item.goods.toLowerCase();
+              return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
+            }).map((t) => <div onClick={() => itemNameHandler(t)} className='p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-200'>{t.description || t.category}</div>)}
+          </div>
+          {/*********************************/}
+          {/* <div>
             <button type='button' className='btn4' onClick={() => setIsOpen(!isOpen)}>
               {category.length > 0 ? category : "Category"}
             </button>
@@ -340,13 +365,14 @@ function Sales() {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
+          {/*********************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={salesInput.rate} onChange={onChange} />
           <button type='submit' className='submit -left-[13.5rem] md:left-1'>Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83.5rem] left-[31rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Sales</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83.5rem] left-[26rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Sales</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[11rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={dateFilterHandler} className='flex'>
@@ -361,14 +387,14 @@ function Sales() {
               <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by goods sold' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
               <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
             </div>
-            <div>
+            <div className='absolute top-[73px] left-[11.5rem] z-10 w-[26rem] bg-white shadow-md rounded-lg'>
               {sales.filter(item => {
                 const searchItem = nameFilter.toLowerCase();
                 const good = item.description.toLowerCase();
                 const cat = item.category.toLowerCase();
                 return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
               }).slice(0, 10).map((item) =>
-                <div onClick={() => setNameFilter(item.description)}>{item.description || item.category}</div>
+                <div onClick={() => setNameFilter(item.description)} className='p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-200'>{item.description || item.category}</div>
               )}
             </div>
           </div>
