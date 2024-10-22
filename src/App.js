@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -19,38 +19,9 @@ import DebtorTransaction from './Component/Main/DebtorTransaction';
 import CreditorTotal from './Component/CreditorTotal';
 import DebtorTotal from './Component/DebtorTotal';
 import PageNotFound from './Utilities/PageNotFound';
-// import { baseUrl } from './Utilities/helper';
-// import { useAuth } from './Context/auth';
-// import axios from 'axios';
+import WholeSaleStock from './Component/Main/WholeSaleStock';
 
 function App() {
-  // const verifyUrl = baseUrl+'/auth/verifyToken'
-  // const auth = useAuth()
-
-  // async function verifyToken(token) {
-  //     try {
-  //         let response = await fetch(verifyUrl, {
-  //             method: 'GET',
-  //             headers: {
-  //                 Authorization: "Bearer " + token
-  //             },
-  //         })
-  //         let data = await response.json()
-  //         console.log(data, "xxxx")
-  //         return data
-  //     } catch (error) {
-  //         console.log(error)
-  //     }
-  // } 
-  // useEffect(()=>{
-  //     const getToken = localStorage.getItem("myToken")
-  //     console.log(getToken, "app")
-  //     verifyToken(getToken).then((response) => {
-  //         console.log(response, "app effect")
-  //         auth.setUser(response.userDetail[0])
-  //     })
-  // },[])
-
 
   return (
     <div className='App'>
@@ -71,6 +42,7 @@ function App() {
             <Route path="dashboard/sales/:accounId" element={<Sales />} />
             <Route path="dashboard/debtor/:accountId" element={<Debtor />} />
             <Route path="dashboard/stock/:accountId" element={<Stock />} />
+            <Route path="dashboard/wholesalestock/:accountId" element={<WholeSaleStock />} />
             <Route path="dashboard/creditor/:accountId/:creditorId/transaction" element={<CreditorTransaction />} />
             <Route path="dashboard/debtor/:accountId/:debtorId/transaction" element={<DebtorTransaction />} />
             <Route component={PageNotFound} />

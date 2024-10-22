@@ -29,6 +29,7 @@ function EachCreditor(props) {
   const [lists, setLists] = useState([])   //// category dropdown
   const [category, setCategory] = useState('')  ////category
   const [open, setOpen] = useState(false)
+  const [isToggle, setIsToggle] = useState(false)
   const [filterInput, setFilterInput] = useState({
     from: "",
     to: ""
@@ -198,9 +199,8 @@ function EachCreditor(props) {
           date: creditorInput.date,
           description: item.goods,
           category: item.category,
-          // description,
-          // category: category,
           qty: creditorInput.qty,
+          amt: isToggle ? 'crt' : 'pcs',
           rate: creditorInput.rate,
           total: creditorInput.rate * creditorInput.qty
         },
@@ -214,9 +214,8 @@ function EachCreditor(props) {
           date: creditorInput.date,
           description: item.goods,
           category: item.category,
-          // description,
-          // category: category,
           qty: creditorInput.qty,
+          amt: isToggle ? 'crt' : 'pcs',
           rate: Number(creditorInput.rate),
           total: creditorInput.rate * creditorInput.qty,
           businessId: createdBy
@@ -234,7 +233,7 @@ function EachCreditor(props) {
     setCategory('')
     setItemName("")
   }
-
+  console.log(creditor, "ccccccccc", credit)
   //////////////Delete/////////////
   const deleteHandler = value => {
 
@@ -303,6 +302,10 @@ function EachCreditor(props) {
     setIsClose(false)
     setCategory(value)
   }
+
+  const amountToggle = () => {
+    setIsToggle(!isToggle)
+  }
   ///////////Save to the backend//////
   const saveHandler = () => {
     if (credit.length === 0) {
@@ -327,13 +330,14 @@ function EachCreditor(props) {
   }
 
   const renderCreditor = creditor.map((value, id) => {
-    const { date, total, description, category, qty, rate, } = value;
+    const { date, total, description, category, qty, rate, amt } = value;
+    console.log(amt, "amt", typeof qty)
     return (
       <>   <tr key={id} className='relative space-x-1 left-2 top-10 md:left-[230px] md:top-28 mt-2 flex md:space-x-4 w-[120vw] md:w-[100vw] -mb-7'>
         <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
         <td className='table-header'>{category}</td>
         <td className='bg-gray-200 w-32 h-10 rounded pt-2 flex justify-center text-xs md:text-xl md:w-60'>{description}</td>
-        <td className='table-header'>{qty}</td>
+        <td className='table-header'>{amt === undefined ? qty : qty + amt}</td>
         <td className='table-header'>{rate}</td>
         <td className='table-header'>{total}</td>
       </tr>
@@ -392,11 +396,12 @@ function EachCreditor(props) {
                 ))}
               </select> */}
               <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange} />
+              <div type="text" onClick={amountToggle} className={isToggle ? 'crt' : 'pcs'}>{isToggle ? "crt" : "pcs"}</div>
               <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
               <button type='submit' className='submit -left-[13.5rem] md:left-1' >Submit</button>
             </form>
             {/*********************************************************************/}
-            <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83rem] left-[31rem] md:-top-10 -top-1 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Search</button>
+            <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[86.5rem] left-[31rem] md:-top-10 -top-1 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Search</button>
             {open ?
               <div className='absolute z-10 md:left-[75rem] left-[13rem] top-[4.3rem] md:top-[4.4rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
                 <form onSubmit={filterHandler} className='flex'>

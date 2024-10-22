@@ -12,17 +12,10 @@ import { useAuth } from '../Context/auth'
 function Dashboard() {
   const [openCreditor, setOpenCreditor] = useState(false)
   const [openDebtor, setOpenDebtor] = useState(false)
+  const [openStock, setOpenStock] = useState(false)
   const [showCreditorModal, setShowCreditorModal] = useState(false)
   const [showDebtorModal, setShowDebtorModal] = useState(false)
-  // const [showCategoryModal, setShowCategoryModal] = useState(false)
-  // const [showCreditBalModal, setShowCreditBalModal] = useState(false)
-  // const [user, setUser] = useState()
   const auth = useAuth()
-  // const [categoryTodo, setCategoryTodo] = useState({
-  //   name: ""
-  // })
-  // const [categoryList, setCategoryList] = useState([])
-
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
 
@@ -32,14 +25,26 @@ function Dashboard() {
     e.preventDefault()
     if (!openCreditor) {
       setOpenCreditor(true)
+      setOpenDebtor(false)
+      setOpenStock(false)
     } else setOpenCreditor(false)
   }
 
-  //delete handle here
+  const stockHandler = (e) => {
+    e.preventDefault()
+    if (!openStock) {
+      setOpenStock(true)
+      setOpenCreditor(false)
+      setOpenDebtor(false)
+    } else setOpenStock(false)
+  }
+
   const debtorHandler = (e) => {
     e.preventDefault()
     if (!openDebtor) {
       setOpenDebtor(true)
+      setOpenCreditor(false)
+      setOpenStock(false)
     } else setOpenDebtor(false)
   }
 
@@ -58,11 +63,18 @@ function Dashboard() {
       {/*******************  Main body here ***********************/}
       <div className='relative -left-64 -top-64 md:left-0'>
         <div className='absolute top-80 left-80'>
-          <NavLink to={`stock/${account_id}`}><button className='btn1'>Stock</button></NavLink>
+          <button className='btn1' onClick={stockHandler}>Stock</button>
           <NavLink to={`sales/${account_id}`}><button className='btn1'>Sales</button></NavLink>
           <button className='btn1' onClick={creditorHandler}>Creditor</button>
           <button className='btn1' onClick={debtorHandler}>Debtor</button>
         </div>
+        {openStock ?
+          <div className='stock relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
+            <NavLink to={`stock/${account_id}`} className='no-underline'><button className=' btn2 no-underline'>Retail Stock</button></NavLink>
+            <NavLink to={`wholesalestock/${account_id}`} className='no-underline'><div className='btn20'>WholeSale Stock</div></NavLink>
+          </div> :
+          <div></div>
+        }
         {openCreditor ?
           <div className='creditor relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
             <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>

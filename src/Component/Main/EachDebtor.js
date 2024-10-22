@@ -351,10 +351,10 @@ function EachDebtor() {
           {/*************************************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={debtorInput.rate} onChange={onChange} />
-          <button type='submit' className='submit -left-[11rem] md:left-1'>Submit</button>
+          <button type='submit' className='submit -left-[13.5rem] md:left-1'>Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83.5rem] left-[26rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Goods</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[78.5rem] left-[31rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Goods</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[11rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={dateFilterHandler} className='flex'>

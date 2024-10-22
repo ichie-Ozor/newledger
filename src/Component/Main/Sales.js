@@ -21,7 +21,6 @@ function Sales() {
   const [isOpen, setIsOpen] = useState(false) //// goods category dropdown
   const [isClose, setIsClose] = useState(false)  /// goods description
   const [category, setCategory] = useState([])  ///category
-  // const [save, setSave] = useState(false)
   const [description, setDescription] = useState([])
   const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
@@ -36,6 +35,7 @@ function Sales() {
     date: "",
     description: "",
     category: "",
+    cost: "",
     qty: "",
     rate: ""
   })
@@ -57,6 +57,7 @@ function Sales() {
       })
       axios.get(baseUrl5).then((response) => {
         const data = response.data.Stock
+        console.log(data, "Stock details")
         setLists(data)
       }).catch((error) => {
         toast.error(error.response.data.message || "Something went wrong, try again later!")
@@ -92,6 +93,7 @@ function Sales() {
         date: salesInput.date,
         description: item.goods,
         category: item.category,
+        cost: item.cost,
         // description: description,
         // category: category,
         qty: salesInput.qty,
@@ -107,8 +109,7 @@ function Sales() {
         date: salesInput.date,
         description: item.goods,
         category: item.category,
-        // description: description,
-        // category: category,
+        cost: item.cost,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -157,14 +158,17 @@ function Sales() {
   ///////// it should also send data to the backend from here and display it on the page at the same time
   // const saveHandler = async() => {
   async function saveHandler() {
+    console.log(sale, "salellll")
     let finished = window.confirm("Have you entered all the sales?")
     if (finished) {
+
       try {
         await axios({
           method: 'post',
           url: salesUrlxx,
           data: sale
-        }).then(() => {
+        }).then((r) => {
+          console.log(r, "returned")
           toast.success("Sales Posted Successfully")
         }).catch((error) => {
           toast.error(error.response.data.message || "Something went wrong, try again later!")
@@ -252,7 +256,15 @@ function Sales() {
     const returns = accumulator + Number(currentValue.total)
     return returns
   }
+  const costReducer = (accumulator, currentValue) => {
+    console.log(accumulator, "cost ruducer", currentValue.cost)
+    const returns = accumulator + currentValue.cost
+    return returns
+  }
   const salesTotal = sales.reduce(reducer, 0)
+  const salesCost = sales.reduce(costReducer, 0)
+  const grossProfit = salesTotal - salesCost
+  console.log(salesCost, "cost", sales, "sales total", salesTotal, "profit", grossProfit)
   ////////////////sales filter///////////////
   const nameFilterChange = (e) => {
     e.preventDefault()
@@ -320,7 +332,7 @@ function Sales() {
       </>
     )
   })
-  console.log(itemName, "item name", item)
+
   return (
     <div>
       <NavBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
@@ -334,7 +346,6 @@ function Sales() {
           <input type='text' placeholder='search for goods' value={itemName} onChange={(e) => setItemName(e.target.value)} className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[26rem] md:h-14 md:p-4 md:pl-8 md:ml-3 md:text-lg md:left-1 md:top-4' />
           <div className='absolute top-[73px] left-[11.5rem] z-10 w-[26rem] bg-white shadow-md rounded-lg'>
             {lists.filter(item => {
-              console.log(item, itemName, "listtttt")
               const searchItem = itemName.toLowerCase();
               const cat = item.category.toLowerCase();
               const good = item.goods.toLowerCase();
@@ -412,12 +423,17 @@ function Sales() {
       </table>
       {error}
       <div>{renderSales}</div>
-      <div className='relative w-[20.5rem] h-28 items-center justify-center pt-10 md:left-[25rem] left-[1.5rem] top-28 md:top-20 space-y-8 shadow-xl hover:shadow md:w-[27rem] rounded-xl'>
-        <div className='flex space-x-8  mb-6'><div className='btn5'>Total : </div>
+      <div className='relative w-[20.5rem] h-40 items-center justify-center pt-10 md:left-[25rem] left-[1.5rem] top-28 md:top-20 space-y-8 shadow-xl hover:shadow md:w-[29rem] rounded-xl'>
+        <div className='flex space-x-8  mb-4'>
+          <div className='btn5'>Total : </div>
           <div className='bg-gray-200 w-[12rem] md:w-72 h-10 rounded pt-2 text-center text-xl'>{salesTotal}</div>
         </div>
+        <div className='flex space-x-8  mb-4'>
+          <div className='btn5'>Gross Profit : </div>
+          <div className='bg-gray-200 w-[12rem] md:w-72 h-10 rounded pt-2 text-center text-xl'>{grossProfit}</div>
+        </div>
       </div>
-      <button className={sales.length === 0 ? 'unsave' : 'save'} onClick={saveHandler} disabled={sales.length === 0}>Save</button>
+      <button className={sale.length === 0 ? 'unsave' : 'save'} onClick={saveHandler} disabled={sale.length === 0}>Save</button>
     </div>
   )
 }
