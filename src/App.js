@@ -19,7 +19,6 @@ import DebtorTransaction from './Component/Main/DebtorTransaction';
 import CreditorTotal from './Component/CreditorTotal';
 import DebtorTotal from './Component/DebtorTotal';
 import PageNotFound from './Utilities/PageNotFound';
-import WholeSaleStock from './Component/Main/WholeSaleStock';
 
 function App() {
 
@@ -42,7 +41,6 @@ function App() {
             <Route path="dashboard/sales/:accounId" element={<Sales />} />
             <Route path="dashboard/debtor/:accountId" element={<Debtor />} />
             <Route path="dashboard/stock/:accountId" element={<Stock />} />
-            <Route path="dashboard/wholesalestock/:accountId" element={<WholeSaleStock />} />
             <Route path="dashboard/creditor/:accountId/:creditorId/transaction" element={<CreditorTransaction />} />
             <Route path="dashboard/debtor/:accountId/:debtorId/transaction" element={<DebtorTransaction />} />
             <Route component={PageNotFound} />

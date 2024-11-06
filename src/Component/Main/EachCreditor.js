@@ -40,7 +40,7 @@ function EachCreditor(props) {
   const [item, setItem] = useState()
   const [error] = useState(null)
   const [creditorInput, setCreditorInput] = useState({
-    date: "",
+    date: "" || Date.now(),
     description: "",
     category: "",
     qty: "",
@@ -232,6 +232,8 @@ function EachCreditor(props) {
     setDescription('')
     setCategory('')
     setItemName("")
+
+    if (isToggle) amountToggle()
   }
   console.log(creditor, "ccccccccc", credit)
   //////////////Delete/////////////

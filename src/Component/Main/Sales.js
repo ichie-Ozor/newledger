@@ -15,6 +15,7 @@ function Sales() {
   // const location = useLocation()
   // const list = location.state
   const [sales, setSales] = useState([])
+  const [bank, setBank] = useState("")
   const [sale, setSale] = useState([])
   const [open, setOpen] = useState(false)
   const [error, setError] = useState("")
@@ -22,6 +23,7 @@ function Sales() {
   const [isClose, setIsClose] = useState(false)  /// goods description
   const [category, setCategory] = useState([])  ///category
   const [description, setDescription] = useState([])
+  const [isToggle, setIsToggle] = useState(false)
   const [lists, setLists] = useState([]) ///category
   const auth = useAuth()
   const [filterInput, setFilterInput] = useState({
@@ -32,9 +34,12 @@ function Sales() {
   const [itemName, setItemName] = useState("")
   const [nameFilter, setNameFilter] = useState("")
   const [salesInput, setSalesInput] = useState({
-    date: "",
+    date: "" || Date.now(),
     description: "",
     category: "",
+    // pcs: "",
+    // crt: "",
+    amt: "",
     cost: "",
     qty: "",
     rate: ""
@@ -78,13 +83,13 @@ function Sales() {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    console.log(item, "item submit")
-    if (salesInput.date === "" && (itemName !== item.goods || itemName !== item.category) && salesInput.qty === "" && salesInput.rate === "") return toast.error("please enter the items")
+    // console.log(item, "item submit")
+    if (salesInput.date === "" && (itemName !== item.goods || itemName !== item.category) && salesInput.pcs === "" && salesInput.crt === "" && salesInput.rate === "") return toast.error("please enter the items")
     if (lists.length === 0) {
       return toast.error("please enter the goods inthe stock first, Thank you")
     }
     const account_id = auth.user._id
-    //this is displayed on the frontend
+    // const calculatedQty = Number(salesInput.pcs) * Number(salesInput.crt || 1)
     setSales((prev) => [
       ...prev,
       {
@@ -94,8 +99,10 @@ function Sales() {
         description: item.goods,
         category: item.category,
         cost: item.cost,
-        // description: description,
-        // category: category,
+        // pcs: Number(salesInput.pcs),
+        // crt: Number(salesInput.crt),
+        amt: isToggle ? 'crt' : 'pcs',
+        // qty: calculatedQty,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -110,6 +117,10 @@ function Sales() {
         description: item.goods,
         category: item.category,
         cost: item.cost,
+        // pcs: Number(salesInput.pcs),
+        // crt: Number(salesInput.crt),
+        amt: isToggle ? 'crt' : 'pcs',
+        // qty: calculatedQty,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -146,22 +157,26 @@ function Sales() {
       date: "",
       description: "",
       category: "",
+      // pcs: "",
+      // crt: "",
       qty: "",
       rate: ""
     })
     setCategory('')
     setDescription('')
     setItemName("")
+    if (isToggle) amountToggle()
   }
 
-
+  const amountToggle = () => {
+    setIsToggle(!isToggle)
+  }
   ///////// it should also send data to the backend from here and display it on the page at the same time
   // const saveHandler = async() => {
   async function saveHandler() {
-    console.log(sale, "salellll")
     let finished = window.confirm("Have you entered all the sales?")
     if (finished) {
-
+      console.log(sale, "aiossssss")
       try {
         await axios({
           method: 'post',
@@ -171,10 +186,10 @@ function Sales() {
           console.log(r, "returned")
           toast.success("Sales Posted Successfully")
         }).catch((error) => {
+          console.log(error, "error")
           toast.error(error.response.data.message || "Something went wrong, try again later!")
         })
       } catch (err) {
-        console.log(err, "error")
         toast.error(err.response.data.message)
         const id = await err.response.data?.sale.id
         const removeIt = sales.filter((item) => item.id !== id)
@@ -187,14 +202,14 @@ function Sales() {
   }
 
   /////////////Dropdown///////////
-  const dropDownDescHandler = (value) => {
-    setIsClose(false)
-    setDescription(value)
-  }
-  const dropDownHandler = (value) => {
-    setIsOpen(false)
-    setCategory(value)
-  }
+  // const dropDownDescHandler = (value) => {
+  //   setIsClose(false)
+  //   setDescription(value)
+  // }
+  // const dropDownHandler = (value) => {
+  //   setIsOpen(false)
+  //   setCategory(value)
+  // }
   //////////////Delete/////////////
   const deleteHandler = item => {
     if (item.id !== undefined) {
@@ -257,14 +272,12 @@ function Sales() {
     return returns
   }
   const costReducer = (accumulator, currentValue) => {
-    console.log(accumulator, "cost ruducer", currentValue.cost)
     const returns = accumulator + currentValue.cost
     return returns
   }
   const salesTotal = sales.reduce(reducer, 0)
   const salesCost = sales.reduce(costReducer, 0)
   const grossProfit = salesTotal - salesCost
-  console.log(salesCost, "cost", sales, "sales total", salesTotal, "profit", grossProfit)
   ////////////////sales filter///////////////
   const nameFilterChange = (e) => {
     e.preventDefault()
@@ -314,16 +327,27 @@ function Sales() {
     setItemName(value.goods || value.category)
     setItem(value)
   }
+  // console.log(sales, "salesssss", sale)
   /////////////////////////////////////////
   const renderSales = sales.map((value, id) => {
-    const { total, date, description, category, qty, rate } = value;
+
+    const { total, date, description, pcs, category, crt, qty, rate, amt } = value;
+
+    // const unit = qty / (pcs || 1)
+    // const rem = qty % pcs
     return (
       <>
         <tr key={id} className='relative top-20 left-2 md:left-60 md:top-14 mt-1 -mb-8 flex space-x-1 md:space-x-4  w-[110vw]'>
           <td className='table-header'>{moment(date).format('DD/MM/YYYY')}</td>
           <td className='table-header'>{category}</td>
           <td className='bg-gray-200 w-40 md:w-60 h-10 rounded pt-2 flex justify-center text-xs md:text-xl'>{description}</td>
-          <td className='table-header'>{qty}</td>
+          {/* <td className="table-header">
+            {crt && !pcs ? `${crt} crt` : ""}
+            {pcs && !crt ? `${pcs} pcs` : ""}
+            {crt && pcs ? `${crt} crt ${pcs} pcs` : ""}
+            {qty ? `${qty}` : ""}
+          </td> */}
+          <td className='table-header'>{amt === undefined ? qty : qty + amt}</td>
           <td className='table-header'>{rate}</td>
           <td className='table-header'>{total}</td>
         </tr>
@@ -332,7 +356,7 @@ function Sales() {
       </>
     )
   })
-
+  // console.log(bank, "bank")
   return (
     <div>
       <NavBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
@@ -343,7 +367,7 @@ function Sales() {
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={salesInput.date} onChange={onChange} />
           {/****************************/}
-          <input type='text' placeholder='search for goods' value={itemName} onChange={(e) => setItemName(e.target.value)} className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[26rem] md:h-14 md:p-4 md:pl-8 md:ml-3 md:text-lg md:left-1 md:top-4' />
+          <input type='text' placeholder='search for goods' value={itemName} onChange={(e) => setItemName(e.target.value)} className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[25rem] md:h-14 md:p-4 md:pl-8 md:ml-3 md:text-lg md:left-1 md:top-4' />
           <div className='absolute top-[73px] left-[11.5rem] z-10 w-[26rem] bg-white shadow-md rounded-lg'>
             {lists.filter(item => {
               const searchItem = itemName.toLowerCase();
@@ -379,11 +403,28 @@ function Sales() {
           </div> */}
           {/*********************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange} />
+          <div type="text" onClick={amountToggle} className={isToggle ? 'crt' : 'pcs'}>{isToggle ? "crt" : "pcs"}</div>
+          {/* <input type='number' placeholder='Crt' className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' name='crt' value={salesInput.crt} onChange={onChange} /> */}
+          {/* <input type='number' placeholder='Pcs/crt' className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' name='pcs' value={salesInput.pcs} onChange={onChange} /> */}
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={salesInput.rate} onChange={onChange} />
-          <button type='submit' className='submit -left-[13.5rem] md:left-1'>Submit</button>
+          <div className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[8.7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4 text-gray-400' onClick={() => setIsOpen(true)}>Payment type</div>
+          {isOpen ?
+            <div className='absolute top-20 z-10 bg-white shadow-xl hover:shadow rounded-md md:w-[8.7rem] md:h-14 '>
+              <div><span>POS</span><input type='radio' /></div>
+              <div><span>Transfer</span><input type='radio' /></div>
+            </div> :
+            <></>
+          }
+          {/* <select className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[8.7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4 text-gray-400'>
+            <option value="">Payment</option>
+            <option value="saab">POS</option>
+            <option value="opel">Cash</option>
+            <option><input placeholder='Bank' name="bank" value={bank} onChange={() => setBank(bank)} /></option>
+          </select> */}
+          <button type='submit' className='submit -left-[13.5rem] md:left-3'>Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[83.5rem] left-[26rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Sales</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[97.5rem] left-[26rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Sales</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[11rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={dateFilterHandler} className='flex'>

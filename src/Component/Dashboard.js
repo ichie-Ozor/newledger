@@ -63,18 +63,19 @@ function Dashboard() {
       {/*******************  Main body here ***********************/}
       <div className='relative -left-64 -top-64 md:left-0'>
         <div className='absolute top-80 left-80'>
-          <button className='btn1' onClick={stockHandler}>Stock</button>
+          {/* <button className='btn1' onClick={stockHandler}>Stock</button> */}
+          <NavLink to={`stock/${account_id}`} className='no-underline'><button className=' btn1 no-underline'>Stock</button></NavLink>
           <NavLink to={`sales/${account_id}`}><button className='btn1'>Sales</button></NavLink>
           <button className='btn1' onClick={creditorHandler}>Creditor</button>
           <button className='btn1' onClick={debtorHandler}>Debtor</button>
         </div>
-        {openStock ?
+        {/* {openStock ?
           <div className='stock relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
             <NavLink to={`stock/${account_id}`} className='no-underline'><button className=' btn2 no-underline'>Retail Stock</button></NavLink>
             <NavLink to={`wholesalestock/${account_id}`} className='no-underline'><div className='btn20'>WholeSale Stock</div></NavLink>
           </div> :
           <div></div>
-        }
+        } */}
         {openCreditor ?
           <div className='creditor relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
             <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>

@@ -18,16 +18,17 @@ function Stock() {
   const [stocks, setStocks] = useState([])
   const auth = useAuth()
   const [error, setError] = useState("")
-  // const [category, setCategory] = useState('')
   const [filterInput, setFilterInput] = useState({
     from: "",
     to: ""
   })
   const [nameFilter, setNameFilter] = useState("")
   const [stockInput, setStockInput] = useState({
-    date: "",
+    date: "" || Date.now(),
     goods: "",
     category: "",
+    pcs: "",
+    crt: "",
     qty: "",
     cost: "",
     sellingPrice: ""
@@ -85,14 +86,15 @@ function Stock() {
       stockInput.date === "" &&
       stockInput.goods === "" &&
       stockInput.category === "" &&
-      stockInput.qty === "" &&
+      stockInput.pcs === "" &&
+      stockInput.crt === "" &&
       stockInput.cost === "" &&
       stockInput.sellingPrice === ""
     ) {
       toast.error("Please enter the items")
       return
     }
-
+    const calculatedQty = Number(stockInput.pcs) * Number(stockInput.crt)
     setStock((prev) => [
       ...prev,
       {
@@ -101,7 +103,9 @@ function Stock() {
         date: stockInput.date,
         goods: stockInput.goods,
         category: stockInput.category,
-        qty: stockInput.qty,
+        pcs: Number(stockInput.pcs),
+        crt: Number(stockInput.crt),
+        qty: calculatedQty,
         cost: stockInput.cost,
         sellingPrice: stockInput.sellingPrice
       },
@@ -115,7 +119,9 @@ function Stock() {
         date: stockInput.date,
         goods: stockInput.goods,
         category: stockInput.category,
-        qty: stockInput.qty,
+        pcs: Number(stockInput.pcs),
+        crt: Number(stockInput.crt),
+        qty: calculatedQty,
         cost: stockInput.cost,
         sellingPrice: stockInput.sellingPrice
       },
@@ -125,6 +131,8 @@ function Stock() {
       date: "",
       goods: "",
       category: "",
+      pcs: "",
+      crt: "",
       qty: "",
       cost: "",
       sellingPrice: ""
@@ -254,22 +262,26 @@ function Stock() {
 
 
   const renderStock = stock.map((value, id) => {
-    const { sellingPrice, date, goods, category, qty, cost } = value;
+    const { sellingPrice, date, goods, category, qty, pcs, cost } = value;
+    const unit = qty / (pcs || 1)
+    const rem = qty % pcs
+
     return (
       <>
         <div key={id} className='relative flex space-x-2 left-2 w-78 top-28 md:top-[2rem] md:left-60 md:mt-2 md:space-x-4'>
           <div className='table-header -mb-8'>{moment(date).format('DD/MM/YYYY')}</div>
           <div className='table-header -mb-8'>{category}</div>
           <div className='bg-gray-200 -mb-8 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
-          <div className='table-header -mb-8'>{qty}</div>
+          <div className='table-header -mb-8'>{pcs === undefined ? (qty + "pcs") : (unit + "crt" + " " + rem + "pcs")}</div>
           <div className='table-header -mb-8'>{cost}</div>
           <div className='table-header -mb-8'>{sellingPrice}</div>
         </div>
-        <button className='btn7  relative top-[6.8rem] md:top-8 left-[106%] md:left-[84rem]' onClick={() => deleteHandler(value)}>Delete</button>
-        <button className='btn7  relative top-[6.8rem] md:top-8 w-40 left-[106%] md:left-[84rem]' onClick={() => editHandler(value)}>Edit</button>
+        <button className='btn7  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => deleteHandler(value)}>Delete</button>
+        <button className='btn7  relative top-[6.8rem] md:top-8 w-40 left-[106%] md:left-[85rem]' onClick={() => editHandler(value)}>Edit</button>
       </>
     )
   })
+  console.log(stock, "stock", stocks)
   return (
     <div>
       <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
@@ -279,13 +291,14 @@ function Stock() {
           <input type='date' placeholder='date' className='btn6' name='date' value={stockInput.date} onChange={onChange} />
           <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange} />
           <input type='text' placeholder='Available Goods' className='btn6' name='goods' value={stockInput.goods} onChange={onChange} />
-          <input type='number' placeholder='Qty' className='btn6' name='qty' value={stockInput.qty} onChange={onChange} />
-          <input type='number' placeholder='Cost Price N' className='btn6' name='cost' value={stockInput.cost} onChange={onChange} />
-          <input type='number' placeholder='Selling Price N' className='btn6' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange} />
+          <input type='number' placeholder='Crt' className='btn6a' name='crt' value={stockInput.crt} onChange={onChange} />
+          <input type='number' placeholder='Pcs per Crt' className='btn6b' name='pcs' value={stockInput.pcs} onChange={onChange} />
+          <input type='number' placeholder='Cost Price N' className='btn6b' name='cost' value={stockInput.cost} onChange={onChange} />
+          <input type='number' placeholder='Selling Price N' className='btn6b' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange} />
           <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[90rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[88rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={filterHandler} className='flex'>

@@ -39,7 +39,7 @@ function EachDebtor() {
     to: ""
   })
   const [debtorInput, setDebtorInput] = useState({
-    date: "",
+    date: "" || Date.now(),
     description: "",
     category: "",
     qty: "",
