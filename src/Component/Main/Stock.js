@@ -34,6 +34,7 @@ function Stock() {
     sellingPrice: ""
   })
 
+  console.log(stockInput, "inputttt")
   /////////This loads the sales data once the page opens
   const account_id = auth.user._id
   const { fullName, businessName } = auth.user
