@@ -50,6 +50,7 @@ function Stock() {
         const data = response.data.Stock
         setStock(data)
       }).catch((error) => {
+        console.log(error, "errorrrrr")
         toast.error(error.response.data.message || "Something went wrong, try again later!")
       })
       // axios.get(profileUrl).then((response) => {
@@ -261,11 +262,11 @@ function Stock() {
     }
   }
 
-
+  console.log(stock, "stock ssss", stocks)
   const renderStock = stock.map((value, id) => {
-    const { sellingPrice, date, goods, category, qty, pcs, cost } = value;
-    const unit = qty / (pcs || 1)
-    const rem = qty % pcs
+    const { sellingPrice, date, goods, category, qty, pcs, cost, crt } = value;
+    const unit = Math.floor(qty / (pcs || 1))
+    const rem = qty % (pcs || 1)
 
     return (
       <>
@@ -273,7 +274,14 @@ function Stock() {
           <div className='table-header -mb-8'>{moment(date).format('DD/MM/YYYY')}</div>
           <div className='table-header -mb-8'>{category}</div>
           <div className='bg-gray-200 -mb-8 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
+          {/* <div className='table-header -mb-8'>{unit + "crt" + " " + rem + "pcs"}</div> */}
           <div className='table-header -mb-8'>{pcs === undefined ? (qty + "pcs") : (unit + "crt" + " " + rem + "pcs")}</div>
+          {/* <td className="table-header -mb-8">
+            {crt && !pcs ? `${crt} crt` : ""}
+            {pcs && !crt ? `${pcs} pcs` : ""}
+            {crt && pcs ? `${crt} crt ${pcs} pcs` : ""}
+            {qty ? `${qty}` : ""}
+          </td> */}
           <div className='table-header -mb-8'>{cost}</div>
           <div className='table-header -mb-8'>{sellingPrice}</div>
         </div>
