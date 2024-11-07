@@ -40,7 +40,7 @@ function EachCreditor(props) {
   const [item, setItem] = useState()
   const [error] = useState(null)
   const [creditorInput, setCreditorInput] = useState({
-    date: "" || Date.now(),
+    date: "",
     description: "",
     category: "",
     qty: "",
@@ -196,7 +196,7 @@ function EachCreditor(props) {
         ...prev,
         {
           id: new Date().getMilliseconds(),
-          date: creditorInput.date,
+          date: creditorInput.date === "" ? new Date().toISOString().split('T')[0] : creditorInput.date,
           description: item.goods,
           category: item.category,
           qty: creditorInput.qty,
@@ -211,7 +211,7 @@ function EachCreditor(props) {
         {
           id: new Date().getMilliseconds(),
           creditorId: _id,
-          date: creditorInput.date,
+          date: creditorInput.date === "" ? new Date().toISOString().split('T')[0] : creditorInput.date,
           description: item.goods,
           category: item.category,
           qty: creditorInput.qty,

@@ -34,7 +34,7 @@ function Sales() {
   const [itemName, setItemName] = useState("")
   const [nameFilter, setNameFilter] = useState("")
   const [salesInput, setSalesInput] = useState({
-    date: "" || Date.now(),
+    date: "",
     description: "",
     category: "",
     // pcs: "",
@@ -95,7 +95,7 @@ function Sales() {
       {
         id: new Date().getMilliseconds(),
         account: account_id,
-        date: salesInput.date,
+        date: salesInput.date === "" ? new Date().toISOString().split('T')[0] : salesInput.date,
         description: item.goods,
         category: item.category,
         cost: item.cost,
@@ -113,7 +113,7 @@ function Sales() {
       {
         id: new Date().getMilliseconds(),
         account: account_id,
-        date: salesInput.date,
+        date: salesInput.date === "" ? new Date().toISOString().split('T')[0] : salesInput.date,
         description: item.goods,
         category: item.category,
         cost: item.cost,

@@ -39,7 +39,7 @@ function EachDebtor() {
     to: ""
   })
   const [debtorInput, setDebtorInput] = useState({
-    date: "" || Date.now(),
+    date: "",
     description: "",
     category: "",
     qty: "",
@@ -138,7 +138,7 @@ function EachDebtor() {
         ...prev,
         {
           id: new Date().getMilliseconds(),
-          date: debtorInput.date,
+          date: debtorInput.date === "" ? new Date().toISOString().split('T')[0] : debtorInput.date,
           description: debtorInput.description,
           category: debtorInput.category,
           qty: debtorInput.qty,
@@ -152,7 +152,7 @@ function EachDebtor() {
         {
           id: new Date().getMilliseconds(),
           debtorId,
-          date: debtorInput.date,
+          date: debtorInput.date === "" ? new Date().toISOString().split('T')[0] : debtorInput.date,
           description: debtorInput.description,
           category: debtorInput.category,
           qty: debtorInput.qty,

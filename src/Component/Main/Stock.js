@@ -24,7 +24,7 @@ function Stock() {
   })
   const [nameFilter, setNameFilter] = useState("")
   const [stockInput, setStockInput] = useState({
-    date: "" || Date.now(),
+    date: "",
     goods: "",
     category: "",
     pcs: "",
@@ -102,7 +102,7 @@ function Stock() {
       {
         id: new Date().getMilliseconds(),
         account: account_id,
-        date: stockInput.date,
+        date: stockInput.date === "" ? new Date().toISOString().split('T')[0] : stockInput.date,
         goods: stockInput.goods,
         category: stockInput.category,
         pcs: Number(stockInput.pcs),
@@ -118,7 +118,7 @@ function Stock() {
       {
         id: new Date().getMilliseconds(),
         account: account_id,
-        date: stockInput.date,
+        date: stockInput.date === "" ? new Date().toISOString().split('T')[0] : stockInput.date,
         goods: stockInput.goods,
         category: stockInput.category,
         pcs: Number(stockInput.pcs),
@@ -307,7 +307,7 @@ function Stock() {
           <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[88rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[89rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={filterHandler} className='flex'>
