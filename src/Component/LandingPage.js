@@ -113,8 +113,7 @@ function LandingPage() {
     if (email === "" && password === "") {
       return setErrorText("Please register Now, Or 😡😡😠😡😡");
     }
-    // console.log(isSigneIn)
-    /////////////////this sends data to the back for signin
+
     axios({
       method: "post",
       url: baseUrlxx,

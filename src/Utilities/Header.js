@@ -56,7 +56,7 @@ function Header({ name, pageTitle, classStyle }) {
       password: ""
     })
     setOpen(!open)
-    window.location.reload()
+    // window.location.reload()
     toast.success("Your Profile has being created successfully!")
   }
   //const profileName = profile.fName + " " + profile.lName
