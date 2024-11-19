@@ -349,7 +349,7 @@ function EachCreditor(props) {
     )
   })
 
-  console.log(creditor, "creditor")
+  console.log(creditor, "creditor", eachCreditor)
   return (
     <div >
       <NavBar classStyle='fixed grid w-[153vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
@@ -360,7 +360,13 @@ function EachCreditor(props) {
       <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
       <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
       {invoice ?
-        <Invoice closeInvoice={() => setInvoice(false)} /> :
+        <Invoice
+          closeInvoice={() => setInvoice(false)}
+          creditor={eachCreditor}
+          businessName={businessName}
+          fullName={fullName}
+          stock={desc}
+        /> :
         (<>
           <div className='absolute md:-left-3 top-22 '>
             <form className='relative flex  left-56' onSubmit={submitHandler}>
@@ -369,7 +375,6 @@ function EachCreditor(props) {
               <input type='text' placeholder='search for goods' value={itemName} onChange={(e) => setItemName(e.target.value)} className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[26rem] md:h-14 md:p-4 md:pl-8 md:ml-3 md:text-lg md:left-1 md:top-4' />
               <div className='absolute top-[73px] left-[11.5rem] z-10 w-[26rem] bg-white shadow-md rounded-lg'>
                 {desc.filter(item => {
-                  console.log(item, itemName, "listtttt")
                   const searchItem = itemName.toLowerCase();
                   const cat = item.category.toLowerCase();
                   const good = item.goods.toLowerCase();
@@ -398,7 +403,7 @@ function EachCreditor(props) {
                 ))}
               </select> */}
               <input type='number' placeholder='Qty' className='btn4' name='qty' value={creditorInput.qty} onChange={onChange} />
-              <div type="text" onClick={amountToggle} className={isToggle ? 'crt' : 'pcs'}>{isToggle ? "crt" : "pcs"}</div>
+              <div type="text" onClick={amountToggle} className={isToggle ? 'crt w-12' : 'pcs w-12'}>{isToggle ? "crt" : "pcs"}</div>
               <input type='number' placeholder='Rate N' className='btn4' name='rate' value={creditorInput.rate} onChange={onChange} />
               <button type='submit' className='submit -left-[13.5rem] md:left-1' >Submit</button>
             </form>
@@ -434,7 +439,7 @@ function EachCreditor(props) {
               <></>
             }
             {/*********************************************************************/}
-            {/* <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[84rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button> */}
+            <button type='button' className=' relative -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[86.5rem] md:-top-10 md:ml-2' onClick={() => setInvoice(true)}>Invoice</button>
           </div>
           <table className='relative left-2 top-20 md:left-[230px] md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
             <th className='table-header'>Date</th>

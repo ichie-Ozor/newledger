@@ -69,10 +69,10 @@
   @apply absolute top-[7rem] md:top-[10rem] left-2 md:left-[13rem] w-[18rem] md:w-[25rem] text-[13px] md:text-[20px] font-bold text-red-700;
 }
 .pcs {
-  @apply w-12 h-10 shadow-xl hover:shadow relative top-8 ml-2 -mr-2 pl-2 rounded-md cursor-pointer text-xl text-gray-400;
+  @apply h-10 shadow-xl hover:shadow relative top-9 ml-2 -mr-2 pl-2 rounded-md cursor-pointer text-xl text-gray-400;
 }
 .crt {
-  @apply w-12 h-10 shadow-xl hover:shadow relative top-8 ml-2 pl-1 rounded-md cursor-pointer text-2xl text-black bg-yellow-500;
+  @apply h-10 shadow-xl hover:shadow relative top-9 ml-2 pl-1 rounded-md cursor-pointer text-2xl text-black bg-yellow-500;
 }
 .btnz {
   position: relative;
@@ -131,7 +131,7 @@
 }
 .container {
   width: 250rem;
-  left: 175px;
+  left: 235px;
 }
 .header-img {
   border-radius: 50%;
@@ -243,5 +243,20 @@ table {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #invoiceSection,
+  #invoiceSection * {
+    visibility: visible;
+  }
+  #invoiceSection {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
 }

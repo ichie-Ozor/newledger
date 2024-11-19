@@ -96,7 +96,7 @@ function Stock() {
       toast.error("Please enter the items")
       return
     }
-    const calculatedQty = Number(stockInput.pcs) * Number(stockInput.crt)
+    const calculatedQty = Number(stockInput.pcs === "" ? 1 : stockInput.pcs) * Number(stockInput.crt)
     setStock((prev) => [
       ...prev,
       {
@@ -288,6 +288,39 @@ function Stock() {
         <button className='btn7  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => deleteHandler(value)}>Delete</button>
         <button className='btn7  relative top-[6.8rem] md:top-8 w-40 left-[106%] md:left-[85rem]' onClick={() => editHandler(value)}>Edit</button>
       </>
+      // <div className='relative bg-red-500 w-[80%] flex flex-row'>
+      //////////////////////////////////////////////////////////////
+      // <div key={id} className='flex flex-row space-x-2 top-28 md:top-[2rem] md:mt-2 md:space-x-4 bg-red-500'>
+      //   <div className='text-center justify-center basis-1/6 bg-gray-200 sm:w-[7rem] md:w-[10rem] h-10 rounded pt-2 text-[6px] md:text-lg -mb-8'>{moment(date).format('DD/MM/YYYY')}</div>
+      //   <div className='text-center justify-center basis-1/6 bg-gray-200 sm:w-[7rem] md:w-[10rem] h-10 rounded pt-2 text-[6px] md:text-lg -mb-8'>{category}</div>
+      //   <div className='bg-gray-200 -mb-8 md:w-60 text-center h-10 justify-center rounded pt-2 text-xs md:text-lg pl-4'>{goods}</div>
+      //   {/* <div className='table-header -mb-8'>{unit + "crt" + " " + rem + "pcs"}</div> */}
+      //   <div className='text-center justify-center basis-1/6 bg-gray-200 sm:w-[7rem] md:w-[10rem] h-10 rounded pt-2 text-[6px] md:text-lg -mb-8'>{pcs === undefined ? (qty + "pcs") : (unit + "crt" + " " + rem + "pcs")}</div>
+      //   {/* <td className="table-header -mb-8">
+      //       {crt && !pcs ? `${crt} crt` : ""}
+      //       {pcs && !crt ? `${pcs} pcs` : ""}
+      //       {crt && pcs ? `${crt} crt ${pcs} pcs` : ""}
+      //       {qty ? `${qty}` : ""}
+      //     </td> */}
+      //   <div className='text-center justify-center basis-1/6 bg-gray-200 sm:w-[7rem] md:w-[10rem] h-10 rounded pt-2 text-[6px] md:text-lg -mb-8'>{cost}</div>
+      //   <div className='text-center justify-center basis-1/6 bg-gray-200 sm:w-[7rem] md:w-[10rem] h-10 rounded pt-2 text-[6px] md:text-lg -mb-8'>{sellingPrice}</div>
+      //   {/* </div> */}
+      //   <button className='w-20 h-8 text-sm basis-1/6 bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => deleteHandler(value)}>Delete</button>
+      //   <button className='w-20 h-8 text-sm basis-1/6 bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => editHandler(value)}>Edit</button>
+      // </div>
+      //////////////////////////////////////////
+      // <div className=''>
+      //   <div className='relative w-[70%] flex flex-row bg-red-500 justify-center lg:ml-60 space-x-2 top-28 md:top-[2rem] md:space-x-4'>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{moment(date).format('DD/MM/YYYY')}</div>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{category}</div>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{goods}</div>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{pcs === undefined ? (qty + "pcs") : (unit + "crt" + " " + rem + "pcs")}</div>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{cost}</div>
+      //     <div className=' ml-2 mr-2 basis-1/4 h-8 bg-gray-200 rounded'>{sellingPrice}</div>
+      //   </div>
+      //   <button className='w-20 h-8 text-sm basis-1/6 bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => deleteHandler(value)}>Delete</button>
+      //   <button className='w-20 h-8 text-sm basis-1/6 bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white  relative top-[6.8rem] md:top-8 left-[106%] md:left-[85rem]' onClick={() => editHandler(value)}>Edit</button>
+      // </div>
     )
   })
   console.log(stock, "stock", stocks)
@@ -307,7 +340,7 @@ function Stock() {
           <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[89rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[93rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
       {open ?
         <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
           <form onSubmit={filterHandler} className='flex'>

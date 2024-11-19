@@ -39,6 +39,7 @@ function Sales() {
     category: "",
     // pcs: "",
     // crt: "",
+    payment: "cash",
     amt: "",
     cost: "",
     qty: "",
@@ -103,6 +104,7 @@ function Sales() {
         // crt: Number(salesInput.crt),
         amt: isToggle ? 'crt' : 'pcs',
         // qty: calculatedQty,
+        payment: salesInput.payment,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -121,6 +123,7 @@ function Sales() {
         // crt: Number(salesInput.crt),
         amt: isToggle ? 'crt' : 'pcs',
         // qty: calculatedQty,
+        payment: salesInput.payment,
         qty: salesInput.qty,
         rate: salesInput.rate,
         total: salesInput.rate * salesInput.qty
@@ -167,7 +170,7 @@ function Sales() {
     setItemName("")
     if (isToggle) amountToggle()
   }
-
+  console.log(sale, "salessss", sales)
   const amountToggle = () => {
     setIsToggle(!isToggle)
   }
@@ -403,15 +406,33 @@ function Sales() {
           </div> */}
           {/*********************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={salesInput.qty} onChange={onChange} />
-          <div type="text" onClick={amountToggle} className={isToggle ? 'crt' : 'pcs'}>{isToggle ? "crt" : "pcs"}</div>
+          <div type="text" onClick={amountToggle} className={isToggle ? 'crt w-12' : 'pcs w-12'}>{isToggle ? "crt" : "pcs"}</div>
           {/* <input type='number' placeholder='Crt' className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' name='crt' value={salesInput.crt} onChange={onChange} /> */}
           {/* <input type='number' placeholder='Pcs/crt' className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4' name='pcs' value={salesInput.pcs} onChange={onChange} /> */}
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={salesInput.rate} onChange={onChange} />
           <div className='ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[8.7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4 text-gray-400' onClick={() => setIsOpen(true)}>Payment type</div>
           {isOpen ?
             <div className='absolute top-20 z-10 bg-white shadow-xl hover:shadow rounded-md md:w-[8.7rem] md:h-14 '>
-              <div><span>POS</span><input type='radio' /></div>
-              <div><span>Transfer</span><input type='radio' /></div>
+              <div>
+                <span>POS</span>
+                <input
+                  name='payment'
+                  type='radio'
+                  value="pos"
+                  checked={salesInput.payment === "pos"}
+                  onChange={onChange}
+                />
+              </div>
+              <div>
+                <span>Transfer</span>
+                <input
+                  name='transfer'
+                  type='radio'
+                  value="transfer"
+                  checked={salesInput.payment === "transfer"}
+                  onChange={onChange}
+                />
+              </div>
             </div> :
             <></>
           }
