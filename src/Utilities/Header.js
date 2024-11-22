@@ -16,8 +16,8 @@ function Header({ name, pageTitle, classStyle }) {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false)
   const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
+    address: "",
     businessName: "",
     password: ""
   })
@@ -51,8 +51,8 @@ function Header({ name, pageTitle, classStyle }) {
       })
 
     setProfile({
-      firstName: "",
-      lastName: "",
+      name: "",
+      address: "",
       businessName: "",
       password: ""
     })
@@ -93,8 +93,8 @@ function Header({ name, pageTitle, classStyle }) {
           <div className='relative -left-[11rem] top-20 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
             <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
             <form onSubmit={profileHandler}>
-              <input type='text' placeholder='Enter First Name' className='header-input' name='firstName' value={profile.firstName} onChange={onChange} />
-              <input type='text' placeholder='Enter Last Name' className='header-input' name='lastName' value={profile.lastName} onChange={onChange} />
+              <input type='text' placeholder='Enter Name' className='header-input' name='name' value={profile.name} onChange={onChange} />
+              <input type='text' placeholder='Enter Business Address' className='header-input' name='address' value={profile.address} onChange={onChange} />
               <input type='text' placeholder='Enter Business Name' className='header-input' name='businessName' value={profile.businessName} onChange={onChange} />
               <div className="relative">
                 <input type={showPassword ? 'text' : 'password'} placeholder='Password' className='header-input' name='password' value={profile.password} onChange={onChange} />
