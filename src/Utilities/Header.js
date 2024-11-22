@@ -25,7 +25,8 @@ function Header({ name, pageTitle, classStyle }) {
 
   useEffect(() => {
     axios.get(adminUrl + `/${id}`).then((response) => {
-      setAdmin(response.data.getProfile[0])
+      setAdmin(response.data.getProfile)
+      console.log(response, "response")
       // setAdmin(() => response.data.getProfile[0])
     }).catch(error => {
       console.log(error.message)
@@ -46,8 +47,10 @@ function Header({ name, pageTitle, classStyle }) {
     axios.post(adminUrl, profile)
       .then((response) => {
         console.log(response)
+        toast.success("Your Profile has being created successfully!")
       }).catch(err => {
         console.error('Error has occured at profile, header page', err)
+        toast.error("Error has occured while trying to create the profile")
       })
 
     setProfile({
@@ -58,7 +61,7 @@ function Header({ name, pageTitle, classStyle }) {
     })
     setOpen(!open)
     // window.location.reload()
-    toast.success("Your Profile has being created successfully!")
+
   }
   //const profileName = profile.fName + " " + profile.lName
 
@@ -68,7 +71,7 @@ function Header({ name, pageTitle, classStyle }) {
     } else setOpen(false)
   }
 
-
+  console.log(admin, "admin", admin.length)
   return (
     <div className={classStyle}>
       <NavLink to='dashboard' className='no-underline'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
@@ -84,7 +87,7 @@ function Header({ name, pageTitle, classStyle }) {
       </div>
       {open ?
 
-        (admin ?
+        (admin.length > 0 ?
           <div
             className='relative -left-40 top-20 bg-gray-100 p-1 md:p-4 z-10 w-[20rem] md:w-96 h-[5rem] md:h-46 grid justify-items-center text-xl md:text-2xl font-bold rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
             The Admin is already registered 😃😃😃
