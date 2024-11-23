@@ -63,7 +63,6 @@ function Header({ name, pageTitle, classStyle }) {
     // window.location.reload()
 
   }
-  //const profileName = profile.fName + " " + profile.lName
 
   const openProfile = () => {
     if (open === false) {

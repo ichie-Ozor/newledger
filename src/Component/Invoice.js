@@ -24,6 +24,8 @@ function Invoice({ creditor, stock, closeInvoice }) {
     const auth = useAuth()
     const { fullName, businessName } = auth.user
     const { firstName, lastName, phoneNumber, createdBy, _id } = creditor
+    console.log(_id, "creditor id")
+    const baseUrlPost = baseUrl + '/invoice';
 
     useEffect(() => {
         const baseUrl5 = baseUrl + `/stock/${createdBy}`
@@ -39,7 +41,6 @@ function Invoice({ creditor, stock, closeInvoice }) {
 
         try {
             axios.get(baseUrl5).then((response) => {
-                // console.log(response.data.Stock, "see 71")
                 setDesc(response?.data?.Stock)
             }).catch((error) => {
                 toast.error(error.response.data.message || "Something went wrong, try aain later!")
@@ -72,14 +73,14 @@ function Invoice({ creditor, stock, closeInvoice }) {
                 id: new Date().getMilliseconds(),
                 businessId: createdBy,
                 invoiceId,
+                creditorId: _id,
                 date: new Date(),
                 paymentMethod,
                 businessPhone: auth?.user?.phoneNumber,
                 crditorPhone: phoneNumber,
                 businessName,
                 ownerName: fullName,
-                creditorFirstName: firstName,
-                creditorLastName: lastName,
+                creditorName: firstName + " " + lastName,
                 description: item.goods,
                 category: item.category,
                 qty: parseInt(invoiceInput.qty, 10),
@@ -143,6 +144,17 @@ function Invoice({ creditor, stock, closeInvoice }) {
 
     const handleBeforePrint = React.useCallback(() => {
         console.log("`onBeforePrint` called");
+        axios({
+            method: 'post',
+            url: baseUrlPost,
+            data: invoiceData
+        }).then((result) => {
+            console.log(result, 'invoice posted')
+            toast.success('Invoice saved successfully')
+        }).catch(error => {
+            console.log(error, "invoice error")
+            toast.error(error.response.data.message || "There is an error while savine the invoice, try again later")
+        })
         return Promise.resolve();
     }, []);
 
