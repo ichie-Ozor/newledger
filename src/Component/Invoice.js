@@ -16,10 +16,10 @@ function Invoice({ creditor, stock, closeInvoice }) {
     const [invoiceItem, setInvoiceItem] = useState([])
     const [print, setPrint] = useState(false)
     const [invoiceData, setInvoiceData] = useState([])
-    const [paymentMethod, setPaymentMethod] = useState([])
+    const [paymentMethod, setPaymentMethod] = useState("")
     const [invoiceInput, setInvoiceInput] = useState({
         qty: "",
-        rate: ""
+        rate: "",
     })
     const auth = useAuth()
     const { fullName, businessName } = auth.user
@@ -32,6 +32,8 @@ function Invoice({ creditor, stock, closeInvoice }) {
         const currentDate = new Date()
         const formattedDate = currentDate.toISOString().split("T")[0]
         setToday(formattedDate)
+
+
         const randomNum = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
         const word = businessName.split(' ')
         let f = word[0][0].toUpperCase()
@@ -39,62 +41,54 @@ function Invoice({ creditor, stock, closeInvoice }) {
         const invoiceNo = f + l + "-" + randomNum
         setInvoiceId(invoiceNo)
 
-        try {
-            axios.get(baseUrl5).then((response) => {
-                setDesc(response?.data?.Stock)
-            }).catch((error) => {
-                toast.error(error.response.data.message || "Something went wrong, try aain later!")
-            })
-        } catch (err) { console.log(err.message) }
-    }, [])
+
+        axios.get(baseUrl5).then((response) => {
+            setDesc(response?.data?.Stock)
+        }).catch((error) => {
+            toast.error(error.response.data.message || "Something went wrong, try aain later!")
+        })
+    }, [businessName, createdBy])
 
     const submitHandler = (e) => {
         e.preventDefault()
-        console.log(invoiceInput, "input here", item)
+        console.log(invoiceInput.qty, invoiceInput.rate, item.goods, "ffffffffff")
         if (!invoiceInput.qty || !invoiceInput.rate || !item.goods) {
             toast.error("Please complete the item details before adding.");
             return;
         }
-        setInvoiceItem((prev) => [
-            ...prev,
-            {
-                id: new Date().getMilliseconds(),
-                description: item.goods,
-                category: item.category,
-                qty: parseInt(invoiceInput.qty, 10),
-                rate: parseFloat(invoiceInput.rate),
-                unit: isToggle ? "crt" : "pcs",
-                total: invoiceInput.qty * invoiceInput.rate,
-            },
-        ])
-        setInvoiceData((prev) => [
-            ...prev,
-            {
-                id: new Date().getMilliseconds(),
-                businessId: createdBy,
-                invoiceId,
-                creditorId: _id,
-                date: new Date(),
-                paymentMethod,
-                businessPhone: auth?.user?.phoneNumber,
-                crditorPhone: phoneNumber,
-                businessName,
-                ownerName: fullName,
-                creditorName: firstName + " " + lastName,
-                description: item.goods,
-                category: item.category,
-                qty: parseInt(invoiceInput.qty, 10),
-                rate: parseFloat(invoiceInput.rate),
-                unit: isToggle ? "crt" : "pcs",
-                total: invoiceInput.qty * invoiceInput.rate,
-            }
-        ])
+
+        const newItem = {
+            id: new Date().getMilliseconds(),
+            description: item.goods,
+            category: item.category,
+            qty: parseInt(invoiceInput.qty, 10),
+            rate: parseFloat(invoiceInput.rate),
+            unit: isToggle ? "crt" : "pcs",
+            total: invoiceInput.qty * invoiceInput.rate,
+        }
+
+        const newInvoiceData = {
+            ...newItem,
+            businessId: createdBy,
+            invoiceId,
+            creditorId: _id,
+            date: new Date(),
+            paymentMethod: paymentMethod || "cash",
+            businessPhone: auth?.user?.phoneNumber,
+            crditorPhone: phoneNumber,
+            businessName,
+            ownerName: fullName,
+            creditorName: `${firstName} ${lastName}`,
+        }
+
+        setInvoiceItem((prev) => [...prev, newItem]);
+        setInvoiceData((prev) => [...prev, newInvoiceData])
         setInvoiceInput({ qty: "", rate: "" });
         setItemName("");
         setItem({});
         setIsToggle(false)
     }
-    console.log(invoiceInput, "input item here", invoiceItem, creditor, "xxxxxxxx", auth?.user)
+    console.log(invoiceInput, "input item here", invoiceItem, "creditor", invoiceData, "xxxxxxxx", auth?.user)
 
     const itemNameHandler = (value) => {
         setItemName(value?.goods || value?.category)
@@ -106,32 +100,37 @@ function Invoice({ creditor, stock, closeInvoice }) {
         setItem(value)
     }
 
-    const amountToggle = () => {
-        setIsToggle(!isToggle)
-    }
+    const amountToggle = () => setIsToggle(!isToggle)
 
     const onChange = (e) => {
         e.preventDefault()
         const { name, value } = e.target
-        setInvoiceInput({
-            ...invoiceInput, [name]: value
-        })
+        // setInvoiceInput({
+        //     ...invoiceInput, [name]: value
+        // })
+        setInvoiceInput((prev) => ({
+            ...prev, [name]: value
+        }));
     }
 
     const paymentHandler = (e) => {
-        const { name, checked } = e.target
-        console.log(checked, "checked", name)
-        setPaymentMethod((prevMethod) =>
-            checked
-                ? [...prevMethod, name]
-                : prevMethod.filter((method) => method !== name)
-        );
+        const { name, checked } = e.target;
+        setPaymentMethod((prev) => {
+            const updated = checked
+                ? [...prev, name]
+                : prev.filter((method) => method !== name)
+            return updated;
+        });
     }
 
 
 
     const viewPrintHandler = (e) => {
         e.preventDefault()
+        if (invoiceData.length === 0) {
+            toast.error("Add at least one item beofre printing")
+            return;
+        }
         setPrint(true)
     }
 
@@ -142,21 +141,37 @@ function Invoice({ creditor, stock, closeInvoice }) {
         console.log("`onAfterPrint` called");
     }, []);
 
+    console.log(invoiceData, "invoice")
+    // const handleBeforePrint = React.useCallback(() => {
+    //     console.log("`onBeforePrint` called", invoiceData);
+    //     axios({
+    //         method: 'post',
+    //         url: baseUrlPost,
+    //         data: invoiceData
+    //     }).then((result) => {
+    //         console.log(result, 'invoice posted')
+    //         toast.success('Invoice saved successfully')
+    //     }).catch(error => {
+    //         console.log(error, "invoice error")
+    //         toast.error(error.response.data.message || "There is an error while savine the invoice, try again later")
+    //     })
+    //     return Promise.resolve();
+    // }, []);
+
     const handleBeforePrint = React.useCallback(() => {
-        console.log("`onBeforePrint` called");
-        axios({
-            method: 'post',
-            url: baseUrlPost,
-            data: invoiceData
-        }).then((result) => {
-            console.log(result, 'invoice posted')
-            toast.success('Invoice saved successfully')
-        }).catch(error => {
-            console.log(error, "invoice error")
-            toast.error(error.response.data.message || "There is an error while savine the invoice, try again later")
-        })
-        return Promise.resolve();
-    }, []);
+        if (invoiceData.length === 0) {
+            toast.error('No data to save')
+            return Promise.reject();
+        }
+        return axios
+            .post(baseUrlPost, invoiceData)
+            .then((result) => {
+                toast.success('invoice saved successfully')
+            })
+            .catch((error) => {
+                toast.error(error.response?.data?.message || 'Error saving invoice, try aain later')
+            })
+    }, [invoiceData, baseUrlPost])
 
     const handlePrint = useReactToPrint({
         contentRef: componentRef,
@@ -165,6 +180,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
         onBeforePrint: handleBeforePrint,
     });
     /////////////////////////////////////////////////
+
     const renderInvoice = invoiceItem.map((item, idx) => {
         return (
             <>
@@ -292,13 +308,27 @@ function Invoice({ creditor, stock, closeInvoice }) {
                         </div>
                         <div className='relative w-3/7 top-10 justify-self-end mb-14 mr-5'>
                             <form className='rounded-md shadow-xl hover:shadow md:w-full p-4 content-center'>
-                                <input type='number' placeholder='Enter payment' className='h-8 w-full border rounded pl-2 mb-1' />
+                                {/* <input type='number' placeholder='Enter payment' className='h-8 w-full border rounded pl-2 mb-1' name='amt' value={amt} onVolumeChange={(e)=> setAmt()}/> */}
                                 <div className='mb-2'>
-                                    <label className='mr-2'>POS:
+                                    {["pos", "cash", "transfer"].map((item, index) => (
+                                        <div className='mr-2' key={index}>
+                                            <label>{item}:
+                                                <input
+                                                    name={item}
+                                                    type='checkbox'
+                                                    onChange={paymentHandler}
+                                                    checked={paymentMethod.includes(item)}
+                                                    className='ml-2'
+                                                />
+                                            </label>
+                                        </div>
+                                    ))}
+                                    {/* <label className='mr-2'>POS:
                                         <input
                                             name='pos'
                                             type='checkbox'
                                             onChange={paymentHandler}
+                                            checked={paymentMethod.includes("pos")}
                                             className='ml-2'
                                         />
                                     </label>
@@ -307,6 +337,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
                                             name='cash'
                                             type='checkbox'
                                             onChange={paymentHandler}
+                                            checked={paymentMethod.includes("cash")}
                                             className='ml-2'
                                         />
                                     </label>
@@ -315,9 +346,10 @@ function Invoice({ creditor, stock, closeInvoice }) {
                                             name='transfer'
                                             type='checkbox'
                                             onChange={paymentHandler}
+                                            checked={paymentMethod.includes("transfer")}
                                             className='ml-2'
                                         />
-                                    </label>
+                                    </label> */}
                                 </div>
                                 <button className='h-8 bg-gray-400 rounded text-white p-2 font-bold hover:bg-gray-200 hover:text-black' onClick={viewPrintHandler} disabled={invoiceData.length === 0}>ENTER</button>
                             </form>
