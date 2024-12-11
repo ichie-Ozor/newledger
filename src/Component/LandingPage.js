@@ -243,27 +243,21 @@ function LandingPage() {
         {/* <div className="">{verifyEmail}</div> */}
         {clicked === "1" ? (
           <>
-            <div
-              className={
-                clicked === "1"
-                  ? "signIn"
-                  : setErrorText("")
-              }
-            >
+            <div className={clicked === "1" ? "signIn" : setErrorText("")}>
               {errorText}
             </div>
             <div className="flex flex-col justify-center items-center">
-              <div className="relative top-20 left-20 md:-top-24 md:-left-5 font-bold text-3xl md:text-lg">
-                Sign In
+              <div className="font-bold text-3xl md:text-lg mr-5">
+                <h4 className="mr-5"> Sign In</h4>
               </div>
               <form
-                className="relative p-20 md:p-2 w-96 top-5 md:-top-28"
+                className=" p-20 md:p-2 w-96 top-5 md:-top-28"
                 onSubmit={isSignInHandler}
               >
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="input relative left-12 md:left-0"
+                  className="input  left-12 md:left-0"
                   name="email"
                   value={isSigneIn.email}
                   onChange={onChange}
@@ -271,7 +265,7 @@ function LandingPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="input relative left-12 md:left-0"
+                  className="input left-12 md:left-0"
                   name="password"
                   value={isSigneIn.password}
                   onChange={onChange}
@@ -280,18 +274,18 @@ function LandingPage() {
                   Sign In
                 </button>
               </form>
-              <div className="relative flex flex-col justify-center items-center left-12 md:-top-20 md:-left-6">
-                <div className="relative -top-5  text-sm flex  font-bold md:font-normal">
-                  Don't have an A<p className="text-black">ccount? </p>
+              <div className=" flex flex-col justify-center items-center left-12 md:-top-20 md:-left-6">
+                <div className="mt-4 -top-5  text-sm flex  font-bold md:font-normal mr-5">
+                  <p className="text-black mr-1">Don't have an Account? </p>
                   <span
                     onClick={() => setClicked("2")}
-                    className="cursor-pointer text-blue-700 md:text-primary-200"
+                    className="cursor-pointer text-blue-700 md:text-primary-200 mr-5"
                   >
                     Register
                   </span>
                 </div>
                 <span
-                  className="absolute text-sm text-primary-200 cursor-pointer font-bold md:font-normal"
+                  className="mr-5 text-sm text-primary-200 cursor-pointer font-bold md:font-normal"
                   onClick={() => setClicked("3")}
                 >
                   forgot Password?
@@ -302,11 +296,7 @@ function LandingPage() {
         ) : clicked === "2" ? (
           <>
             <div
-              className={
-                clicked === "2"
-                  ? "register"
-                  : setRegisterError("")
-              }
+              className={clicked === "2" ? "register" : setRegisterError("")}
             >
               {registerError}
             </div>
@@ -358,7 +348,10 @@ function LandingPage() {
                   value={isRegister.password}
                   onChange={onRegister}
                 />
-                <button type="submit" className="btny relative top-[3rem] md:top-[7rem] left-[5rem] md:-left-[13rem] text-white bg-blue-800 w-[90px] h-[30px] shadow-xl shadow-[#948989] rounded-md">
+                <button
+                  type="submit"
+                  className="btny relative top-[3rem] md:top-[7rem] left-[5rem] md:-left-[13rem] text-white bg-blue-800 w-[90px] h-[30px] shadow-xl shadow-[#948989] rounded-md"
+                >
                   Register
                 </button>
               </form>
@@ -383,13 +376,7 @@ function LandingPage() {
           </>
         ) : clicked === "3" ? (
           <>
-            <div
-              className={
-                clicked === "3"
-                  ? "forgetP"
-                  : setForgetError("")
-              }
-            >
+            <div className={clicked === "3" ? "forgetP" : setForgetError("")}>
               {forgetError}
             </div>
             <div className="flex flex-col justify-center items-center">
