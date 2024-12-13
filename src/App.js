@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -19,38 +19,8 @@ import DebtorTransaction from './Component/Main/DebtorTransaction';
 import CreditorTotal from './Component/CreditorTotal';
 import DebtorTotal from './Component/DebtorTotal';
 import PageNotFound from './Utilities/PageNotFound';
-// import { baseUrl } from './Utilities/helper';
-// import { useAuth } from './Context/auth';
-// import axios from 'axios';
 
 function App() {
-  // const verifyUrl = baseUrl+'/auth/verifyToken'
-  // const auth = useAuth()
-
-  // async function verifyToken(token) {
-  //     try {
-  //         let response = await fetch(verifyUrl, {
-  //             method: 'GET',
-  //             headers: {
-  //                 Authorization: "Bearer " + token
-  //             },
-  //         })
-  //         let data = await response.json()
-  //         console.log(data, "xxxx")
-  //         return data
-  //     } catch (error) {
-  //         console.log(error)
-  //     }
-  // } 
-  // useEffect(()=>{
-  //     const getToken = localStorage.getItem("myToken")
-  //     console.log(getToken, "app")
-  //     verifyToken(getToken).then((response) => {
-  //         console.log(response, "app effect")
-  //         auth.setUser(response.userDetail[0])
-  //     })
-  // },[])
-
 
   return (
     <div className='App'>

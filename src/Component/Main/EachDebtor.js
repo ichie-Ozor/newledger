@@ -16,6 +16,7 @@ function EachDebtor() {
   const { accountId, debtorId } = params
 
   const baseUrlxx = baseUrl + `/debt/${debtorId}`;
+  const debtFilterUrl = baseUrl + `/debt/filter/${debtorId}`
   const baseUrl2b = baseUrl + '/debt';
   const baseUrl3 = baseUrl + "/debtorBal";
   const location = useLocation()
@@ -26,12 +27,17 @@ function EachDebtor() {
   const [debt, setDebt] = useState([])
   const [cash, setCash] = useState(initialValue)
   const [isClose, setIsClose] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const [desc, setDesc] = useState([])
   const [description, setDescription] = useState("description")
   const [category, setCategory] = useState('')
   const [totalCash, setTotalCash] = useState(0)
   const [error, setError] = useState(null)
+  const [nameFilter, setNameFilter] = useState("")
+  const [filterInput, setFilterInput] = useState({
+    from: "",
+    to: ""
+  })
   const [debtorInput, setDebtorInput] = useState({
     date: "",
     description: "",
@@ -76,7 +82,48 @@ function EachDebtor() {
     })
   }
 
-
+  ////////////////////Filter///////////////////
+  const nameFilterChange = (e) => {
+    e.preventDefault()
+    console.log(e.target.value)
+    setNameFilter(e.target.value)
+  }
+  const onDateFilterChange = (e) => {
+    e.preventDefault()
+    const { name, value } = e.target
+    setFilterInput({
+      ...filterInput, [name]: value
+    })
+  }
+  const dateFilterHandler = (e) => {
+    e.preventDefault()
+    try {
+      axios({
+        method: 'post',
+        url: debtFilterUrl,
+        data: filterInput
+      }).then((response) => {
+        const filtered = response.data.filter
+        setDebtor(filtered)
+      })
+    } catch (err) { console.log(err.message) }
+    setFilterInput({
+      from: "",
+      to: ""
+    })
+    setOpen(false)
+  }
+  const nameFilterHandler = () => {
+    console.log("name filter handler clikec", nameFilter)
+    const filtered = debtor.filter((item) => item.category === nameFilter || item.description === nameFilter)
+    setDebtor(filtered)
+    setFilterInput({
+      from: "",
+      to: ""
+    })
+    setOpen(false)
+  }
+  ///////////////////////////////////////////// 
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -91,7 +138,7 @@ function EachDebtor() {
         ...prev,
         {
           id: new Date().getMilliseconds(),
-          date: debtorInput.date,
+          date: debtorInput.date === "" ? new Date().toISOString().split('T')[0] : debtorInput.date,
           description: debtorInput.description,
           category: debtorInput.category,
           qty: debtorInput.qty,
@@ -105,7 +152,7 @@ function EachDebtor() {
         {
           id: new Date().getMilliseconds(),
           debtorId,
-          date: debtorInput.date,
+          date: debtorInput.date === "" ? new Date().toISOString().split('T')[0] : debtorInput.date,
           description: debtorInput.description,
           category: debtorInput.category,
           qty: debtorInput.qty,
@@ -125,7 +172,6 @@ function EachDebtor() {
     setCategory("")
     setDescription("Description")
   }
-
 
   //////////////Delete/////////////
   const deleteHandler = (item) => {
@@ -218,7 +264,6 @@ function EachDebtor() {
 
   ////////////////Total ends here///////////////////////
 
-
   ////////////Reducer/////////////
   const reducer = (accumulator, currentValue) => {
     const returns = accumulator + Number(currentValue.total)
@@ -306,9 +351,39 @@ function EachDebtor() {
           {/*************************************/}
           <input type='number' placeholder='Qty' className='btn4' name='qty' value={debtorInput.qty} onChange={onChange} />
           <input type='number' placeholder='Rate N' className='btn4' name='rate' value={debtorInput.rate} onChange={onChange} />
-          <button type='submit' className='submit'>Submit</button>
+          <button type='submit' className='submit -left-[13.5rem] md:left-1'>Submit</button>
         </form>
       </div>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[78.5rem] left-[31rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Goods</button>
+      {open ?
+        <div className='absolute z-10 md:left-[75rem] left-[11rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
+          <form onSubmit={dateFilterHandler} className='flex'>
+            <div className='mr-1 text-xl'>From</div>
+            <input type='date' name='from' className='w-[7rem] h-8 rounded-md mr-2 border-slate-400 border-2' value={filterInput.from} onChange={onDateFilterChange} />
+            <div className='mr-1 text-xl'>to</div>
+            <input type='date' name='to' className='w-[7rem] h-8 rounded-md border-slate-400 border-2' value={filterInput.to} onChange={onDateFilterChange} />
+            <button type='submit' className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white w-[3.3rem] md:w-[4rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-1 ml-2'>Enter</button>
+          </form>
+          <div className='mt-2'>
+            <div>
+              <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by goods sold' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
+              <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
+            </div>
+            <div>
+              {debtor.filter(item => {
+                const searchItem = nameFilter.toLowerCase();
+                const good = item.description.toLowerCase();
+                const cat = item.category.toLowerCase();
+                return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
+              }).slice(0, 10).map((item) =>
+                <div onClick={() => setNameFilter(item.description)}>{item.description || item.category}</div>
+              )}
+            </div>
+          </div>
+        </div>
+        :
+        <></>
+      }
       <table className='relative left-2 top-20 md:left-60 md:top-28 flex space-x-1 md:space-x-4 w-[120vw] md:w-[100vw]'>
         <th className='table-header'>Date</th>
         <th className='table-header'>Category</th>

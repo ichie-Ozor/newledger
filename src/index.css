@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .input {
-  @apply w-[18rem] md:w-80 md:h-14 border border-gray-400 rounded-xl p-2 mt-6;
+  @apply w-[16rem] md:w-80 md:h-14 h-10 border border-gray-400 rounded-xl p-2 mt-6 ml-40 md:ml-0;
 }
 .btn {
   @apply w-80 h-10 bg-primary-500 border rounded-xl mt-4 border-none text-gray-400;
@@ -12,7 +12,10 @@
   @apply w-64 h-24 bg-white border rounded-xl mt-4 ml-4 border-none text-blue-200 text-3xl font-extrabold hover:bg-primary-500 shadow-xl hover:scale-75;
 }
 .btn2 {
-  @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-lg;
+  @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-lg no-underline;
+}
+.btn20 {
+  @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-base no-underline;
 }
 .btn3 {
   @apply w-80 h-12 bg-white mt-3 relative left-1 top-4 rounded-md p-4 text-lg shadow-xl hover:shadow;
@@ -21,16 +24,22 @@
   @apply ml-1 top-7 text-xs -left-56 w-20 h-10 p-1 bg-white relative rounded-md shadow-xl hover:shadow md:w-[9.7rem] md:h-14 md:p-4 md:ml-3 md:text-lg md:left-1 md:top-4;
 }
 .btn5 {
-  @apply w-20 h-6 bg-[#676552] ml-2 text-center relative left-3 top-1 rounded-md text-white font-bold text-base;
+  @apply w-28 h-6 bg-[#676552] ml-2 text-center relative left-3 top-1 rounded-md text-white font-bold text-base;
 }
 .btn6 {
-  @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-[10.3rem] md:h-12;
+  @apply ml-1 top-7 text-gray-400 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-1 md:text-lg md:w-[8.8rem] md:h-12;
+}
+.btn6a {
+  @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:p-4 md:text-lg md:w-[7.8rem] md:h-12;
+}
+.btn6b {
+  @apply ml-1 top-7 text-xs -left-48 w-20 h-10 p-1 bg-white shadow-xl hover:shadow rounded-md relative md:ml-3 md:left-1 md:top-4 md:pl-2 md:text-lg md:w-[8.8rem] md:h-12;
 }
 .btn7 {
   @apply w-20 h-8 text-sm bg-gray-400 ml-2 rounded-md text-white font-bold md:text-lg shadow-xl hover:shadow hover:text-black hover:bg-white;
 }
 .submit {
-  @apply -left-[11rem] top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-1 md:top-4 md:ml-2;
+  @apply top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-4 md:ml-2;
 }
 .save {
   @apply relative left-[22.5rem] top-24 w-24 text-xs h-8 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white md:text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-16 md:ml-2 md:left-[67rem];
@@ -42,7 +51,7 @@
   @apply w-80 border-2 border-gray-400 relative left-6 h-14 m-2 rounded p-2 shadow-xl hover:shadow text-gray-600;
 }
 .table-header {
-  @apply flex text-center justify-center bg-gray-200 w-[9.7rem] md:w-[9.7rem] h-10 rounded pt-2 text-xs md:text-lg;
+  @apply flex text-center justify-center bg-gray-200 w-[9.7rem] md:w-[10rem] h-10 rounded pt-2 text-xs md:text-lg;
 }
 .table-data {
   @apply relative bg-gray-200 text-xs rounded pt-2 flex justify-center w-16 md:w-36 md:text-xl;
@@ -59,7 +68,12 @@
 .register {
   @apply absolute top-[7rem] md:top-[10rem] left-2 md:left-[13rem] w-[18rem] md:w-[25rem] text-[13px] md:text-[20px] font-bold text-red-700;
 }
-
+.pcs {
+  @apply h-10 shadow-xl hover:shadow relative top-9 ml-2 -mr-2 pl-2 rounded-md cursor-pointer text-xl text-gray-400;
+}
+.crt {
+  @apply h-10 shadow-xl hover:shadow relative top-9 ml-2 pl-1 rounded-md cursor-pointer text-2xl text-black bg-yellow-500;
+}
 .btnz {
   position: relative;
   top: 15px;
@@ -117,7 +131,7 @@
 }
 .container {
   width: 250rem;
-  left: 175px;
+  left: 235px;
 }
 .header-img {
   border-radius: 50%;
@@ -128,6 +142,11 @@
   position: absolute;
   top: 450px;
   left: 51rem;
+}
+.stock {
+  position: absolute;
+  top: 450px;
+  left: 21rem;
 }
 .debtor {
   position: absolute;
@@ -224,5 +243,20 @@ table {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #invoiceSection,
+  #invoiceSection * {
+    visibility: visible;
+  }
+  #invoiceSection {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
 }
