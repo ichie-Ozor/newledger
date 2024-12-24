@@ -238,13 +238,7 @@ function LandingPage() {
         </div>
         {clicked === "1" ? (
           <>
-            <div
-              className={
-                clicked === "1"
-                  ? "signIn"
-                  : setErrorText("")
-              }
-            >
+            <div className={clicked === "1" ? "signIn" : setErrorText("")}>
               {errorText}
             </div>
             <div className="flex flex-col justify-center items-center min-h-screen">
@@ -320,11 +314,7 @@ function LandingPage() {
         ) : clicked === "2" ? (
           <>
             <div
-              className={
-                clicked === "2"
-                  ? "register"
-                  : setRegisterError("")
-              }
+              className={clicked === "2" ? "register" : setRegisterError("")}
             >
               {registerError}
             </div>
@@ -433,13 +423,7 @@ function LandingPage() {
           </>
         ) : clicked === "3" ? (
           <>
-            <div
-              className={
-                clicked === "3"
-                  ? "forgetP"
-                  : setForgetError("")
-              }
-            >
+            <div className={clicked === "3" ? "forgetP" : setForgetError("")}>
               {forgetError}
             </div>
             <div className="flex flex-col justify-center items-center min-h-screen">
