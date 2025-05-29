@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 // import { AuthContext } from '../../Context/auth'
-import NavBar from '../../Utilities/NavBar'
+import SideBar from '../../Utilities/SideBar'
 import Header from '../../Utilities/Header'
 import Invoice from '../Invoice';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
@@ -352,12 +352,10 @@ function EachCreditor(props) {
   console.log(creditor, "creditor", eachCreditor)
   return (
     <div >
-      <NavBar classStyle='fixed grid w-[153vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
-        <Link className='no-underline' to={'transaction'} state={eachCreditor}>
-          <button className='text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
-        </Link>
-      </NavBar>
-      <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
+      {/* <SideBar classStyle='fixed grid w-[153vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
+        
+      </SideBar>
+      <Header pageTitle={" Creditor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' /> */}
       <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
       {invoice ?
         <Invoice

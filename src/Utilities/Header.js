@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../Context/auth'
 import { baseUrl } from './helper'
 import { toast } from 'react-toastify'
@@ -9,6 +9,8 @@ import { toast } from 'react-toastify'
 
 function Header({ name, pageTitle, classStyle }) {
   const auth = useAuth()
+  const location = useLocation()
+  console.log(location, "location")
   const id = auth.user._id
   const adminUrl = baseUrl + "/profile/"
   const navigate = useNavigate()
@@ -19,7 +21,8 @@ function Header({ name, pageTitle, classStyle }) {
     name: "",
     address: "",
     businessName: "",
-    password: ""
+    password: "",
+    file: null
   })
 
 
@@ -35,16 +38,34 @@ function Header({ name, pageTitle, classStyle }) {
 
   const onChange = (e) => {
     e.preventDefault()
-    const { name, value } = e.target
-    setProfile({
-      ...profile, [name]: value,
-      account: id
-    })
+
+    const { name, value, files } = e.target
+    if (name === "file") {
+      setProfile((prev) => ({
+        ...prev,
+        [name]: files[0]
+      }))
+    } else {
+      setProfile({
+        ...profile, [name]: value,
+        account: id
+      })
+    }
   }
 
   const profileHandler = (e) => {
     e.preventDefault()
-    axios.post(adminUrl, profile)
+
+    const formData = new FormData();
+    formData.append("name", profile.name);
+    formData.append("address", profile.address);
+    formData.append("businessName", profile.businessName);
+    formData.append("password", profile.password);
+    formData.append("file", profile.file);
+    formData.append("account", id);
+
+
+    axios.post(adminUrl, formData)
       .then((response) => {
         console.log(response)
         toast.success("Your Profile has being created successfully!")
@@ -57,7 +78,8 @@ function Header({ name, pageTitle, classStyle }) {
       name: "",
       address: "",
       businessName: "",
-      password: ""
+      password: "",
+      file: null
     })
     setOpen(!open)
     // window.location.reload()
@@ -70,17 +92,16 @@ function Header({ name, pageTitle, classStyle }) {
     } else setOpen(false)
   }
 
-  console.log(admin, "admin", admin.length)
+
   return (
-    <div className={classStyle}>
-      <NavLink to='dashboard' className='no-underline'><div className='left-4 text-gray-600 relative top-36 text-lg md:text-gray-400 md:left-56 md:top-14 md:text-3xl font-bold' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
+    <div className='bg-primary-200 h-[12vh] md:h-[20vh]  w-[100vw] md:w-[85vw] flex justify-between items-center md:ml-[15vw] pr-0'>
+      <NavLink to='dashboard' className='no-underline'><div className='text-gray-600 text-2xl md:text-gray-400 md:text-3xl font-bold m-4' onClick={() => navigate(-1)}>Welcome{pageTitle}</div></NavLink>
       {/* <div className='absolute text-white top-28 ml-5 block md:none' onClick={() => navigate(-1)}>BACK</div> */}
-      <div className='md:left-[72.8%] left-[12rem] md:w-[30rem] md:flex absolute md:bg-primary-500 h-28 top-4 rounded-l-ksm'>
-        <div className='header-img bg-gray-400  left-10 relative'>
-          <img src='' alt='' />
+      <div className=' md:w-auto md:flex md:bg-primary-500 h-28 rounded-l-ksm ml-auto md:items-center'>
+        <div className='header-img bg-gray-400 relative'>
         </div>
-        <div className='relative left-1 text-base font-bold -top-1 text-white md:text-xl md:w-40 md:left-14 md:top-5'>{name}</div>
-        <svg onClick={openProfile} className='left-[8.2rem] -top-[4.3rem] text-white w-10 h-10 relative font-bold  cursor-pointer md:left-32 md:top-8' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <div className='md:relative text-base font-bold text-white md:text-xl md:w-40 md:left-14 md:top-5'>{name}</div>
+        <svg onClick={openProfile} className='text-white w-10 h-10 font-bold ml-auto mr-4 cursor-pointer' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
       </div>
@@ -94,12 +115,12 @@ function Header({ name, pageTitle, classStyle }) {
           :
           <div className='relative -left-[11rem] top-20 bg-gray-100 z-10 w-96 h-96  grid justify-items-center rounded-xl shadow-xl md:top-32 md:left-[43rem] md:bg-white hover:shadow-md'>
             <h3 className='text-xl text-gray-400 relative top-2'>Update your Profile</h3>
-            <form onSubmit={profileHandler}>
-              <input type='text' placeholder='Enter Name' className='header-input' name='name' value={profile.name} onChange={onChange} />
-              <input type='text' placeholder='Enter Business Address' className='header-input' name='address' value={profile.address} onChange={onChange} />
-              <input type='text' placeholder='Enter Business Name' className='header-input' name='businessName' value={profile.businessName} onChange={onChange} />
+            <form onSubmit={profileHandler} className='flex flex-col px-5' enctype="multipart/form-data">
+              <input type='text' placeholder='Enter Name' className='w-full border-1 border-gray-300 h-10 mb-2 rounded p-2 shadow-xl hover:shadow text-gray-600' name='name' value={profile.name} onChange={onChange} />
+              <input type='text' placeholder='Enter Business Address' className='w-full border-1 border-gray-300 h-10 mb-2 rounded p-2 shadow-xl hover:shadow text-gray-600' name='address' value={profile.address} onChange={onChange} />
+              <input type='text' placeholder='Enter Business Name' className='w-full border-1 border-gray-300 h-10 mb-2 rounded p-2 shadow-xl hover:shadow text-gray-600' name='businessName' value={profile.businessName} onChange={onChange} />
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} placeholder='Password' className='header-input' name='password' value={profile.password} onChange={onChange} />
+                <input type={showPassword ? 'text' : 'password'} placeholder='Password' className='w-full border-1 border-gray-300 h-10 mb-2 rounded p-2 shadow-xl hover:shadow text-gray-600' name='password' value={profile.password} onChange={onChange} />
                 <button
                   type="button"
                   className="absolute inset-y-0 rounded-r border-0 right-0 px-5 pt-2 flex items-center"
@@ -116,10 +137,10 @@ function Header({ name, pageTitle, classStyle }) {
                   )}
                 </button>
               </div>
-              <button type='submit' className='w-24 h-10 rounded relative left-36 top-1 text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
+              <input type='file' placeholder='Enter business logo here' className='w-full border-1 border-gray-300 h-12 mb-2 rounded p-1 shadow-xl hover:shadow text-gray-600' name='file' accept='image/*, .pdf, .doc, .docx' onChange={onChange} />
+              <button type='submit' className='w-24 h-10 rounded text-white text-xl bg-gray-400 hover:bg-red-300 hover:text-blue-100'>Submit</button>
             </form>
           </div>)
-
         : <div></div>
       }
     </div>

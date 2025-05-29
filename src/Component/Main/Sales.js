@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 // import { Typeahead } from 'react-bootstrap-typeahead';
-import NavBar from '../../Utilities/NavBar'
+import SideBar from '../../Utilities/SideBar'
 // import { useLocation } from 'react-router-dom';
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
@@ -362,10 +362,10 @@ function Sales() {
   // console.log(bank, "bank")
   return (
     <div>
-      <NavBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
-        {/* <div className='absolute top-[1rem] text-xs font-bold left-[0.767rem] cursor-pointer' onClick={() => navigate(-1)} >BACK</div> */}
-      </NavBar>
-      <Header pageTitle={" Sales Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[146vw] md:w-[100vw] flex' />
+      {/* <SideBar classStyle='fixed grid w-[146vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'> */}
+      {/* <div className='absolute top-[1rem] text-xs font-bold left-[0.767rem] cursor-pointer' onClick={() => navigate(-1)} >BACK</div> */}
+      {/* </SideBar> */}
+      {/* <Header pageTitle={" Sales Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[146vw] md:w-[100vw] flex' /> */}
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn4' name='date' value={salesInput.date} onChange={onChange} />

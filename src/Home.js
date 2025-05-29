@@ -3,6 +3,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from './Context/auth';
 import { baseUrl } from './Utilities/helper';
+import SideBar from './Utilities/SideBar';
+import Header from './Utilities/Header';
 
 
 function Home() {
@@ -76,8 +78,12 @@ function Home() {
     }
 
     return (
-        <div>
-            <Outlet />
+        <div className='flex'>
+            <SideBar />
+            <div className=''>
+                <Header />
+                <Outlet />
+            </div>
         </div>
     );
 }

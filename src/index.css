@@ -9,10 +9,10 @@
   @apply w-80 h-10 bg-primary-500 border rounded-xl mt-4 border-none text-gray-400;
 }
 .btn1 {
-  @apply w-64 h-24 bg-white border rounded-xl mt-4 ml-4 border-none text-blue-200 text-3xl font-extrabold hover:bg-primary-500 shadow-xl hover:scale-75;
+  @apply bg-white hover:bg-primary-500 hover:scale-75 duration-500 border rounded-xl border-none text-blue-200 text-3xl font-extrabold shadow-xl;
 }
 .btn2 {
-  @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-lg no-underline;
+  @apply md:bg-blue-100 text-gray-400 shadow-xl rounded-sm cursor-pointer hover:shadow hover:text-black  no-underline;
 }
 .btn20 {
   @apply mr-1 ml-1 text-lg w-32 h-10 md:bg-blue-100 text-gray-400 shadow-xl rounded-sm justify-center flex items-center cursor-pointer hover:shadow hover:text-black md:w-[140px] md:h-14 md:text-base no-underline;

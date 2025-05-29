@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import DeleteModal from '../../Utilities/DeleteModal'
-import NavBar from '../../Utilities/NavBar'
+import SideBar from '../../Utilities/SideBar'
 import Header from '../../Utilities/Header'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../Context/auth'
@@ -148,8 +148,8 @@ function Debtor() {
   })
   return (
     <div>
-      <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[103vw] md:w-[100vw] flex' />
+      {/* <SideBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' /> */}
+      {/* <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[103vw] md:w-[100vw] flex' /> */}
       <div>
         {error ? <div className='relative top-60 left-80 text-3xl font-bold'>{error}</div> : render}
       </div>

@@ -3,7 +3,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 // import  Select from 'react-select'
-import NavBar from '../../Utilities/NavBar'
+import SideBar from '../../Utilities/SideBar'
 import Header from '../../Utilities/Header'
 import { useAuth } from '../../Context/auth'
 import { toast } from 'react-toastify';
@@ -326,9 +326,9 @@ function Stock() {
   console.log(stock, "stock", stocks)
   return (
     <div>
-      <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <Header pageTitle={" Stocks Page"} name={businessName} classStyle='bg-primary-200 h-36 w-[200vw] md:w-[100vw] flex' />
-      <div className='absolute left top-22  container'>
+      {/* <SideBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' /> */}
+      {/* <Header pageTitle={" Stocks Page"} name={businessName} classStyle='bg-primary-200 h-36 w-[200vw] md:w-[100vw] flex' /> */}
+      {/* <div className='absolute left top-22  container'>
         <form className='relative flex  left-2' onSubmit={submitHandler}>
           <input type='date' placeholder='date' className='btn6' name='date' value={stockInput.date} onChange={onChange} />
           <input type='text' placeholder='Category' className='btn6' name='category' value={stockInput.category} onChange={onChange} />
@@ -340,35 +340,74 @@ function Stock() {
           <button type='submit' className='submit -left-[11rem] md:left-1' >Submit</button>
         </form>
       </div>
-      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[93rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
-      {open ?
-        <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
-          <form onSubmit={filterHandler} className='flex'>
-            <div className='mr-1 text-xl'>From</div>
-            <input type='date' name='from' className='w-[7rem] h-8 rounded-md mr-2 border-slate-400 border-2' value={filterInput.from} onChange={onFilterChange} />
-            <div className='mr-1 text-xl'>to</div>
-            <input type='date' name='to' className='w-[7rem] h-8 rounded-md border-slate-400 border-2' value={filterInput.to} onChange={onFilterChange} />
-            <button type='submit' className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white w-[3.3rem] md:w-[4rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-1 ml-2'>Enter</button>
+      <button type="button" className=' relative text-xs h-8 p-2 font-bold bg-gray-400 rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:left-[93rem] left-[36.5rem] md:top-4  top-9 md:ml-2;' onClick={() => setOpen(prev => !prev)}>Find Stock</button>*/}
+      {/* top-9 text-xs h-8 p-2 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-40 md:h-12 md:text-lg md:font-bold md:top-4 md:ml-2; */}
+      {/* ******************** */}
+      {/* <form>
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <input type="number" placeholder="Age" min="18" />
+        <input type="date" />
+        <input type="time" />
+        <input type="month" />
+        <input type="week" />
+        <input type="file" />
+        <input type="radio" name="gender" value="male" /> Male
+        <input type="radio" name="gender" value="female" /> Female
+        <input type="checkbox" /> Accept Terms
+        <input type="color" />
+        <input type="range" min="0" max="100" />
+        <button type="submit">Submit</button>
+      </form> */}
+      {/****************************** **/}
+      <div className='flex mt-1 grid-col-10 md:ml-[12.1rem]'>
+        <div className='col-span-9 w-[90.5%]'>
+          <form className='space-x-1' onSubmit={submitHandler}>
+            <input type='date' placeholder='date' className='w-[12.5%] pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='date' value={stockInput.date} onChange={onChange} />
+            <input type='text' placeholder='Category' className='w-[19.5%] pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='category' value={stockInput.category} onChange={onChange} />
+            <input type='text' placeholder='Available Goods' className='w-[19.5%] pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='goods' value={stockInput.goods} onChange={onChange} />
+            <input type='number' placeholder='Crt' className='w-[5%]  pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='crt' value={stockInput.crt} onChange={onChange} />
+            <input type='number' placeholder='Pcs per Crt' className='w-[7.5%]  pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='pcs' value={stockInput.pcs} onChange={onChange} />
+            <input type='number' placeholder='Cost Price N' className='w-[10.5%]  pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='cost' value={stockInput.cost} onChange={onChange} />
+            <input type='number' placeholder='Selling Price N' className='w-[10.5%]  pl-2 text-gray-400 text-xs h-10 p-1 bg-white shadow-xl hover:shadow rounded-md md:ml-1 md:h-12 md:text-[16px]' name='sellingPrice' value={stockInput.sellingPrice} onChange={onChange} />
+            <button type='submit' className=' px-2 w-[12%]  rounded' >Submit</button>
           </form>
-          <div className='mt-2'>
-            <div>
-              <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by Availbale goods' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
-              <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
-            </div>
-            <div>
-              {stock.filter(item => {
-                const searchItem = nameFilter.toLowerCase();
-                const good = item.goods.toLowerCase();
-                const cat = item.category.toLowerCase();
-                return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
-              }).slice(0, 10).map((item) =>
-                <div onClick={() => setNameFilter(item.goods)}>{item.goods || item.category}</div>
-              )}
+        </div>
+        <div className='col-span-1'>
+          <button type="button" className=' w-[170%] rounded font-bold shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:text-lg md:font-bold' onClick={() => setOpen(prev => !prev)}>Find Stock</button>
+        </div>
+      </div>
+      {/*********************************** */}
+      {
+        open ?
+          <div className='absolute z-10 md:left-[75rem] left-[21rem] top-[13.3rem] w-[25.5rem] pt-2 pl-2 bg-white shadow-xl hover:shadow h-[6rem] rounded-md'>
+            <form onSubmit={filterHandler} className='flex'>
+              <div className='mr-1 text-xl'>From</div>
+              <input type='date' name='from' className='w-[7rem] h-8 rounded-md mr-2 border-slate-400 border-2' value={filterInput.from} onChange={onFilterChange} />
+              <div className='mr-1 text-xl'>to</div>
+              <input type='date' name='to' className='w-[7rem] h-8 rounded-md border-slate-400 border-2' value={filterInput.to} onChange={onFilterChange} />
+              <button type='submit' className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white w-[3.3rem] md:w-[4rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-1 ml-2'>Enter</button>
+            </form>
+            <div className='mt-2'>
+              <div>
+                <input type="text" value={nameFilter} onChange={nameFilterChange} placeholder='Search by Availbale goods' className='h-8 rounded-md w-[19rem] pl-2 border-slate-400 border-2' />
+                <button type='submit' onClick={nameFilterHandler} className='text-xs h-8 font-bold bg-gray-400 relative rounded-md shadow-xl hover:shadow hover:text-black hover:bg-white text-white md:w-[4rem] w-[3.3rem] md:h-8 md:text-lg md:font-bold md:left-1 md:top-0 ml-2'>Enter</button>
+              </div>
+              <div>
+                {stock.filter(item => {
+                  const searchItem = nameFilter.toLowerCase();
+                  const good = item.goods.toLowerCase();
+                  const cat = item.category.toLowerCase();
+                  return searchItem && (good.startsWith(searchItem) || cat.startsWith(searchItem)) && good !== searchItem
+                }).slice(0, 10).map((item) =>
+                  <div onClick={() => setNameFilter(item.goods)}>{item.goods || item.category}</div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        :
-        <></>
+          :
+          <></>
       }
 
       <div className='relative left-2 top-24 flex space-x-2 md:left-60 md:top-[2rem] md:flex md:space-x-4'>
@@ -382,7 +421,7 @@ function Stock() {
       {error}
       <div>{renderStock}</div>
       <button className={stocks.length === 0 ? 'unsave' : 'save'} onClick={saveHandler} disabled={stocks.length === 0}>Save</button>
-    </div>
+    </div >
   )
 }
 

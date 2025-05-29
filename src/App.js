@@ -26,8 +26,8 @@ function App() {
     <div className='App'>
       <Router>
         <Routes>
+          <Route index element={<LandingPage />} />
           <Route path="/" element={<Home />}>
-            <Route index element={<LandingPage />} />
             <Route path="/emailsent/:email" element={<EmailSent />} />
             <Route path="/:email?" element={<LandingPage />} />
             <Route path="dashboard/creditorTotal/:accountId" element={<CreditorTotal />} />

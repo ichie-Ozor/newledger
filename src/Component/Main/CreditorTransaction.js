@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Header from "../../Utilities/Header";
-import NavBar from "../../Utilities/NavBar";
+import SideBar from "../../Utilities/SideBar";
 import moment from "moment";
 import axios from "axios";
 import { baseUrl } from "../../Utilities/helper";
@@ -81,8 +81,8 @@ function CreditorTransaction() {
 
   return (
     <div>
-      <NavBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
-      <Header pageTitle={` to ${firstName} ${lastName} Creditor Page`} name={firstName + " " + lastName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' />
+      {/* <SideBar classStyle='fixed grid w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' /> */}
+      {/* <Header pageTitle={` to ${firstName} ${lastName} Creditor Page`} name={firstName + " " + lastName} classStyle='bg-primary-200 h-36 w-[153vw] md:w-[100vw] flex' /> */}
       <div>
         <div className="flex align-items-center justify-center mb-3">
           <div className="relative top-12 font-bold text-3xl text-gray-600">

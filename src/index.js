@@ -1,10 +1,11 @@
 import React from 'react';
-import { ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux'
 import store from './Redux/Store';
-import { AuthProvider  } from './Context/auth';
+import { AuthProvider } from './Context/auth';
+import { SideBarProvider } from './Context/SideBarContext'
 import './index.css';
 import App from './App';
 
@@ -13,12 +14,14 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Provider store={store}>
+    <Provider store={store}>
+      <SideBarProvider>
         <AuthProvider>
           <App />
           <ToastContainer />
         </AuthProvider>
-      </Provider>
+      </SideBarProvider>
+    </Provider>
   </React.StrictMode>
 );
 

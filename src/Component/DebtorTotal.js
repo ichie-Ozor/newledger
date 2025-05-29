@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import { baseUrl, calculateTotalDebt, thousandSeperator } from '../Utilities/helper'
 import Header from '../Utilities/Header'
-import NavBar from '../Utilities/NavBar'
+import SideBar from '../Utilities/SideBar'
 import axios from 'axios'
 
 function DebtorTotal() {
@@ -74,7 +74,7 @@ function DebtorTotal() {
   return (
     <div>
       <Header pageTitle={" Total Debt"} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
-      <NavBar classStyle='fixed grid w-[163vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
+      <SideBar classStyle='fixed grid w-[163vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center' />
       <div className=' grid justify-items-center mt-3'>
         {renderDebtors}
       </div>

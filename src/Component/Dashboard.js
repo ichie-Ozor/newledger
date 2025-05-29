@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Header from '../Utilities/Header'
-import NavBar from '../Utilities/NavBar'
+import React, { useState, useEffect } from 'react'
+
+// import Header from '../Utilities/Header'
+// import SideBar from '../Utilities/SideBar'
 import CreditorModal from '../Utilities/CreditorModal'
 import DebtorModal from '../Utilities/DebtorModal'
 import { NavLink } from 'react-router-dom'
 // import DashboardModal from '../Utilities/DashboardModal'
 import { useAuth } from '../Context/auth'
+import { useSideBar } from '../Context/SideBarContext'
 
 
 function Dashboard() {
@@ -15,11 +16,15 @@ function Dashboard() {
   const [openStock, setOpenStock] = useState(false)
   const [showCreditorModal, setShowCreditorModal] = useState(false)
   const [showDebtorModal, setShowDebtorModal] = useState(false)
+  const { setActiveComponent } = useSideBar()
   const auth = useAuth()
   const account_id = auth.user._id
-  const { fullName, businessName } = auth.user
+  // const { fullName, businessName } = auth.user
 
-
+  useEffect(() => {
+    setActiveComponent('dashboard')
+    return () => setActiveComponent(null)
+  }, [setActiveComponent])
   //credit handle here
   const creditorHandler = (e) => {
     e.preventDefault()
@@ -52,47 +57,51 @@ function Dashboard() {
   const handleDebtorOnClose = () => setShowDebtorModal(false)
 
   return (
-    <div>
-      <NavBar classStyle='fixed w-[100%] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0'>
-        {/* <div onClick={() => setShowCategoryModal(true)}>Category</div> */}
-        <Link to={`debtorTotal/${account_id}`} className='no-underline'><div className='text-xs font-bold ml-3 cursor-pointer text-white no-underline' >TOTAL DEBTOR STATEMENT</div></Link>
-        <Link to={`creditorTotal/${account_id}`} className='no-underline'><div className='text-xs font-bold ml-3 mt-3 cursor-pointer text-white no-underline'>TOTAL CREDITOR STATEMENT</div></Link>
-        {/* <div onClick={() => setShowCreditBalModal(true)}>Credit Balance</div> */}
-      </NavBar>
-      <Header pageTitle={" Dashboard"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[100vw] md:w-[100vw] flex' />
-      {/*******************  Main body here ***********************/}
-      <div className='relative -left-64 -top-64 md:left-0'>
-        <div className='absolute top-80 left-80'>
-          {/* <button className='btn1' onClick={stockHandler}>Stock</button> */}
-          <NavLink to={`stock/${account_id}`} className='no-underline'><button className=' btn1 no-underline'>Stock</button></NavLink>
-          <NavLink to={`sales/${account_id}`}><button className='btn1'>Sales</button></NavLink>
-          <button className='btn1' onClick={creditorHandler}>Creditor</button>
-          <button className='btn1' onClick={debtorHandler}>Debtor</button>
+    <div className=' md:ml-[15vw] md:w-[85vw] w-[100vw] p-4'>
+      <div className='grid grid-cols-6 gap-2 mt-10 md:mt-0 md:gap-8 max-h-screen h-[70vh] md:h-[50vh] w-[80vw] md:w-[70vw] md:justify-self-center'>
+        <NavLink to={`stock/${account_id}`} className='no-underline btn1 col-span-2 grid justify-items-center'><button className='w-full'>Stock</button></NavLink>
+        <NavLink to={`sales/${account_id}`} className='no-underline btn1 col-span-2 grid justify-items-center'><button className=' w-full'>Sales</button></NavLink>
+        <div className='btn1 col-span-2 grid justify-center'>
+          {openCreditor ?
+            (<div className='flex gap-2 md:gap-4 w-full  items-center'>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"
+                onClick={() => setOpenCreditor(false)}
+                className='cursor-pointer hover:text-white hover:scale-[400%] duration-500 w-10 h-10'
+              >
+                <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+              </svg>
+              <div className='pr-4 md:pr-0 md:ml-4'>
+                <div className='cursor-pointer' onClick={() => setShowCreditorModal(true)}>New Account?</div>
+                <div className='border-b-2 border-gray-400 scale-110'></div>
+                <NavLink to={`creditor/${account_id}`} className='no-underline'><div className='text-blue-200'>Old Account?</div></NavLink>
+              </div>
+            </div>)
+            :
+            <button onClick={creditorHandler} className=''>Creditor</button>}
         </div>
-        {/* {openStock ?
-          <div className='stock relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
-            <NavLink to={`stock/${account_id}`} className='no-underline'><button className=' btn2 no-underline'>Retail Stock</button></NavLink>
-            <NavLink to={`wholesalestock/${account_id}`} className='no-underline'><div className='btn20'>WholeSale Stock</div></NavLink>
-          </div> :
-          <div></div>
-        } */}
-        {openCreditor ?
-          <div className='creditor relative w-48 md:w-[20rem] h-24 bg-white md:flex md:p-2 shadow-2xl rounded hover:shadow'>
-            <div className='btn2' onClick={() => setShowCreditorModal(true)}>New Account?</div>
-            <NavLink to={`creditor/${account_id}`} className='no-underline'><div className='btn2'>Old Account?</div></NavLink>
-          </div> :
-          <div></div>
-        }
-        {openDebtor ?
-          <div className='debtor relative w-48 h-24 bg-white md:flex shadow-2xl rounded hover:shadow md:w-[20rem] md:p-2'>
-            <div className='btn2' onClick={() => setShowDebtorModal(true)}>New Account?</div>
-            <NavLink to={`debtor/${account_id}`} className=' no-underline'><div className='btn2'>Old Account?</div></NavLink>
-          </div> :
-          <div></div>
-        }
-        <CreditorModal onClose={handleCreditorOnClose} visible={showCreditorModal} />
-        <DebtorModal onClose={handleDebtorOnClose} visible={showDebtorModal} />
+        <div className='btn1 col-span-3 grid justify-center'>
+          {openDebtor ?
+            (<div className='flex gap-2 md:gap-4 w-full  items-center'>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"
+                onClick={() => setOpenDebtor(false)}
+                className='cursor-pointer hover:text-white hover:scale-[400%] duration-500 w-10 h-10'
+              >
+                <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+              </svg>
+              <div className='pr-4 md:pr-0 md:ml-4'>
+                <div className='cursor-pointer' onClick={() => setShowDebtorModal(true)}>New Account?</div>
+                <div className='border-b-2 border-gray-400 scale-110'></div>
+                <NavLink to={`debtor/${account_id}`} className=' no-underline'><div className='text-blue-200'>Old Account?</div></NavLink>
+              </div>
+            </div>)
+            :
+            <button className='' onClick={debtorHandler}>Debtor</button>}
+        </div>
+        <button className='btn1 col-span-3'>Invoice</button>
       </div>
+
+      <CreditorModal onClose={handleCreditorOnClose} visible={showCreditorModal} />
+      <DebtorModal onClose={handleDebtorOnClose} visible={showDebtorModal} />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import moment from 'moment';
-import NavBar from '../../Utilities/NavBar'
+import SideBar from '../../Utilities/SideBar'
 import Header from '../../Utilities/Header'
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify'
@@ -315,12 +315,10 @@ function EachDebtor() {
 
   return (
     <div className=' w-[163vw]'>
-      <NavBar classStyle='fixed grid w-[163vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
-        <Link className='no-underline' to={'transaction'} state={eachDebtor}>
-          <button className='text-xs font-bold ml-3 mt-3 cursor-pointer text-white'>Check Balance</button>
-        </Link>
-      </NavBar>
-      <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' />
+      {/* <SideBar classStyle='fixed grid w-[163vw] bg-slate-500 h-[50px] top-24 md:h-screen md:bg-primary-500 md:w-48 md:top-0 md:justify-items-center'>
+
+      </SideBar> */}
+      {/* <Header pageTitle={" Debtor Page"} name={businessName + " " + fullName} classStyle='bg-primary-200 h-36 w-[163vw] md:w-[100vw] flex' /> */}
       <div className='relative left-60 md:left-80 -top-8 md:-top-12 font-bold text-sm md:text-3xl text-white md:text-gray-600'>{firstName + " " + lastName}</div>
       <div className='absolute left top-22 '>
         <form className='relative flex  left-56' onSubmit={submitHandler}>

@@ -14,9 +14,11 @@ function Invoice({ creditor, stock, closeInvoice }) {
   const [isToggle, setIsToggle] = useState(false);
   const [item, setItem] = useState({});
   const [invoiceItem, setInvoiceItem] = useState([]);
+  const [paid, setPaid] = useState("")
   const [print, setPrint] = useState(false);
   const [invoiceData, setInvoiceData] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [profileImg, setProfileImg] = useState("")
   const [invoiceInput, setInvoiceInput] = useState({
     qty: "",
     rate: "",
@@ -29,6 +31,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
 
   useEffect(() => {
     const baseUrl5 = baseUrl + `/stock/${createdBy}`;
+    const baseUrl6 = baseUrl + `/profile/file/${createdBy}`
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split("T")[0];
     setToday(formattedDate);
@@ -41,17 +44,49 @@ function Invoice({ creditor, stock, closeInvoice }) {
     const invoiceNo = f + l + "-" + randomNum;
     setInvoiceId(invoiceNo);
 
-    axios
-      .get(baseUrl5)
-      .then((response) => {
-        setDesc(response?.data?.Stock);
+    Promise.all([
+      axios.get(baseUrl5),
+      axios.get(baseUrl6, { responseType: "blob", })
+    ])
+      .then(([response1, response2]) => {
+        console.log(response2, "profile logo")
+        setDesc(response1?.data?.Stock);
+        /////////////////////
+        const url = URL.createObjectURL(response2.data)
+        console.log(url, "url")
+        setProfileImg(url)
+
+        /////////this helps you download an image into your computer download folder immediately the page mounts/////////
+        // const anchor = document.createElement("a")
+        // anchor.href = url
+        // anchor.download = "downloaded_file.png"
+        // document.body.appendChild(anchor)
+        // anchor.click()
+        // document.body.removeChild(anchor)
+        // URL.revokeObjectURL(url)
+        /////////////////////////////it ends here////////////////
       })
       .catch((error) => {
+        console.log(error, "error")
+        console.log(error.response, "error message")
         toast.error(
-          error.response.data.message || "Something went wrong, try aain later!"
+          error.response.data.message || "Something went wrong, try again later!"
         );
       });
+
+    // axios
+    //   .get(baseUrl5)
+    //   .then((response) => {
+    //     setDesc(response?.data?.Stock);
+    //   })
+    //   .catch((error) => {
+    //     toast.error(
+    //       error.response.data.message || "Something went wrong, try aain later!"
+    //     );
+    //   });
   }, [businessName, createdBy]);
+
+
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -92,15 +127,6 @@ function Invoice({ creditor, stock, closeInvoice }) {
     setItem({});
     setIsToggle(false);
   };
-  console.log(
-    invoiceInput,
-    "input item here",
-    invoiceItem,
-    "creditor",
-    invoiceData,
-    "xxxxxxxx",
-    auth?.user
-  );
 
   const itemNameHandler = (value) => {
     setItemName(value?.goods || value?.category);
@@ -152,7 +178,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
     console.log("`onAfterPrint` called");
   }, []);
 
-  console.log(invoiceData, "invoice");
+  console.log(invoiceData, "invoice", paid);
   // const handleBeforePrint = React.useCallback(() => {
   //     console.log("`onBeforePrint` called", invoiceData);
   //     axios({
@@ -182,7 +208,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
       .catch((error) => {
         toast.error(
           error.response?.data?.message ||
-            "Error saving invoice, try aain later"
+          "Error saving invoice, try aain later"
         );
       });
   }, [invoiceData, baseUrlPost]);
@@ -221,8 +247,10 @@ function Invoice({ creditor, stock, closeInvoice }) {
       </>
     );
   });
+
+  const grandTotal = invoiceItem.reduce((acc, curr) => acc + curr.total, 0)
   return (
-    <div className="fixed bg-red-800 inset-0 bg-opacity-40 backdrop-blur-sm flex md:justify-center md:items-center overflow-auto">
+    <div className="fixed bg-red-800 inset-0 bg-opacity-40 backdrop-blur-sm flex md:justify-center md:items-center overflow-auto pt-10">
       <div className="relative top-20 min-h-[100vh] left-0 w-[60rem] bg-white rounded-xl">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -236,71 +264,92 @@ function Invoice({ creditor, stock, closeInvoice }) {
           <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
         </svg>
         {print ? (
-          <>
+          <div className="max-w-5xl mx-auto px-4 py-8">
             <div
-              className="relative top-10 mx-8 p-12 bg-white rounded-lg shadow-2xl"
+              className="bg-white rounded-lg shadow-lg p-8"
               ref={componentRef}
               id="invoiceSection"
             >
-              <h1 className="text-4xl font-bold text-center text-gray-800 mb-3">{businessName}</h1>
-              <h6 className="text-gray-600 text-center mb-10 text-lg">
+              <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">{businessName}</h1>
+              <h6 className="text-gray-600 text-center mb-10">
                 2A France Road Sabon Gari Kano
               </h6>
-              
+
               <div className="grid grid-cols-6 gap-12 mb-10">
                 <div className="col-start-1 col-end-3">
-                  <div className="mb-6">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-2">{fullName}</h4>
-                    <h6 className="text-gray-600 text-lg">{auth?.user?.phoneNumber}</h6>
+                  <div className="mb-4">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-1">{fullName}</h4>
+                    <h6 className="text-gray-600 text-md">{auth?.user?.phoneNumber}</h6>
                   </div>
-                  <div className="space-y-3">
-                    <span className="block text-gray-700 text-lg">
-                      <span className="font-bold">Invoice #:</span> 
-                      <span className="ml-3 text-gray-600">{invoiceId}</span>
+                  <div className="space-y-1">
+                    <span className="block text-gray-700">
+                      <span className="font-bold">Invoice #:</span>
+                      <span className="ml-2 text-gray-600">{invoiceId}</span>
                     </span>
-                    <span className="block text-gray-700 text-lg">
+                    <span className="block text-gray-700 text-md">
                       <span className="font-bold">Date:</span>
                       <span className="ml-3 text-gray-600">{today}</span>
                     </span>
                   </div>
                 </div>
                 <div className="col-start-5 col-end-7">
-                  <h4 className="text-xl font-semibold text-gray-800 mb-2">{firstName + " " + lastName}</h4>
-                  <h6 className="text-gray-600 text-lg">{phoneNumber}</h6>
+                  <h4 className="text-lg font-semibold text-gray-800 mb-1">{firstName + " " + lastName}</h4>
+                  <h6 className="text-gray-600 text-md">{phoneNumber}</h6>
                 </div>
               </div>
-
-              <div className="w-full h-[2px] bg-gray-200 my-8"></div>
-
+              <div className="border-t border-gray-200 my-8 h-8 bg-gradient-to-r from-blue-950 via-indigo-500 to-purple-500 rounded"></div>
               <div className="w-full overflow-x-auto rounded-lg">
                 <table className="w-full border-collapse bg-white">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200">SN</th>
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/3">Description</th>
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Category</th>
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Qty</th>
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Rate</th>
-                      <th className="py-4 px-6 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Total</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200">SN</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/3">Description</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Category</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Qty</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Rate</th>
+                      <th className="py-2 px-3 text-left text-sm font-bold text-gray-800 border border-gray-200 w-1/4">Total</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">{renderInvoice}</tbody>
                 </table>
               </div>
+              <div className="flex justify-end mt-4 pr-10">
+                <table className="text-right">
+                  <tbody>
+                    <tr>
+                      <th className="pr-4 text-grey-600">Total Amount</th>
+                      <td className="text-grey-900 text-left">{grandTotal}</td>
+                    </tr>
+                    <tr>
+                      <th className="pr-4 text-grey-600">Amount Paid</th>
+                      <td className="px-2 py-1 text-left">{paid}</td>
+                    </tr>
+                    <tr>
+                      <th className="pr-4 text-grey-600">Balance</th>
+                      <td className="text-grey-900  text-left">{grandTotal - paid}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex justify-center mt-4">
+                <button onClick={handlePrint} className="border border-gray-400 px-2 rounded text-white font-bold bg-gradient-to-r from-blue-950 via-indigo-500 to-purple-500">Print Now</button>
+              </div>
             </div>
-            <div className="flex justify-center mt-4">
-              <button onClick={handlePrint}>Print Now</button>
-            </div>
-          </>
+          </div>
         ) : (
           <>
             <div className="max-w-5xl mx-auto px-4 py-8">
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">{businessName}</h1>
-                <h6 className="text-gray-600 text-center mb-10">
-                  2A France Road Sabon Gari Kano
-                </h6>
-
+                <div className="flex justify-between justify-self-center items-center relative w-1/2">
+                  <div className="text-center">
+                    <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">{businessName}</h1>
+                    <h6 className="text-gray-600 text-center mb-10">
+                      2A France Road Sabon Gari Kano
+                    </h6>
+                  </div>
+                  <img src={profileImg} alt="logo" className="absolute w-48 h-48 ml-4 right-0 justify-self-center" style={{ objectFit: "cover" }} />
+                  {/* <img src={profileImg} alt="logo" className="h-full object-contain bg-blue-800" style={{ maxWidth: "auto" }} /> */}
+                </div>
                 <div className="grid grid-cols-2 gap-12 mb-10">
                   <div>
                     <div className="mb-6">
@@ -325,7 +374,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 my-8"></div>
+                <div className="border-t border-gray-200 my-8 h-8 bg-gradient-to-r from-blue-950 via-indigo-500 to-purple-500 ..."></div>
 
                 <form onSubmit={submitHandler} className="mb-8">
                   <div className="flex items-center space-x-4">
@@ -362,9 +411,8 @@ function Invoice({ creditor, stock, closeInvoice }) {
                     <button
                       type="button"
                       onClick={amountToggle}
-                      className={`px-4 py-2 rounded-lg font-medium ${
-                        isToggle ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                      }`}
+                      className={`px-4 py-2 rounded-lg font-medium ${isToggle ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                        }`}
                     >
                       {isToggle ? 'CRT' : 'PCS'}
                     </button>
@@ -384,10 +432,10 @@ function Invoice({ creditor, stock, closeInvoice }) {
                       name="rate"
                       value={invoiceInput.rate}
                       onChange={onChange}
-                      className="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-24 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     />
 
-                    <button 
+                    <button
                       type="submit"
                       className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
                     >
@@ -412,6 +460,29 @@ function Invoice({ creditor, stock, closeInvoice }) {
                       {renderInvoice}
                     </tbody>
                   </table>
+                  {invoiceItem.length > 0 ?
+                    <div className="flex justify-end mt-4 pr-10">
+                      <table className="text-right">
+                        <tbody>
+                          <tr>
+                            <th className="pr-4 text-grey-600">Total Amount</th>
+                            <td className="text-grey-900">{grandTotal}</td>
+                          </tr>
+                          <tr>
+                            <th className="pr-4 text-grey-600">Amount Paid</th>
+                            <td>
+                              <input type="number" onChange={(e) => setPaid(e.target.value)} value={paid} className="border border-gray-300 rounded px-2 py-1 text-left" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <th className="pr-4 text-grey-600">Balance</th>
+                            <td className="text-grey-900">{grandTotal - paid}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    :
+                    <></>}
                 </div>
 
                 <div className="mt-8">
@@ -445,7 +516,7 @@ function Invoice({ creditor, stock, closeInvoice }) {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 
